@@ -1,41 +1,32 @@
+using Misa.Infrastructure.Data;
+using Misa.Infrastructure.Items;
+using Misa.Application.Items;
+using Misa.Contract.Items;
+using Microsoft.EntityFrameworkCore;
+using Misa.Api.Items;
+using Misa.Contract.Items;
+
+const string connectionString =
+    "Host=localhost;Port=5432;Database=misa;Username=postgres;Password=meow";
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddDbContext<MisaDbContext>(options =>
+    options.UseNpgsql(connectionString));
+builder.Services.AddScoped<ItemCreationHandler>();
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.MapGet("/api/items", () => "Meow");
+app.MapPost("/api/items", async (
+    ItemDto dto,
+    ItemCreationHandler handler,
+    CancellationToken ct) =>
 {
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
+    var item = dto.ToDomain();
+    await handler.HandleAsync(item, ct);
+    return Results.Ok();
+});
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

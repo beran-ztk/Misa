@@ -1,10 +1,10 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:Misa.Ui.Avalonia.ViewModels"
+        xmlns:vm="using:Misa.Ui.Avalonia.ViewModels.Shells"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="Misa.Ui.Avalonia.Views.MainWindow"
+        x:Class="Misa.Ui.Avalonia.Views.Shells.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="Misa.Ui.Avalonia">
@@ -15,6 +15,7 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Button Content="Create Item" 
+            Command="{Binding CreateItemCommand}"/>
 
 </Window>

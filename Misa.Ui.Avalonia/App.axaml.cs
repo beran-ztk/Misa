@@ -4,8 +4,8 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
-using Misa.Ui.Avalonia.ViewModels;
-using Misa.Ui.Avalonia.Views;
+using Misa.Ui.Avalonia.ViewModels.Shells;
+using Misa.Ui.Avalonia.Views.Shells;
 
 namespace Misa.Ui.Avalonia;
 
