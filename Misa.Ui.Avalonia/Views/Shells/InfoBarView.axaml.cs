@@ -1,11 +1,12 @@
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace Misa.Ui.Avalonia.Views.Shells;
 
-public partial class MainWindow : Window
+public partial class InfoBarView : UserControl
 {
-    public MainWindow()
+    public InfoBarView()
     {
         InitializeComponent();
     }

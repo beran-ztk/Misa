@@ -3,19 +3,53 @@
         xmlns:vm="using:Misa.Ui.Avalonia.ViewModels.Shells"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:Misa.Ui.Avalonia.Views.Shells"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Misa.Ui.Avalonia.Views.Shells.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="Misa.Ui.Avalonia">
+        Icon="/Assets/Images/Shells/nanoparticle.png"
+        Title="Misa">
 
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+    
+    <Grid RowDefinitions="40,*,20"
+          ColumnDefinitions="100,*,4,Auto,40">
 
-    <Button Content="Create Item" 
-            Command="{Binding CreateItemCommand}"/>
+        
+        <views:TitleBarView Grid.Row="0"
+                            Grid.Column="0" 
+                            Grid.ColumnSpan="5"
+                            DataContext="{Binding TitleBar}" />
 
+        
+        <views:NavigationView Grid.Row="1"
+                              Grid.Column="0"
+                              DataContext="{Binding Navigation}" />
+
+        <ContentControl Grid.Row="1"
+                        Grid.Column="1"
+                        Background="{StaticResource BrushPrimaryBackground}"
+                        Content="{Binding CurrentViewModel}" />
+        
+        <GridSplitter Grid.Row="1" Grid.Column="2"
+                      Background="{StaticResource BrushTextPrimary}"/>
+        
+        <ContentControl Grid.Row="1" 
+                        Grid.Column="3"
+                        Background="{StaticResource BrushPrimaryBackground}"
+                        Content="{Binding CurrentInfoViewModel}" />
+
+        <views:InfoBarView  Grid.Row="1"
+                            Grid.Column="4"
+                            DataContext="{Binding InfoBar}" />
+        
+        
+        
+        <views:StatusBarView Grid.Row="2"
+                             Grid.Column="0" 
+                             Grid.ColumnSpan="5"
+                             DataContext="{Binding StatusBar}" />
+    </Grid>
 </Window>

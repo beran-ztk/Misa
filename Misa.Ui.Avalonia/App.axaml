@@ -8,6 +8,63 @@
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
+             
+        <Application.Resources>
+
+        <x:Double x:Key="FontSizeSmall">10</x:Double>
+        <x:Double x:Key="FontSizeAverage">12</x:Double>
+        <x:Double x:Key="FontSizeMedium">14</x:Double>
+        <x:Double x:Key="FontSizeLarge">16</x:Double>
+        <x:Double x:Key="FontSizeBig">20</x:Double>
+        <x:Double x:Key="FontSizeTitle">24</x:Double>
+            
+        <x:Double x:Key="SpacingSmall">4</x:Double>
+        <x:Double x:Key="SpacingMedium">8</x:Double>
+        <x:Double x:Key="SpacingLarge">12</x:Double>
+            
+        <!-- Primäre Basistöne -->
+        <Color x:Key="ColorPrimaryBackground">#121417</Color>   <!-- sehr dunkles Blau-Schwarz -->
+        <Color x:Key="ColorSecondaryBackground">#161916</Color> <!-- dunkles Blau-Grau -->
+        <Color x:Key="ColorPanelBackground">#233549</Color>     <!-- Panels, NavigationView -->
+        <Color x:Key="ColorHover">#2F4762</Color>               <!-- Hover für Buttons -->
+        <Color x:Key="ColorActive">#3D5A80</Color>              <!-- Active / Selected-Element -->
+
+        <!-- Textfarben -->
+        <Color x:Key="ColorTextPrimary">#E6EAF0</Color>  <!-- fast weiß -->
+        <Color x:Key="ColorTextSecondary">#B5C0CC</Color> <!-- leicht abgeblasst -->
+        <Color x:Key="ColorTextFaded">#8090A0</Color>     <!-- dezente Labels -->
+
+        <!-- Borders -->
+        <Color x:Key="ColorBorder">#4F5A66</Color>        <!-- helleres Grau-Blau -->
+        <Color x:Key="ColorBorderLight">#6B7682</Color>   <!-- feine Linien -->
+
+        <!-- Akzentfarben -->
+        <Color x:Key="ColorAccent">#4A90E2</Color>        <!-- klares Blau -->
+        <Color x:Key="ColorAccentDim">#2E6BBE</Color>     <!-- dunkleres Blau -->
+
+        <!-- Erfolg / Warnung / Fehler (für Status-Leiste) -->
+        <Color x:Key="ColorSuccess">#4CAF50</Color>
+        <Color x:Key="ColorWarning">#FFC107</Color>
+        <Color x:Key="ColorError">#F44336</Color>
+
+        <!-- Brushes -->
+        <SolidColorBrush x:Key="BrushPrimaryBackground" Color="{StaticResource ColorPrimaryBackground}" />
+        <SolidColorBrush x:Key="BrushSecondaryBackground" Color="{StaticResource ColorSecondaryBackground}" />
+        <SolidColorBrush x:Key="BrushPanelBackground" Color="{StaticResource ColorPanelBackground}" />
+        <SolidColorBrush x:Key="BrushHover" Color="{StaticResource ColorHover}" />
+        <SolidColorBrush x:Key="BrushActive" Color="{StaticResource ColorActive}" />
+        <SolidColorBrush x:Key="BrushTextPrimary" Color="{StaticResource ColorTextPrimary}" />
+        <SolidColorBrush x:Key="BrushTextSecondary" Color="{StaticResource ColorTextSecondary}" />
+        <SolidColorBrush x:Key="BrushTextFaded" Color="{StaticResource ColorTextFaded}" />
+        <SolidColorBrush x:Key="BrushBorder" Color="{StaticResource ColorBorder}" />
+        <SolidColorBrush x:Key="BrushBorderLight" Color="{StaticResource ColorBorderLight}" />
+        <SolidColorBrush x:Key="BrushAccent" Color="{StaticResource ColorAccent}" />
+        <SolidColorBrush x:Key="BrushAccentDim" Color="{StaticResource ColorAccentDim}" />
+        <SolidColorBrush x:Key="BrushSuccess" Color="{StaticResource ColorSuccess}" />
+        <SolidColorBrush x:Key="BrushWarning" Color="{StaticResource ColorWarning}" />
+        <SolidColorBrush x:Key="BrushError" Color="{StaticResource ColorError}" />
+
+    </Application.Resources>
   
     <Application.Styles>
         <FluentTheme />
