@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "pgcrypto"; -- For gen_random_uuid() function
-       
 CREATE TABLE items
 (
     id              UUID DEFAULT   gen_random_uuid() PRIMARY KEY,
@@ -27,7 +25,7 @@ CREATE INDEX idx_items_created
     ON items(created_at_utc);
 
 
-CREATE TABLE item_relations
+CREATE TABLE relations
 (
     id              INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
@@ -40,12 +38,12 @@ CREATE TABLE item_relations
     CONSTRAINT no_self_link CHECK (item_parent_id != item_child_id),
     CONSTRAINT unique_link UNIQUE (item_parent_id, item_child_id, relation_id)
 );
-CREATE INDEX idx_item_relations_parent 
-    ON item_relations(item_parent_id);
-CREATE INDEX idx_item_relations_child
-    ON item_relations(item_child_id);
-CREATE INDEX idx_item_relations_relation
-    ON item_relations(relation_id);
+CREATE INDEX idx_relations_parent 
+    ON relations(item_parent_id);
+CREATE INDEX idx_relations_child
+    ON relations(item_child_id);
+CREATE INDEX idx_relations_relation
+    ON relations(relation_id);
 
 create table item_modules
 (

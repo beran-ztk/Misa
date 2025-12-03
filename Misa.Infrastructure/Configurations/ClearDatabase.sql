@@ -42,4 +42,6 @@ drop table if exists lu_confidences;
 
 drop table if exists lu_completions;
 drop table if exists lu_attainments;
+
+CREATE EXTENSION IF NOT EXISTS "pgcrypto"; -- For gen_random_uuid() function
 commit;
