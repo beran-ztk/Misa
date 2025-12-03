@@ -18,12 +18,11 @@
         </Style>
         
         <Style Selector="Button.MainNavigation:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="Red" />
+            <Setter Property="Background" Value="{StaticResource BrushPanelBackground}" />
         </Style>
 
-        <!-- Pressed -->
         <Style Selector="Button.MainNavigation:pressed /template/ ContentPresenter">
-            <Setter Property="Background" Value="Blue" />
+            <Setter Property="Background" Value="{StaticResource ColorActive}" />
         </Style>
         
         <Style Selector="TextBlock.MainNavigation">

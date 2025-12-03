@@ -21,13 +21,6 @@ VALUES
     ('Urgent',   'Dringend; sofortige Aktion',    5),
     ('Critical', 'Kritische Eskalation',          6);
 
-INSERT INTO item_relations (name, synopsis, sort_order)
-VALUES
-    ('contains',  'Parent-Item beinhaltet das Child-Item',                           1),
-    ('follows',   'Child folgt logisch oder zeitlich nach Parent',                   2),
-    ('triggers',  'Parent löst das Child-Item aus (z.B. Event → Action)',            3),
-    ('blocks',    'Parent verhindert oder verzögert die Ausführung des Child-Items', 4);
-
 INSERT INTO item_categories (name, synopsis)
 VALUES
     ('Task',         'Konkrete Aufgaben oder To-Dos'),
@@ -38,36 +31,16 @@ VALUES
     ('Module',       'Übergeordnetes Lern- oder Projektmodul'),
     ('Unit',         'Einzelne Lerneinheit oder Arbeitsschritt');
 
+INSERT INTO item_relations_types (name, synopsis, sort_order)
+VALUES
+    ('contains',  'Parent-Item beinhaltet das Child-Item',                           1),
+    ('follows',   'Child folgt logisch oder zeitlich nach Parent',                   2),
+    ('triggers',  'Parent löst das Child-Item aus (z.B. Event → Action)',            3),
+    ('blocks',    'Parent verhindert oder verzögert die Ausführung des Child-Items', 4);
 
--- CREATE UNIQUE INDEX ux_item_categories_name
---     ON item_categories((id/100), name);
--- CREATE UNIQUE INDEX ux_item_categories_sort_order
---     ON item_categories((id/100), sort_order);
-
--- INSERT INTO item_categories (id, name, synopsis, sort_order)
--- VALUES
---     (100, 'Personal',       'Private oder persönliche Aufgaben',            1),
---     (101, 'School',         'Aufgaben aus Ausbildung oder Studium',         2),
---     (102, 'Work',           'Berufliche Aufgaben',                          3),
--- 
---     (200, 'Calendar',       'Kalendereintrag oder Termin',                  1),
---     (201, 'Event',          'Kalenderereignis',                             2),
---     (203, 'Module',         'Moduleintrag',                                 3),
---     (204, 'Notification',   'Benachrichtigung',                             4),
--- 
---     (300, 'General',        'Allgemeiner Tagebucheintrag',                  1),
---     (301, 'Personal',       'Persönliche Ereignisse und Gedanken',          2),
---     (302, 'Work',           'Berufliche Ereignisse oder Reflexionen',       3),
---     (304, 'School',         'Schulische Ereignisse und Gedanken',           4),
--- 
---     (400, 'Task',           'Einfache oder neutrale Aufgabe im Lernkontext',                1),
---     (401, 'Read',           'Theorie, Artikel oder Dokumentation lesen',                    2),
---     (402, 'Watch',          'Videos, Vorträge oder Präsentationen anschauen',               3),
---     (403, 'Analysis',       'Beispiele, Fehlerquellen oder Konzepte analysieren',           4),
---     (404, 'Summarize',      'Definitionen, Zusammenfassungen oder Glossare erstellen',      5),
---     (405, 'Brainstorm',     'Ideen sammeln, Fragen erzeugen oder Ansätze entwickeln',       6),
---     (406, 'Exploration',    'Freies Lernen ohne Ziel, neue Ideen und Wege entdecken',       7),
---     (407, 'Review',         'Wissen wiederholen, testen oder Feedback einholen',            8),
---     (408, 'Output',         'Ergebnisse produzieren, erklären, veröffentlichen, testen',    9),
---     (409, 'Implementation', 'Praktisch umsetzen oder programmieren',                        10);
-
+INSERT INTO item_description_types (name, synopsis, sort_order)
+VALUES
+    ('Text',     'Einfacher Fließtext ohne Formatierung',                           1),
+    ('Markdown', 'Formatierter Text mit Überschriften, Listen und Hervorhebungen',  2),
+    ('Url',      'Referenz auf externe Inhalte, Webseiten oder Dateien',            3),
+    ('Picture',  'Grafiken, Screenshots oder eingebettete Bilder',                  4);

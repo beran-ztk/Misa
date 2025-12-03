@@ -23,24 +23,24 @@
         <x:Double x:Key="SpacingLarge">12</x:Double>
             
         <!-- Primäre Basistöne -->
-        <Color x:Key="ColorPrimaryBackground">#121417</Color>   <!-- sehr dunkles Blau-Schwarz -->
-        <Color x:Key="ColorSecondaryBackground">#161916</Color> <!-- dunkles Blau-Grau -->
-        <Color x:Key="ColorPanelBackground">#233549</Color>     <!-- Panels, NavigationView -->
+        <Color x:Key="ColorPrimaryBackground">#121417</Color>
+        <Color x:Key="ColorSecondaryBackground">#161916</Color>
+        <Color x:Key="ColorPanelBackground">#233549</Color>
         <Color x:Key="ColorHover">#2F4762</Color>               <!-- Hover für Buttons -->
         <Color x:Key="ColorActive">#3D5A80</Color>              <!-- Active / Selected-Element -->
 
         <!-- Textfarben -->
-        <Color x:Key="ColorTextPrimary">#E6EAF0</Color>  <!-- fast weiß -->
-        <Color x:Key="ColorTextSecondary">#B5C0CC</Color> <!-- leicht abgeblasst -->
-        <Color x:Key="ColorTextFaded">#8090A0</Color>     <!-- dezente Labels -->
+        <Color x:Key="ColorTextPrimary">#E6EAF0</Color>
+        <Color x:Key="ColorTextSecondary">#B5C0CC</Color>
+        <Color x:Key="ColorTextFaded">#8090A0</Color>
 
         <!-- Borders -->
-        <Color x:Key="ColorBorder">#4F5A66</Color>        <!-- helleres Grau-Blau -->
-        <Color x:Key="ColorBorderLight">#6B7682</Color>   <!-- feine Linien -->
+        <Color x:Key="ColorBorder">#4F5A66</Color>
+        <Color x:Key="ColorBorderLight">#6B7682</Color>
 
         <!-- Akzentfarben -->
-        <Color x:Key="ColorAccent">#4A90E2</Color>        <!-- klares Blau -->
-        <Color x:Key="ColorAccentDim">#2E6BBE</Color>     <!-- dunkleres Blau -->
+        <Color x:Key="ColorAccent">#4A90E2</Color>
+        <Color x:Key="ColorAccentDim">#2E6BBE</Color>
 
         <!-- Erfolg / Warnung / Fehler (für Status-Leiste) -->
         <Color x:Key="ColorSuccess">#4CAF50</Color>

@@ -1,17 +1,16 @@
 CREATE TABLE items
 (
-    id              UUID DEFAULT   gen_random_uuid() PRIMARY KEY,
+    id              UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     
     owner_id        UUID,
-    state_id        INT REFERENCES lu_states(id)     ON DELETE RESTRICT,
-    priority_id     INT REFERENCES lu_priorities(id) ON DELETE RESTRICT,
-    category_id     INT REFERENCES lu_categories(id) ON DELETE RESTRICT,
+    state_id        INT NOT NULL REFERENCES item_states(id)     ON DELETE RESTRICT,
+    priority_id     INT NOT NULL REFERENCES item_priorities(id) ON DELETE RESTRICT,
+    category_id     INT NOT NULL REFERENCES item_categories(id) ON DELETE RESTRICT,
     
     title           TEXT NOT NULL,
-    description     TEXT,
     
-    created_at_utc  TIMESTAMPTZ DEFAULT now(),
-    updated_at_utc  TIMESTAMPTZ,
+    created_at_utc  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at_utc  TIMESTAMPTZ
 );
 CREATE INDEX idx_items_owner
     ON items(owner_id);
@@ -24,16 +23,15 @@ CREATE INDEX idx_items_category
 CREATE INDEX idx_items_created
     ON items(created_at_utc);
 
-
 CREATE TABLE relations
 (
     id              INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
-    item_parent_id  UUID REFERENCES items(id) ON DELETE RESTRICT,
-    item_child_id   UUID REFERENCES items(id) ON DELETE RESTRICT,
-    relation_id     INT  REFERENCES lu_relations(id) ON DELETE RESTRICT,
+    item_parent_id  UUID NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+    item_child_id   UUID NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+    relation_id     INT  NOT NULL REFERENCES item_relations_types(id) ON DELETE RESTRICT,
 
-    created_at_utc TIMESTAMPTZ DEFAULT now()
+    created_at_utc TIMESTAMPTZ NOT NULL DEFAULT now(),
 
     CONSTRAINT no_self_link CHECK (item_parent_id != item_child_id),
     CONSTRAINT unique_link UNIQUE (item_parent_id, item_child_id, relation_id)
@@ -45,12 +43,18 @@ CREATE INDEX idx_relations_child
 CREATE INDEX idx_relations_relation
     ON relations(relation_id);
 
-create table item_modules
+CREATE TABLE descriptions
 (
-    id              int generated always as identity primary key,
-    fk_item         int not null references items(id) on delete restrict,
-    fk_completion   int references lu_completions(id) on delete restrict, -- Wie viel vom geplanten
-    fk_attainment   int references lu_attainments(id) on delete restrict, -- Verständnisgrad der neuen Inhalte
-    purpose         text,
-    summary         text
+    id              UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    
+    item_id         UUID NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+    type_id         INT  NOT NULL REFERENCES item_description_types(id) ON DELETE RESTRICT,
+    
+    content         TEXT NOT NULL,
+    
+    sort_order      INT  NOT NULL,
+    created_at_utc  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    
+    CONSTRAINT ux_descriptions_content UNIQUE (item_id, content),
+    CONSTRAINT ux_descriptions_sort_order UNIQUE (item_id, sort_order)
 );

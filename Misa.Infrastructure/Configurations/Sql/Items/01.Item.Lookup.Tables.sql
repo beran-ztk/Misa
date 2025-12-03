@@ -14,7 +14,14 @@ CREATE TABLE item_priorities
     sort_order  INT NOT NULL UNIQUE
 );
 
-CREATE TABLE item_relations
+CREATE TABLE item_categories
+(
+    id          INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name        TEXT NOT NULL UNIQUE,
+    synopsis    TEXT
+);
+
+CREATE TABLE item_relations_types
 (
     id          INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name        TEXT NOT NULL UNIQUE,
@@ -22,9 +29,10 @@ CREATE TABLE item_relations
     sort_order  INT NOT NULL UNIQUE
 );
 
-CREATE TABLE item_categories
+CREATE TABLE item_description_types
 (
     id          INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name        TEXT NOT NULL UNIQUE,
-    synopsis    TEXT
+    synopsis    TEXT,
+    sort_order  INT NOT NULL UNIQUE
 );
