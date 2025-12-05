@@ -1,0 +1,35 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Misa.Ui.Avalonia.Views.Items.ItemView"
+             xmlns:vm="clr-namespace:Misa.Ui.Avalonia.ViewModels.Items"
+             xmlns:views="clr-namespace:Misa.Ui.Avalonia.Views.Items"
+             xmlns:entityViews="clr-namespace:Misa.Ui.Avalonia.Views.Entities"
+             x:DataType="vm:ItemViewModel">
+    
+    <Border>
+        <Grid ColumnDefinitions="*,*">
+            <Border Grid.Column="0"
+                    BorderThickness="0,0,1,0"
+                    BorderBrush="{StaticResource BrushBorder}">
+                <Grid RowDefinitions="40,*">
+                
+                    <views:ItemNavigationView Grid.Row="0"
+                                              DataContext="{Binding ItemNavigationVM}"/>
+                
+                    <views:ItemListView Grid.Row="1"
+                                        DataContext="{Binding ItemListVM}"/>
+                </Grid>
+            </Border>
+            
+            
+            <entityViews:EntityMainDetailView
+                Grid.Column="1"
+                DataContext="{Binding EntityViewModel}"/>
+            
+        </Grid>
+    </Border>
+    
+</UserControl>

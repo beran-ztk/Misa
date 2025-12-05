@@ -5,7 +5,7 @@ namespace Misa.Ui.Avalonia.ViewModels.Items;
 
 public class ItemListViewModel : ViewModelBase
 {
-    public ItemListViewModel(INavigationService nav)
+    public ItemListViewModel()
     {
         
     }

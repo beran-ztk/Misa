@@ -4,8 +4,14 @@
     <option name="projectPerEditor">
       <map>
         <entry key="Misa.Ui.Avalonia/App.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
+        <entry key="Misa.Ui.Avalonia/Views/Entities/EntityInformationView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
+        <entry key="Misa.Ui.Avalonia/Views/Entities/EntityMainDetailView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
+        <entry key="Misa.Ui.Avalonia/Views/Entities/EntityRelationView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
+        <entry key="Misa.Ui.Avalonia/Views/Entities/EntitySessionView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
         <entry key="Misa.Ui.Avalonia/Views/Informations/Notifications.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
         <entry key="Misa.Ui.Avalonia/Views/Items/ItemListView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
+        <entry key="Misa.Ui.Avalonia/Views/Items/ItemNavigationView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
+        <entry key="Misa.Ui.Avalonia/Views/Items/ItemView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
         <entry key="Misa.Ui.Avalonia/Views/MainWindow.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
         <entry key="Misa.Ui.Avalonia/Views/Shells/InfoBarView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
         <entry key="Misa.Ui.Avalonia/Views/Shells/MainWindow.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />

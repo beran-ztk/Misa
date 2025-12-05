@@ -14,7 +14,7 @@ public class NavigationService : INavigationService
     }
     public void ShowItems()
     {
-        _navigationStore.CurrentViewModel = new ItemListViewModel(this);
+        _navigationStore.CurrentViewModel = new ItemViewModel(this);
     }
     public void ShowNotifications()
     {

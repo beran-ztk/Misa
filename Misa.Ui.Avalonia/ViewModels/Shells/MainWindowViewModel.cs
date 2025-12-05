@@ -23,7 +23,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public TitleBarViewModel TitleBar { get; }
     public StatusBarViewModel StatusBar { get; }
     public ReactiveCommand<Unit, Unit> CreateItemCommand { get; }
-    public string StatusText => "Meow";
 
     public MainWindowViewModel(NavigationStore navigationStore, NavigationService navigationService)
     {
