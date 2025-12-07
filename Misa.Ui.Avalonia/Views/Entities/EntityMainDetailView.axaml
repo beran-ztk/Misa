@@ -2,22 +2,32 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Misa.Ui.Avalonia.Views.Entities.EntityMainDetailView">
-    
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:Class="Misa.Ui.Avalonia.Views.Entities.EntityMainDetailView"
+             xmlns:views="clr-namespace:Misa.Ui.Avalonia.Views.Entities"
+             xmlns:vm="clr-namespace:Misa.Ui.Avalonia.ViewModels.Entities"
+             x:DataType="vm:EntityMainDetailViewModel">
+
     <Border>
-        <Grid RowDefinitions="40,*">
-            <Border Grid.Row="0"
-                    BorderThickness="0,0,0,1"
-                    BorderBrush="{StaticResource BrushBorder}">
-                <Grid ColumnDefinitions="*,*,*,*">
-                    <TextBlock Grid.Column="0" Text="Information"  HorizontalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" Text="Relations"    HorizontalAlignment="Center"/>
-                    <TextBlock Grid.Column="2" Text="Sessions"     HorizontalAlignment="Center"/>
-                    <TextBlock Grid.Column="3" Text="History"      HorizontalAlignment="Center"/>
-                </Grid>    
-            </Border>
-            
-        </Grid>
+        <TabControl SelectedIndex="{Binding SelectedTabIndex}">
+                <TabItem Header="Information">
+                    <views:EntityInformationView 
+                        DataContext="{Binding InformationViewModel}"/>
+                </TabItem>
+
+                <TabItem Header="Relations">
+                    <views:EntityRelationView />
+                </TabItem>
+
+                <TabItem Header="Sessions">
+                    <views:EntitySessionView />
+                </TabItem>
+
+                <TabItem Header="History">
+                    <views:EntityHistoryView />
+                </TabItem>
+            </TabControl>
     </Border>
 </UserControl>

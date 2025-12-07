@@ -3,5 +3,6 @@
 public interface INavigationService
 {
     public void ShowItems();
+    public void ShowTasks();
     public void ShowNotifications();
 }

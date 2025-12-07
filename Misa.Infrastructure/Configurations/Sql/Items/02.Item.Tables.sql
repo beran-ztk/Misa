@@ -2,23 +2,14 @@ CREATE TABLE entities
 (
     id                  UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     owner_id            UUID,
-    workflow_id         INT NOT NULL REFERENCES workflows(id) ON DELETE RESTRICT,
+    workflow_id         INT NOT NULL REFERENCES entity_workflow_types(id) ON DELETE RESTRICT,
     
-    deleted             BOOL NOT NULL DEFAULT FALSE,
+    is_deleted          BOOL NOT NULL DEFAULT FALSE,
     
     created_at_utc      TIMESTAMPTZ NOT NULL,
     updated_at_utc      TIMESTAMPTZ,
-    interacted_at_utc   TIMESTAMPTZ,
-
-    CONSTRAINT ck_updated_ts CHECK (updated_at_utc IS NULL OR updated_at_utc >= created_at_utc),
-    CONSTRAINT ck_interacted_ts CHECK (interacted_at_utc IS NULL OR interacted_at_utc >= created_at_utc)
+    interacted_at_utc   TIMESTAMPTZ NOT NULL
 );
-CREATE INDEX idx_entities_owner
-    ON entities(owner_id);
-CREATE INDEX idx_entities_workflow
-    ON entities(workflow_id);
-CREATE INDEX idx_entities_created
-    ON entities(created_at_utc);
 
 CREATE TABLE items
 (

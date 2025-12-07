@@ -17,10 +17,9 @@
                 <Grid RowDefinitions="40,*">
                 
                     <views:ItemNavigationView Grid.Row="0"
-                                              DataContext="{Binding ItemNavigationVM}"/>
-                
+                                              DataContext="{Binding Navigation}" />
                     <views:ItemListView Grid.Row="1"
-                                        DataContext="{Binding ItemListVM}"/>
+                                              DataContext="{Binding ListModel}" />
                 </Grid>
             </Border>
             

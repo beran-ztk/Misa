@@ -69,6 +69,17 @@
                     </StackPanel>
                 </Button>
                 
+                <Button Classes="MainNavigation"
+                        Command="{Binding ShowTasksCommand}">
+                    <StackPanel Orientation="Horizontal" 
+                                Spacing="{StaticResource SpacingSmall}">
+                        <Image Width="16" Height="16"
+                               Source="{SvgImage /Assets/Images/MainNavigation/calendar-dots.svg}"/>
+                        <TextBlock Text="Tasks" 
+                                   Classes="MainNavigation"/>
+                    </StackPanel>
+                </Button>
+                
             </StackPanel>
 
             <!-- Settings unten -->

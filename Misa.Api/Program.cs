@@ -1,10 +1,15 @@
 using Misa.Infrastructure.Data;
 using Misa.Infrastructure.Items;
-using Misa.Application.Items;
+using Misa.Application.Items.Repositories;
 using Misa.Contract.Items;
 using Microsoft.EntityFrameworkCore;
-using Misa.Api.Items;
-using Misa.Contract.Items;
+using Misa.Application.Entities.Add;
+using Misa.Application.Entities.Get;
+using Misa.Application.Entities.Repositories;
+using Misa.Application.Items.Add;
+using Misa.Application.Tasks.Add;
+using Misa.Contract.Entities;
+using Misa.Infrastructure.Entities;
 
 const string connectionString =
     "Host=localhost;Port=5432;Database=misa;Username=postgres;Password=meow";
@@ -13,19 +18,44 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<MisaDbContext>(options =>
     options.UseNpgsql(connectionString));
-builder.Services.AddScoped<ItemCreationHandler>();
+
+builder.Services.AddScoped<AddItemHandler>();
+builder.Services.AddScoped<AddTaskHandler>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
+
+// Entity
+builder.Services.AddScoped<GetEntitiesHandler>();
+builder.Services.AddScoped<AddEntityHandler>();
+builder.Services.AddScoped<IEntityRepository, EntityRepository>();
 
 var app = builder.Build();
 
-app.MapGet("/api/items", () => "Meow");
-app.MapPost("/api/items", async (
-    ItemDto dto,
-    ItemCreationHandler handler,
+
+app.MapGet("/api/entities/get", async (
+    GetEntitiesHandler handler,
     CancellationToken ct) =>
 {
-    var item = dto.ToDomain();
-    await handler.HandleAsync(item, ct);
+    var entities = await handler.GetAllAsync(ct);
+    return entities;
+});
+
+app.MapPost("/api/entities/add", async (
+    EntityDto dto,
+    AddEntityHandler handler,
+    CancellationToken ct) =>
+{
+    var entity = dto.Transform();
+    await handler.AddAsync(entity, ct);
+    return Results.Ok();
+});
+
+app.MapPost("/api/tasks/add", async (
+    AddEntityHandler entityHandler,
+    AddItemHandler itemHandler, 
+    AddTaskHandler taskHandler, 
+    CancellationToken ct) =>
+{
+    await taskHandler.AddAsync(entityHandler, itemHandler, ct);
     return Results.Ok();
 });
 

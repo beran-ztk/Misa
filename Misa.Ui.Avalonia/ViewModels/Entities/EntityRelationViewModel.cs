@@ -1,6 +1,8 @@
-﻿namespace Misa.Ui.Avalonia.ViewModels.Entities;
+﻿using Misa.Ui.Avalonia.ViewModels.Shells;
 
-public class EntityRelationViewModel
+namespace Misa.Ui.Avalonia.ViewModels.Entities;
+
+public class EntityRelationViewModel : ViewModelBase
 {
     
 }

@@ -20,7 +20,7 @@ VALUES
     ('Urgent',   'Dringend; sofortige Aktion',    5),
     ('Critical', 'Kritische Eskalation',          6);
 
-INSERT INTO workflows (name, synopsis)
+INSERT INTO entity_workflow_types (name, synopsis)
 VALUES
     ('Task',         'Konkrete Aufgaben oder To-Dos'),
     ('Calendar',     'Kalendereintrag, Termin oder zeitliche Planung'),

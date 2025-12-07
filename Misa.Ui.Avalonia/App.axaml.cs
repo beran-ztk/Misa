@@ -1,8 +1,10 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
+using System.Net.Http;
 using Avalonia.Markup.Xaml;
 using Misa.Ui.Avalonia.Services.Navigation;
 using Misa.Ui.Avalonia.Stores;
@@ -26,7 +28,9 @@ public partial class App : Application
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
             
-            var navigationState = new NavigationStore();
+            var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:4500") };
+
+            var navigationState = new NavigationStore(httpClient);
             var navigationService = new NavigationService(navigationState);
             
             desktop.MainWindow = new MainWindow

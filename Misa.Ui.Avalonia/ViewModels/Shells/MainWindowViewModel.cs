@@ -28,6 +28,8 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         _navigationStore = navigationStore;
         _navigationService = navigationService;
+        
+        _httpClient = _navigationStore.MisaHttpClient;
 
         Navigation = new NavigationViewModel(navigationService);
         InfoBar = new InfoBarViewModel(navigationService);
@@ -50,7 +52,6 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         };
         
-        _httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:4500") };
         
         CreateItemCommand = ReactiveCommand.CreateFromTask(CreateItemAsync);
         CreateItemCommand
@@ -62,7 +63,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         try
         {
-            var item = new ItemDto("Test", "Meow");
+            var item = new ItemDto();
             var response = await _httpClient.PostAsJsonAsync(requestUri: "api/items", item);
             if (!response.IsSuccessStatusCode)
             {

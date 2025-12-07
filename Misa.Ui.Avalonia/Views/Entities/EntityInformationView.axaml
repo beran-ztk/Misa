@@ -3,6 +3,77 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Misa.Ui.Avalonia.Views.Entities.EntityInformationView">
-    Welcome to Avalonia!
+             x:Class="Misa.Ui.Avalonia.Views.Entities.EntityInformationView"
+             xmlns:vm="clr-namespace:Misa.Ui.Avalonia.ViewModels.Entities"
+             xmlns:entities="clr-namespace:Misa.Contract.Entities;assembly=Misa.Contract"
+             x:DataType="vm:EntityInformationViewModel">
+    <Border>
+        <StackPanel>
+            <TextBlock Text="{Binding Parent.SelectedEntity.Id}"/>
+            <ContentControl Content="{Binding Parent.SelectedEntity}">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate x:DataType="entities:EntityDto">
+
+                        <Grid ColumnDefinitions="Auto,*"
+                              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                              ColumnSpacing="10"
+                              RowSpacing="4">
+
+                            <TextBlock Grid.Row="0" Grid.Column="0"
+                                       Text="Id:"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+                            <TextBlock Grid.Row="0" Grid.Column="1"
+                                       Text="{Binding Id}"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0"
+                                       Text="Owner:"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1"
+                                       Text="{Binding OwnerId}"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0"
+                                       Text="Workflow:"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+                            <TextBlock Grid.Row="2" Grid.Column="1"
+                                       Text="{Binding WorkflowId}"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+
+                            <TextBlock Grid.Row="3" Grid.Column="0"
+                                       Text="Created:"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+                            <TextBlock Grid.Row="3" Grid.Column="1"
+                                       Text="{Binding CreatedAt, StringFormat='yyyy-MM-dd HH:mm'}"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+
+                            <TextBlock Grid.Row="4" Grid.Column="0"
+                                       Text="Updated:"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+                            <TextBlock Grid.Row="4" Grid.Column="1"
+                                       Text="{Binding UpdatedAt}"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+
+                            <TextBlock Grid.Row="5" Grid.Column="0"
+                                       Text="Interacted:"
+                                       FontWeight="Bold"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+                            <TextBlock Grid.Row="5" Grid.Column="1"
+                                       Text="{Binding InteractedAt}"
+                                       Foreground="{StaticResource BrushTextPrimary}" />
+
+                        </Grid>
+
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        </StackPanel>
+    </Border>
+    
+    
 </UserControl>

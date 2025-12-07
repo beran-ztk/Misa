@@ -17,4 +17,9 @@ public partial class NavigationViewModel : ViewModelBase
     {
         _navigationService.ShowItems();
     }
+    [RelayCommand]
+    public void ShowTasks()
+    {
+        _navigationService.ShowTasks();
+    }
 }

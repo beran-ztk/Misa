@@ -14,7 +14,7 @@ CREATE TABLE item_priorities
     sort_order  INT NOT NULL UNIQUE
 );
 
-CREATE TABLE workflows
+CREATE TABLE entity_workflow_types
 (
     id          INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name        TEXT NOT NULL UNIQUE,
