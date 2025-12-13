@@ -33,7 +33,27 @@ public class Item
     public State State { get; private set; }
     public Priority Priority { get; private set; }
     public Category Category { get; private set; }
-    
+
+    public bool HasActiveSession 
+        => State.Id == (int)Dictionaries.Items.ItemStates.Active;
+    public bool CanStartSession
+        => State.Id is (int)Dictionaries.Items.ItemStates.Draft
+           or (int)Dictionaries.Items.ItemStates.Open
+           or (int)Dictionaries.Items.ItemStates.Paused;
+
+    public void ChangeState(Misa.Domain.Dictionaries.Items.ItemStates state)
+    {
+        StateId = (int)state;
+    }
+
+    public void StartSession()
+    {
+        StateId = (int)Dictionaries.Items.ItemStates.Active;
+    }
+    public void PauseSession()
+    {
+        StateId = (int)Dictionaries.Items.ItemStates.Paused;
+    }
     public void Rename(string title)
     {
         Title = string.IsNullOrWhiteSpace(title)

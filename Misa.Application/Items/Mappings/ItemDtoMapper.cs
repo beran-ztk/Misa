@@ -1,6 +1,8 @@
 ﻿using Misa.Application.Entities.Mappings;
+using Misa.Contract.Audit.Lookups;
 using Misa.Contract.Items;
 using Misa.Contract.Items.Lookups;
+using Misa.Domain.Audit;
 using Misa.Domain.Entities;
 using Misa.Domain.Items;
 
@@ -22,13 +24,15 @@ public static class ItemDtoMapper
     }
 
     public static ReadItemDto ToReadItemDto(this Item domain)
-        => new ReadItemDto
+        => new()
         {
             Entity = domain.Entity.ToReadEntityDto(),
             State = domain.State.ToDto(),
             Priority = domain.Priority.ToDto(),
             Category = domain.Category.ToDto(),
-            Title = domain.Title
+            Title = domain.Title,
+            HasActiveSession = domain.HasActiveSession,
+            CanStartSession = domain.CanStartSession
         };
 
     public static List<ReadItemDto> ToReadItemDto(this List<Item> items)
@@ -79,6 +83,20 @@ public static class ItemDtoMapper
 
     public static List<CategoryDto> ToDto(this List<Category> categories)
         => categories.Select(c => new CategoryDto
+        {
+            Id = c.Id,
+            Name = c.Name,
+            Synopsis = c.Synopsis
+        }).ToList();
+    public static List<SessionEfficiencyTypeDto> ToDto(this List<SessionEfficiencyType> categories)
+        => categories.Select(c => new SessionEfficiencyTypeDto
+        {
+            Id = c.Id,
+            Name = c.Name,
+            Synopsis = c.Synopsis
+        }).ToList();
+    public static List<SessionConcentrationTypeDto> ToDto(this List<SessionConcentrationType> categories)
+        => categories.Select(c => new SessionConcentrationTypeDto
         {
             Id = c.Id,
             Name = c.Name,

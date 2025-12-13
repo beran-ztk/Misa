@@ -5,128 +5,245 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Misa.Ui.Avalonia.Views.Details.DetailInformationView"
              xmlns:vm="clr-namespace:Misa.Ui.Avalonia.ViewModels.Details"
-             xmlns:items="clr-namespace:Misa.Contract.Items;assembly=Misa.Contract"
              x:DataType="vm:DetailInformationViewModel">
 
     <Border Padding="12"
-            Background="{StaticResource BrushSecondaryBackground}">
-        <StackPanel>
-            <ContentControl Content="{Binding EntityDetail.SelectedEntity}">
-                <ContentControl.ContentTemplate>
-                    <DataTemplate x:DataType="items:ReadItemDto">
+            Background="{StaticResource BrushPrimaryBackgroundLight}">
+        
+        <!-- Ganze Detail-Info nur, wenn es wirklich ein DetailedEntity gibt -->
+        <StackPanel Spacing="14"
+                    IsVisible="{Binding Parent.HasDetailedEntity}">
 
-                        <StackPanel Spacing="12">
+            <Border Padding="12"
+                    Background="{StaticResource BrushPrimaryBackgroundLight}">
+                <StackPanel Spacing="10">
+                    
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="Start Session"
+                                Command="{Binding ShowSessionStartFormCommand}"
+                                IsVisible="{Binding Parent.DetailedEntity.Item.CanStartSession}"/>
+                    
+                    <Button Content="Pause Session"
+                            Command="{Binding ShowSessionPauseFormCommand}"
+                            IsVisible="{Binding Parent.DetailedEntity.Item.HasActiveSession}"/>
+                    </StackPanel>
+                    
+                    <Border Padding="10"
+                          CornerRadius="8"
+                          BorderThickness="1"
+                          BorderBrush="{StaticResource BrushBorder}"
+                          IsVisible="{Binding IsStartFormOpen}">
+                    <StackPanel Spacing="10">
 
-                            <!-- Header: Title + State/Priority -->
-                            <StackPanel Spacing="4">
-                                <!-- Title -->
-                                <TextBlock Text="{Binding Title, FallbackValue='(No title)'}"
-                                           FontSize="{StaticResource FontSizeBig}"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource BrushTextPrimary}" />
+                      <TextBlock Text="Start session"
+                                 FontWeight="SemiBold"/>
 
-                                <!-- Workflow / Category / Priority in einer Zeile -->
-                                <StackPanel Orientation="Horizontal"
-                                            Spacing="8">
-                                    <TextBlock Text="{Binding Entity.Workflow.Name}"
-                                               Foreground="{StaticResource BrushTextSecondary}"
-                                               FontSize="{StaticResource FontSizeSmall}" />
+                      <Grid ColumnDefinitions="140,*"
+                            RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                            RowSpacing="8"
+                            ColumnSpacing="10">
 
-                                    <TextBlock Text="•"
-                                               Foreground="{StaticResource BrushTextFaded}" />
+                        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Planned (min)" />
+                        <NumericUpDown Grid.Row="0" Grid.Column="1"
+                                      Minimum="1" Maximum="600"
+                                      Value="{Binding PlannedMinutes, Mode=TwoWay}" />
 
-                                    <TextBlock Text="{Binding Category.Name, FallbackValue='No category'}"
-                                               Foreground="{StaticResource BrushTextSecondary}"
-                                               FontSize="{StaticResource FontSizeSmall}" />
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Objective" />
+                        <TextBox Grid.Row="1" Grid.Column="1"
+                                 Text="{Binding Objective, Mode=TwoWay}"
+                                 Watermark="What are you doing?" />
 
-                                    <TextBlock Text="•"
-                                               Foreground="{StaticResource BrushTextFaded}" />
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Auto stop" />
+                        <CheckBox Grid.Row="2" Grid.Column="1"
+                                  IsChecked="{Binding StopAutomatically, Mode=TwoWay}"
+                                  Content="Stop automatically after planned duration" />
 
-                                    <TextBlock Text="{Binding Priority.Name}"
-                                               Foreground="{StaticResource BrushTextSecondary}"
-                                               FontSize="{StaticResource FontSizeSmall}" />
-                                </StackPanel>
-
-                                <!-- State als „Pill“ -->
-                                <Border Background="{StaticResource BrushActive}"
-                                        CornerRadius="4"
-                                        Padding="6,2"
-                                        Margin="0,4,0,0">
-                                    <TextBlock Text="{Binding State.Name}"
-                                               Foreground="{StaticResource BrushTextPrimary}"
-                                               FontSize="{StaticResource FontSizeSmall}" />
-                                </Border>
-                            </StackPanel>
-
-                            <Separator Margin="0,4,0,4"
-                                       HorizontalAlignment="Stretch"
-                                       Background="{StaticResource BrushBorder}" />
-
-                            <!-- Meta-Daten: GUID, Owner, Zeiten -->
-                            <Grid ColumnDefinitions="Auto,*"
-                                  RowDefinitions="Auto,Auto,Auto,Auto,Auto"
-                                  ColumnSpacing="10"
-                                  RowSpacing="4">
-
-                                <!-- GUID -->
-                                <TextBlock Grid.Row="0" Grid.Column="0"
-                                           Text="GUID:"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource BrushTextSecondary}" />
-                                <TextBlock Grid.Row="0" Grid.Column="1"
-                                           Text="{Binding Entity.Id}"
-                                           Foreground="{StaticResource BrushTextPrimary}"
-                                           FontSize="{StaticResource FontSizeSmall}" />
-
-                                <!-- Owner -->
-                                <TextBlock Grid.Row="1" Grid.Column="0"
-                                           Text="Owner:"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource BrushTextSecondary}" />
-                                <TextBlock Grid.Row="1" Grid.Column="1"
-                                           Text="{Binding Entity.OwnerId, FallbackValue='None'}"
-                                           Foreground="{StaticResource BrushTextPrimary}"
-                                           FontSize="{StaticResource FontSizeSmall}" />
-
-                                <!-- Created -->
-                                <TextBlock Grid.Row="2" Grid.Column="0"
-                                           Text="Created:"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource BrushTextSecondary}" />
-                                <TextBlock Grid.Row="2" Grid.Column="1"
-                                           Text="{Binding Entity.CreatedAt, StringFormat='yyyy-MM-dd HH:mm'}"
-                                           Foreground="{StaticResource BrushTextPrimary}" />
-
-                                <!-- Updated -->
-                                <TextBlock Grid.Row="3" Grid.Column="0"
-                                           Text="Updated:"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource BrushTextSecondary}" />
-                                <TextBlock Grid.Row="3" Grid.Column="1"
-                                           Text="{Binding Entity.UpdatedAt, 
-                                                          StringFormat='yyyy-MM-dd HH:mm', 
-                                                          FallbackValue='Not updated yet'}"
-                                           Foreground="{StaticResource BrushTextPrimary}" />
-
-                                <!-- Interacted -->
-                                <TextBlock Grid.Row="4" Grid.Column="0"
-                                           Text="Last activity:"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource BrushTextSecondary}" />
-                                <TextBlock Grid.Row="4" Grid.Column="1"
-                                           Text="{Binding Entity.InteractedAt, StringFormat='yyyy-MM-dd HH:mm'}"
-                                           Foreground="{StaticResource BrushTextPrimary}" />
-
-                            </Grid>
-
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Text="Reason" />
+                        <TextBox Grid.Row="3" Grid.Column="1"
+                                 IsEnabled="{Binding StopAutomatically}"
+                                 Text="{Binding AutoStopReason, Mode=TwoWay}"
+                                 Watermark="Optional reason" />
+                        
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Text=" " />
+                        <StackPanel Grid.Row="4" Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    HorizontalAlignment="Right">
+                          <Button Content="Cancel"
+                                  Command="{Binding CloseSessionStartFormCommand}" />
+                          <Button Content="Save"
+                                  Command="{Binding StartSessionCommand}" />
                         </StackPanel>
 
+                      </Grid>
+
+                    </StackPanel>
+                  </Border>
+                    
+                    
+                    <Border Padding="10"
+                              CornerRadius="8"
+                              BorderThickness="1"
+                              BorderBrush="{StaticResource BrushBorder}"
+                              IsVisible="{Binding IsPauseFormOpen}">
+                        <StackPanel Spacing="10">
+
+                          <TextBlock Text="Pause session"
+                                     FontWeight="SemiBold"/>
+
+                          <Grid ColumnDefinitions="140,*"
+                                RowDefinitions="Auto,Auto,Auto"
+                                RowSpacing="8"
+                                ColumnSpacing="10">
+                              
+                            <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Efficiency" />
+                            <ComboBox Grid.Row="0" Grid.Column="1"
+                                      ItemsSource="{Binding EfficiencyTypes}"
+                                      SelectedValue="{Binding EfficiencyId}"
+                                      SelectedValueBinding="{Binding Id}"
+                                      DisplayMemberBinding="{Binding Name}"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="Concentration" />
+                            <ComboBox Grid.Row="1" Grid.Column="1"
+                                      ItemsSource="{Binding ConcentrationTypes}"
+                                      SelectedValue="{Binding ConcentrationId}"
+                                      SelectedValueBinding="{Binding Id}"
+                                      DisplayMemberBinding="{Binding Name}" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="Summary" />
+                            <StackPanel Grid.Row="2" Grid.Column="1" Spacing="8">
+                              <TextBox Text="{Binding Summary, Mode=TwoWay}"
+                                       AcceptsReturn="True"
+                                       TextWrapping="Wrap"
+                                       MinHeight="70"
+                                       Watermark="What happened? Short summary." />
+
+                              <StackPanel Orientation="Horizontal"
+                                          Spacing="8"
+                                          HorizontalAlignment="Right">
+                                <Button Content="Cancel"
+                                        Command="{Binding CloseSessionPauseFormCommand}" />
+                                <Button Content="Save"
+                                        Command="{Binding PauseSessionCommand}" />
+                              </StackPanel>
+                            </StackPanel>
+
+                          </Grid>
+
+                        </StackPanel>
+                      </Border>
+                    
+                </StackPanel>
+            </Border>
+            <!-- Entity Info -->
+            <Border
+                Background="{StaticResource BrushPrimaryBackground}"
+                Padding="12"
+                IsVisible="{Binding Parent.DetailedEntity}">
+
+                <StackPanel Spacing="8">
+
+                    <TextBlock Text="Entity"
+                               FontSize="16"
+                               FontWeight="SemiBold"/>
+
+                    <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                        
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="0" 
+                                   Text="ID"/>
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="1"
+                                   Text="{Binding Parent.DetailedEntity.Id}"/>
+                        
+                        
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="0" 
+                                   Text="Title"/>
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="1"
+                                   Text="{Binding Parent.DetailedEntity.Item.Title}"/>
+
+                        
+                        <TextBlock Grid.Row="2" 
+                                   Grid.Column="0" 
+                                   Text="Workflow"/>
+                        <TextBlock Grid.Row="2"
+                                   Grid.Column="1"
+                                   Text="{Binding Parent.DetailedEntity.Workflow.Name}"/>
+
+                        
+                        <TextBlock Grid.Row="3"
+                                   Grid.Column="0" 
+                                   Text="State"/>
+                        <TextBlock Grid.Row="3"
+                                   Grid.Column="1"
+                                   Text="{Binding Parent.DetailedEntity.Item.State.Name}"/>
+                        
+                        
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="0" 
+                                   Text="Priority"/>
+                        <TextBlock Grid.Row="4"
+                                   Grid.Column="1"
+                                   Text="{Binding Parent.DetailedEntity.Item.Priority.Name}"/>
+                        
+                        <TextBlock Grid.Row="5"
+                                   Grid.Column="0" 
+                                   Text="Category"/>
+                        <TextBlock Grid.Row="5"
+                                   Grid.Column="1"
+                                   Text="{Binding Parent.DetailedEntity.Item.Category.Name}"/>
+                    </Grid>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Descriptions Header (nur wenn Liste nicht leer) -->
+            <TextBlock Text="Descriptions"
+                       FontSize="14"
+                       FontWeight="SemiBold"
+                       IsVisible="{Binding Parent.DetailedEntity.Descriptions.Count}" />
+
+            <!-- Descriptions List (nur wenn Liste nicht leer) -->
+            <ItemsControl ItemsSource="{Binding Parent.DetailedEntity.Descriptions}"
+                          IsVisible="{Binding Parent.DetailedEntity.Descriptions.Count}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Padding="10"
+                                Margin="0,6,0,0"
+                                Background="{StaticResource BrushPrimaryBackground}">
+                            <TextBlock Text="{Binding Content}"
+                                       TextWrapping="Wrap" />
+                        </Border>
                     </DataTemplate>
-                </ContentControl.ContentTemplate>
-            </ContentControl>
-            
-            <TextBlock Text="Descriptions"/>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Add Description -->
+            <Border Padding="10"
+                    Background="{StaticResource BrushPrimaryBackground}">
+                <Grid ColumnDefinitions="*,Auto"
+                      ColumnSpacing="10"
+                      VerticalAlignment="Center">
+
+                    <TextBox Grid.Column="0"
+                             Classes="misa-input"
+                             Watermark="Description..."
+                             Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <Button Grid.Column="1"
+                            Width="38"
+                            Height="38"
+                            Command="{Binding AddDescriptionCommand}">
+                        <Image Width="16"
+                               Height="16"
+                               Source="{SvgImage /Assets/Images/MainNavigation/plus-circle.svg}" />
+                    </Button>
+                </Grid>
+            </Border>
+
         </StackPanel>
-        
+
     </Border>
 </UserControl>

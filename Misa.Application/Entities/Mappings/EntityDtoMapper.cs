@@ -1,5 +1,8 @@
-﻿using Misa.Contract.Entities;
+﻿using Misa.Application.Items.Mappings;
+using Misa.Contract.Entities;
 using Misa.Contract.Entities.Lookups;
+using Misa.Domain.Entities;
+using Misa.Application.Main.Mappings;
 
 namespace Misa.Application.Entities.Mappings;
 
@@ -23,6 +26,19 @@ public static class EntityDtoMapper
             InteractedAt = entity.InteractedAt
         };
 
+    public static EntityDto ToDetailedDto(this Misa.Domain.Entities.Entity entity)
+        => new EntityDto
+        {
+             Id = entity.Id,
+             OwnerId = entity.OwnerId,
+             Workflow = entity.Workflow.ToDto(),
+             IsDeleted = entity.IsDeleted,
+             CreatedAt = entity.CreatedAt,
+             UpdatedAt = entity.UpdatedAt,
+             InteractedAt = entity.InteractedAt,
+             Item = entity.Item?.ToReadItemDto(),
+             Descriptions = entity.Descriptions.ToDto()
+        };
     public static ReadEntityDto ToReadEntityDto(this Misa.Domain.Entities.Entity entity)
         => new()
         {

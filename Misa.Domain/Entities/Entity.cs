@@ -1,4 +1,8 @@
-﻿namespace Misa.Domain.Entities;
+﻿using System.Security.Cryptography.X509Certificates;
+using Misa.Domain.Items;
+using Misa.Domain.Main;
+
+namespace Misa.Domain.Entities;
 
 public class Entity
 {
@@ -13,16 +17,18 @@ public class Entity
         InteractedAt = DateTimeOffset.UtcNow;
     }
     
-    public Guid Id { get; private set; }
-    public Guid? OwnerId { get; private set; }
-    public int WorkflowId { get; private set; }
-    public bool IsDeleted { get; private set; }
+    public Guid Id { get; set; }
+    public Guid? OwnerId { get; set; }
+    public int WorkflowId { get; set; }
+    public bool IsDeleted { get; set; }
     
-    public DateTimeOffset CreatedAt { get; private set; }
-    public DateTimeOffset? UpdatedAt { get; private set; }
-    public DateTimeOffset InteractedAt { get; private set; }
+    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; }
+    public DateTimeOffset InteractedAt { get; set; }
 
-    public Workflow Workflow { get; private set; }
+    public Workflow Workflow { get;  set; }
+    public Item? Item { get; set; }
+    public ICollection<Description> Descriptions { get; set; } = new List<Description>();
     
     public void Interact() => InteractedAt =  DateTimeOffset.UtcNow;
     public void Update() => UpdatedAt = DateTimeOffset.UtcNow;

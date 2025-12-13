@@ -40,16 +40,19 @@ public class Entity : IEntityTypeConfiguration<Domain.Entities.Entity>
 
         builder.HasQueryFilter(e => !e.IsDeleted);
         
-        builder.HasIndex(e => e.OwnerId)
-            .HasDatabaseName("ix_entities_owner");
-        builder.HasIndex(e => e.WorkflowId)
-            .HasDatabaseName("ix_entities_workflow");
-        builder.HasIndex(e => e.CreatedAt)
-            .HasDatabaseName("ix_entities_created");
-        
         builder.HasOne(i => i.Workflow)
             .WithMany()
             .HasForeignKey(i => i.WorkflowId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.HasOne(i => i.Item)
+            .WithOne(i => i.Entity)
+            .HasForeignKey<Domain.Items.Item>(i => i.EntityId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(i => i.Descriptions)
+            .WithOne()
+            .HasForeignKey(i => i.EntityId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

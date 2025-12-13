@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Misa.Infrastructure.Configurations.Ef;
 
@@ -31,12 +30,6 @@ public class Item : IEntityTypeConfiguration<Misa.Domain.Items.Item>
         builder.Property(x => x.Title)
             .IsRequired()
             .HasColumnName("title");
-        
-        // Entity 1:1
-        builder.HasOne(i => i.Entity)
-            .WithOne()
-            .HasForeignKey<Domain.Items.Item>(i => i.EntityId)
-            .OnDelete(DeleteBehavior.Cascade);
         
         // State n:1
         builder.HasOne(i => i.State)

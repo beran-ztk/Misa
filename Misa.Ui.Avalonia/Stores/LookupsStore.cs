@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Misa.Contract.Audit.Lookups;
 using Misa.Contract.Items.Lookups;
 using Misa.Contract.Main;
 
@@ -15,6 +16,8 @@ public class LookupsStore
     public IReadOnlyList<StateDto> States { get; private set; } = [];
     public IReadOnlyList<PriorityDto> Priorities { get; private set; } = [];
     public IReadOnlyList<CategoryDto> TaskCategories { get; private set; } = [];
+    public IReadOnlyList<SessionEfficiencyTypeDto> EfficiencyTypes { get; private set; } = [];
+    public IReadOnlyList<SessionConcentrationTypeDto> ConcentrationTypes { get; private set; } = [];
     public LookupsStore(HttpClient httpClient)
     {
         _httpClient = httpClient;
@@ -30,6 +33,8 @@ public class LookupsStore
         States = dto.States;
         Priorities = dto.Priorities;
         TaskCategories = dto.TaskCategories;
+        EfficiencyTypes = dto.EfficiencyTypes;
+        ConcentrationTypes = dto.ConcentrationTypes;
 
         _isLoaded = true;
     }

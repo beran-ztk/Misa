@@ -9,5 +9,6 @@ public enum EntityWorkflows
     Journal      = 5,
     Module       = 6,
     Unit         = 7,
-    Session      = 8
+    Session      = 8,
+    Description  = 9
 }

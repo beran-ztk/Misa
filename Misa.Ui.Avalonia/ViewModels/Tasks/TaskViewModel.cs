@@ -32,7 +32,7 @@ public class TaskViewModel : ViewModelBase, IEntityDetail
         
         ListModel = new TaskListViewModel(this);
         Navigation = new TaskNavigationViewModel(this);
-        CurrentInfoModel = new DetailMainDetailViewModel(this);
+        CurrentInfoModel = new DetailMainDetailViewModel(this, NavigationService);
     }
     
     public ViewModelBase? CurrentInfoModel

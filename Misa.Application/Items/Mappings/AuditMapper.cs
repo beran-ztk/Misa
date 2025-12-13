@@ -1,0 +1,57 @@
+﻿using Misa.Contract.Audit;
+using Misa.Contract.Audit.Lookups;
+using Misa.Domain.Audit;
+
+namespace Misa.Application.Items.Mappings;
+
+public static class AuditMapper
+{
+    public static ActionTypeDto ToDto(this ActionType x) => new()
+    {
+        Id = x.Id,
+        Name = x.Name,
+        Synopsis = x.Synopsis
+    };
+
+    public static SessionEfficiencyTypeDto ToDto(this SessionEfficiencyType x) => new()
+    {
+        Id = x.Id,
+        Name = x.Name,
+        Synopsis = x.Synopsis,
+        SortOrder = x.SortOrder
+    };
+
+    public static SessionConcentrationTypeDto ToDto(this SessionConcentrationType x) => new()
+    {
+        Id = x.Id,
+        Name = x.Name,
+        Synopsis = x.Synopsis,
+        SortOrder = x.SortOrder
+    };
+
+    public static ActionDto ToDto(this Misa.Domain.Audit.Action x) => new()
+    {
+        Id = x.Id,
+        EntityId = x.EntityId,
+        Type = x.Type.ToDto(),
+        ValueBefore = x.ValueBefore,
+        ValueAfter = x.ValueAfter,
+        Reason = x.Reason,
+        CreatedAtUtc = x.CreatedAtUtc
+    };
+
+    public static SessionDto ToDto(this Session x) => new()
+    {
+        Id = x.Id,
+        EntityId = x.EntityId,
+        Efficiency = x.Efficiency?.ToDto(),
+        Concentration = x.Concentration?.ToDto(),
+        Objective = x.Objective,
+        Summary = x.Summary,
+        AutoStopReason = x.AutoStopReason,
+        PlannedDuration = x.PlannedDuration,
+        StopAutomatically = x.StopAutomatically,
+        StartedAtUtc = x.StartedAtUtc,
+        EndedAtUtc = x.EndedAtUtc
+    };
+}

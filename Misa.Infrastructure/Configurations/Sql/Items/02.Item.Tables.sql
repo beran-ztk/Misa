@@ -48,7 +48,9 @@ CREATE INDEX idx_relations_relation
 
 CREATE TABLE descriptions
 (
-    entity_id       UUID PRIMARY KEY REFERENCES entities(id) ON DELETE CASCADE,
-    type_id         INT  NOT NULL REFERENCES description_types(id) ON DELETE RESTRICT,
-    content         TEXT NOT NULL,
+    id                  UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    entity_id    UUID REFERENCES entities(id) ON DELETE CASCADE,
+    type_id             INT  NOT NULL REFERENCES description_types(id) ON DELETE RESTRICT,
+    content             TEXT NOT NULL,
+    created_at_utc      TIMESTAMPTZ NOT NULL DEFAULT now()
 );

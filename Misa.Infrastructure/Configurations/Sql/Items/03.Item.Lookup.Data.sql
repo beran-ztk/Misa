@@ -29,7 +29,8 @@ VALUES
     ('Journal',      'Persönliche oder berufliche Notizen'),
     ('Module',       'Übergeordnetes Lern- oder Projektmodul'),
     ('Unit',         'Einzelne Lerneinheit oder Arbeitsschritt'),
-    ('Session',      'Aktive Sitzung');
+    ('Session',      'Aktive Sitzung'),
+    ('Description',  'Unterschiedliche Zusatzinformationen für Entitäten');
 
 INSERT INTO workflow_category_types (workflow_id, name, synopsis, sort_order)
 VALUES
@@ -51,11 +52,5 @@ VALUES
     ('Text',            'Einfacher Fließtext ohne Formatierung',                               1),
     ('Markdown',        'Formatierter Text mit Überschriften, Listen und Hervorhebungen',      2),
     ('Url',             'Referenz auf externe Inhalte, Webseiten oder Dateien',                3),
-    ('Picture',         'Grafiken, Screenshots oder eingebettete Bilder',                      4),
-
-    ('SessionObjective','Zielsetzung der Session, geplante Aufgaben oder Fokusbereiche',        5),
-    ('SessionSummary',  'Kurzfazit nach der Session, Reflexionen oder Ergebnisse',              6),
-    ('AutoStopReason',  'Begründung für automatisches Beenden einer Session',                  7),
-
-    ('AuditActionReason','Erläuterung der Ursache für eine protokollierte Änderung',           8);
+    ('Picture',         'Grafiken, Screenshots oder eingebettete Bilder',                      4);
 
