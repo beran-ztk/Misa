@@ -23,7 +23,7 @@ public class DetailMainDetailViewModel : ViewModelBase
     public DetailInformationViewModel RelationViewModel { get; }
     public DetailInformationViewModel SessionViewModel { get; }
     public DetailInformationViewModel HistoryViewModel { get; }
-    public INavigationService NavigationService;
+    public INavigationService NavigationService { get; }
     
     public DetailMainDetailViewModel(IEntityDetail parent, INavigationService navigationService)
     {

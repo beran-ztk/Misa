@@ -1,9 +1,9 @@
-﻿INSERT INTO audit_action_types (name, synopsis)
+﻿INSERT INTO audit_action_types (id, name, synopsis)
 VALUES
-    ('Deleted',  'Delete an entity'),
-    ('State',    'Change of item state'),
-    ('Priority', 'Change of item priority'),
-    ('Title',    'Change of item title');
+    (100, 'State',    'Change of item state'),
+    (101, 'Priority', 'Change of item priority'),
+    (102, 'Category', 'Change of item category'),
+    (103, 'Title',    'Change of item title');
 
 INSERT INTO audit_session_efficiency_types (name, synopsis, sort_order)
 VALUES

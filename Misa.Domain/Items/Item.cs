@@ -1,8 +1,10 @@
-﻿using Misa.Domain.Entities;
+﻿using Misa.Domain.Dictionaries.Audit;
+using Misa.Domain.Entities;
+using Misa.Domain.Main;
 
 namespace Misa.Domain.Items;
 
-public class Item
+public class Item : ChangeEvent
 {
     // Für EF Core
     private Item() { }
@@ -41,23 +43,63 @@ public class Item
            or (int)Dictionaries.Items.ItemStates.Open
            or (int)Dictionaries.Items.ItemStates.Paused;
 
-    public void ChangeState(Misa.Domain.Dictionaries.Items.ItemStates state)
+    public void ChangeState(int newValue, string? reason = null)
     {
-        StateId = (int)state;
+        if (StateId == newValue)
+            return;
+        AddDomainEvent(new PropertyChangedEvent(
+            EntityId: EntityId,
+            ActionType: (int)ActionTypes.State,
+            OldValue: StateId.ToString(),
+            NewValue: newValue.ToString(),
+            Reason: reason
+        ));
+        StateId = newValue;
     }
+    public void StartSession() => ChangeState((int)Dictionaries.Items.ItemStates.Active);
+    public void PauseSession() => ChangeState((int)Dictionaries.Items.ItemStates.Paused);
+    public void ChangePriority(int newValue, string? reason = null)
+    {
+        if (PriorityId == newValue)
+            return;
+        AddDomainEvent(new PropertyChangedEvent(
+            EntityId: EntityId,
+            ActionType: (int)ActionTypes.Priority,
+            OldValue: Priority.ToString(),
+            NewValue: newValue.ToString(),
+            Reason: reason
+        ));
+        PriorityId = newValue;
+    }
+    public void ChangeCategory(int newValue, string? reason = null)
+    {
+        if (CategoryId == newValue)
+            return;
+        AddDomainEvent(new PropertyChangedEvent(
+            EntityId: EntityId,
+            ActionType: (int)ActionTypes.Category,
+            OldValue: Category.ToString(),
+            NewValue: newValue.ToString(),
+            Reason: reason
+        ));
+        CategoryId = newValue;
+    }
+    public void Rename(string newTitle, string? reason = null)
+    {
+        if (Title == newTitle || string.IsNullOrWhiteSpace(newTitle))
+        {
+            return;
+        }
 
-    public void StartSession()
-    {
-        StateId = (int)Dictionaries.Items.ItemStates.Active;
-    }
-    public void PauseSession()
-    {
-        StateId = (int)Dictionaries.Items.ItemStates.Paused;
-    }
-    public void Rename(string title)
-    {
-        Title = string.IsNullOrWhiteSpace(title)
-            ? throw new ArgumentException("Title cannot be empty.", nameof(title))
-            : title;
+        newTitle = newTitle.Trim();
+        
+        AddDomainEvent(new PropertyChangedEvent(
+            EntityId: EntityId,
+            ActionType: (int)ActionTypes.Title,
+            OldValue: Title,
+            NewValue: newTitle,
+            Reason: reason
+        ));
+        Title = newTitle;
     }
 }

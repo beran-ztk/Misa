@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Misa.Contract.Audit;
 using Misa.Contract.Audit.Lookups;
+using Misa.Contract.Items;
 using Misa.Contract.Items.Lookups;
 using Misa.Contract.Main;
 using Misa.Ui.Avalonia.Interfaces;
@@ -55,6 +56,46 @@ public partial class DetailInformationViewModel : ViewModelBase
     [ObservableProperty] private int concentration;
     [ObservableProperty] private string summary;
 
+    [ObservableProperty] private bool isEditTitleFormOpen;
+    [ObservableProperty] private string title;
+    [ObservableProperty] private int stateId;
+    [RelayCommand]
+    private void ShowEditTitleForm()
+    {
+        if (Parent.DetailedEntity?.Item is null) return;
+
+        Title = Parent.DetailedEntity.Item.Title;
+        IsEditTitleFormOpen = true;
+    }
+    [RelayCommand]
+    private void CloseEditTitleForm() => IsEditTitleFormOpen = false;
+
+    [RelayCommand]
+    private async Task UpdateTitleTask()
+    {
+        if (Parent.DetailedEntity == null)
+            return;
+        
+        var dto = new UpdateItemDto
+        {
+            EntityId = Parent.DetailedEntity.Id,
+            Title = Title == Parent.DetailedEntity?.Item?.Title
+                ? null 
+                : Title
+            // StateId = StateId == Parent.DetailedEntity?.Item?.State.Id 
+            //     ? null 
+            //     : StateId
+        };
+
+        var response = await Parent.NavigationService.NavigationStore
+            .MisaHttpClient.PatchAsJsonAsync(requestUri: "tasks", dto);
+
+        if (!response.IsSuccessStatusCode)
+            Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
+
+        Parent.Refresh();
+        IsEditTitleFormOpen = false;
+    }
 
     [RelayCommand]
     private void ShowSessionStartForm() => IsStartFormOpen = !IsStartFormOpen;

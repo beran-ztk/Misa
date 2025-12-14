@@ -8,6 +8,7 @@ CREATE TABLE entities
     
     created_at_utc      TIMESTAMPTZ NOT NULL,
     updated_at_utc      TIMESTAMPTZ,
+    deleted_at_utc      TIMESTAMPTZ,
     interacted_at_utc   TIMESTAMPTZ NOT NULL
 );
 

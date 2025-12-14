@@ -37,6 +37,7 @@ builder.Services.AddScoped<GetEntitiesHandler>();
 builder.Services.AddScoped<SessionHandler>();
 builder.Services.AddScoped<CreateDescriptionHandler>();
 builder.Services.AddScoped<AddEntityHandler>();
+builder.Services.AddScoped<UpdateItemHandler>();
 builder.Services.AddScoped<IEntityRepository, EntityRepository>();
 
 var app = builder.Build();
@@ -69,6 +70,11 @@ app.MapGet("/api/tasks", async ( GetItemsHandler handler, CancellationToken ct)
      => await handler.GetTasksAsync(ct));
 app.MapPost("/api/tasks", async ( CreateItemDto dto, CreateItemHandler itemHandler, CancellationToken ct) 
     => await itemHandler.AddTaskAsync(dto, ct));
+app.MapPatch("/tasks", async (UpdateItemDto dto, UpdateItemHandler handler) =>
+{
+    await handler.UpdateAsync(dto);
+    return Results.Ok();
+});
 
 // Description
 app.MapPost("/api/descriptions", async ( DescriptionDto dto, CreateDescriptionHandler descriptionHandler, CancellationToken ct) 

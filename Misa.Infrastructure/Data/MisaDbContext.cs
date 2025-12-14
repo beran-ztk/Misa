@@ -1,6 +1,8 @@
-﻿using Misa.Domain.Items;
+﻿using System.Security.AccessControl;
+using Misa.Domain.Items;
 using Microsoft.EntityFrameworkCore;
 using Misa.Domain.Entities;
+using Misa.Domain.Main;
 
 namespace Misa.Infrastructure.Data;
 
@@ -29,4 +31,45 @@ public class MisaDbContext : DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(MisaDbContext).Assembly);
     }
+
+    private void WriteAuditFromDomainEvents()
+    {
+        var tracked = ChangeTracker.Entries()
+            .Select(e => e.Entity)
+            .OfType<IHasDomainEvents>()
+            .Where(e => e.DomainEvents.Count > 0)
+            .ToList();
+
+        var events = tracked
+            .SelectMany(e => e.DomainEvents)
+            .OfType<PropertyChangedEvent>()
+            .ToList();
+
+        foreach (var ev in events)
+        {
+            Actions.Add(new Domain.Audit.Action
+            {
+                EntityId = ev.EntityId,
+                TypeId = ev.ActionType,
+                ValueBefore = ev.OldValue,
+                ValueAfter = ev.NewValue,
+                CreatedAtUtc = DateTimeOffset.UtcNow
+            });
+        }
+        // danach:
+        foreach (var e in tracked)
+            e.ClearDomainEvents();
+    }
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        WriteAuditFromDomainEvents();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken ct = default)
+    {
+        WriteAuditFromDomainEvents();
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, ct);
+    }
+
 }

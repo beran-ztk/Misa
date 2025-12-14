@@ -1,6 +1,6 @@
 ﻿CREATE TABLE audit_action_types
 (
-    id          INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id          INT PRIMARY KEY,
     name        TEXT NOT NULL UNIQUE,
     synopsis    TEXT
 );
