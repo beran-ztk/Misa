@@ -11,7 +11,7 @@ public class CreateDescriptionHandler(IMainRepository repository)
 {
     public async Task CreateAsync(DescriptionDto dto)
     {
-        var description = new Description(dto.EntityId, dto.TypeId, dto.Content);
+        var description = new Description(dto.EntityId, dto.TypeId, dto.Content, DateTimeOffset.UtcNow);
         
         await repository.AddDescriptionAsync(description);
     }

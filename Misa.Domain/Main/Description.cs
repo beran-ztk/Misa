@@ -7,11 +7,12 @@ public class Description
 {
     private Description() { }
 
-    public Description( Guid guid, int typeId, string content)
+    public Description( Guid guid, int typeId, string content, DateTimeOffset? createdAtUtc)
     {
         EntityId = guid;
         TypeId = typeId;
         Content = content;
+        CreatedAtUtc = createdAtUtc ?? DateTimeOffset.UtcNow;
     }
     // Member
     public Guid Id { get; set; }
