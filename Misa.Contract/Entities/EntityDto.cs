@@ -1,4 +1,5 @@
-﻿using Misa.Contract.Entities.Lookups;
+﻿using Misa.Contract.Audit;
+using Misa.Contract.Entities.Lookups;
 using Misa.Contract.Items;
 using Misa.Contract.Main;
 
@@ -19,4 +20,5 @@ public class EntityDto
     public ReadItemDto? Item { get; set; }
 
     public List<DescriptionDto> Descriptions { get; set; } = new();
+    public List<SessionDto> Sessions { get; set; } = new();
 }

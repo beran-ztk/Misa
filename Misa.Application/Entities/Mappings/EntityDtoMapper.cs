@@ -3,6 +3,7 @@ using Misa.Contract.Entities;
 using Misa.Contract.Entities.Lookups;
 using Misa.Domain.Entities;
 using Misa.Application.Main.Mappings;
+using Misa.Domain.Audit;
 
 namespace Misa.Application.Entities.Mappings;
 
@@ -37,7 +38,8 @@ public static class EntityDtoMapper
              UpdatedAt = entity.UpdatedAt,
              InteractedAt = entity.InteractedAt,
              Item = entity.Item?.ToReadItemDto(),
-             Descriptions = entity.Descriptions.ToDto()
+             Descriptions = entity.Descriptions.ToDto(),
+             Sessions = entity.Sessions.ToDto()
         };
     public static ReadEntityDto ToReadEntityDto(this Misa.Domain.Entities.Entity entity)
         => new()

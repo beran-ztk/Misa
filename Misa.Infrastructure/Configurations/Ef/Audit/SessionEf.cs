@@ -58,7 +58,5 @@ public class SessionEf : IEntityTypeConfiguration<Session>
             .WithMany()
             .HasForeignKey(x => x.ConcentrationId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasIndex(x => x.EntityId);
     }
 }

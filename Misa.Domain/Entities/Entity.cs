@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
+using Misa.Domain.Audit;
 using Misa.Domain.Items;
 using Misa.Domain.Main;
 
@@ -29,6 +30,7 @@ public class Entity
     public Workflow Workflow { get;  set; }
     public Item? Item { get; set; }
     public ICollection<Description> Descriptions { get; set; } = new List<Description>();
+    public ICollection<Session> Sessions { get; set; } = new List<Session>();
     
     public void Interact() => InteractedAt =  DateTimeOffset.UtcNow;
     public void Update() => UpdatedAt = DateTimeOffset.UtcNow;

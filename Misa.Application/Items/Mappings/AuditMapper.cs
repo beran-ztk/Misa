@@ -40,7 +40,8 @@ public static class AuditMapper
         CreatedAtUtc = x.CreatedAtUtc
     };
 
-    public static SessionDto ToDto(this Session x) => new()
+    public static List<SessionDto> ToDto(this ICollection<Session> s) 
+        => s.Select(x => new SessionDto()
     {
         Id = x.Id,
         EntityId = x.EntityId,
@@ -53,5 +54,5 @@ public static class AuditMapper
         StopAutomatically = x.StopAutomatically,
         StartedAtUtc = x.StartedAtUtc,
         EndedAtUtc = x.EndedAtUtc
-    };
+    }).ToList();
 }

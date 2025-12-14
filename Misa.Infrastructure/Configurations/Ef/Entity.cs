@@ -54,5 +54,10 @@ public class Entity : IEntityTypeConfiguration<Domain.Entities.Entity>
             .WithOne()
             .HasForeignKey(i => i.EntityId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(e => e.Sessions)
+            .WithOne()
+            .HasForeignKey(s => s.EntityId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

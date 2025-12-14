@@ -22,5 +22,4 @@ public class GetEntitiesHandler(IEntityRepository repository)
         var entity = await repository.GetDetailedEntityAsync(id, ct);
         return entity?.ToDetailedDto();
     }
-
 }
