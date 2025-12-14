@@ -73,7 +73,8 @@ public partial class DetailInformationViewModel : ViewModelBase
         Parent.NavigationService.LookupsStore.EfficiencyTypes;
     public IReadOnlyList<SessionConcentrationTypeDto> ConcentrationTypes =>
         Parent.NavigationService.LookupsStore.ConcentrationTypes;
-    
+
+    public int GetDescriptionCount => Parent.DetailedEntity?.Descriptions.Count ?? 0;
     public string Description
     {
         get => _description;
