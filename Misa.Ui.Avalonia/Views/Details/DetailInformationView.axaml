@@ -274,8 +274,7 @@
                 CornerRadius="10"
                 BorderThickness="1"
                 BorderBrush="{StaticResource BrushBorder}"
-                Background="{StaticResource BrushPrimaryBackgroundLighter}"
-                IsVisible="{Binding Parent.HasDetailedEntity}">
+                Background="{StaticResource BrushPrimaryBackgroundLighter}">
 
             <StackPanel Spacing="12">
                 <TextBlock Text="Information"
@@ -288,50 +287,53 @@
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Parent.DetailedEntity.Id}"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Title" Opacity="0.7"/>
-                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="12">
-                        <TextBlock  Text="{Binding Parent.DetailedEntity.Item.Title}" TextWrapping="Wrap"/>
-                        <Button Classes="misa-action"
-                                Content="Edit"
+
+                    <Grid Grid.Row="1" Grid.Column="1"
+                          ColumnDefinitions="*,Auto"
+                          RowDefinitions="Auto,Auto"
+                          RowSpacing="8"
+                          ColumnSpacing="10">
+
+                        <!-- Display mode -->
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding Parent.DetailedEntity.Item.Title}"
+                                   TextWrapping="Wrap"
+                                   IsVisible="{Binding !IsEditTitleFormOpen}"/>
+
+                        <Button Grid.Row="0" Grid.Column="1"
+                                Classes="misa-action"
                                 Command="{Binding ShowEditTitleFormCommand}"
-                                IsVisible="{Binding Parent.DetailedEntity.Item}"/>
-                        
-                        <Border Padding="10"
-                                CornerRadius="10"
-                                BorderThickness="1"
-                                BorderBrush="{StaticResource BrushBorder}"
-                                Background="{StaticResource BrushPrimaryBackground}"
-                                IsVisible="{Binding IsEditTitleFormOpen}">
-                            <StackPanel Spacing="10">
+                                IsVisible="{Binding !IsEditTitleFormOpen}">
+                            <Image Width="16" Height="16"
+                                   Source="{SvgImage /Assets/Images/Details/pencil.svg}"/>
+                        </Button>
 
-                                <TextBlock Text="Edit"
-                                           FontWeight="SemiBold"/>
+                        <!-- Edit mode -->
+                        <TextBox Grid.Row="1" Grid.Column="0"
+                                 Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 IsVisible="{Binding IsEditTitleFormOpen}"/>
 
-                                <Grid ColumnDefinitions="140,*"
-                                      RowDefinitions="Auto,Auto,Auto,Auto,Auto"
-                                      RowSpacing="8"
-                                      ColumnSpacing="10">
+                        <StackPanel Grid.Row="1" Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    HorizontalAlignment="Right"
+                                    IsVisible="{Binding IsEditTitleFormOpen}">
 
-                                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Title" />
-                                    <TextBox Grid.Row="0" Grid.Column="1"
-                                             Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    
-                                    <TextBlock Grid.Row="4" Grid.Column="0" Text=" " />
-                                    <StackPanel Grid.Row="4" Grid.Column="1"
-                                                Orientation="Horizontal"
-                                                Spacing="8"
-                                                HorizontalAlignment="Right">
-                                        <Button Classes="misa-action"
-                                                Content="Cancel"
-                                                Command="{Binding CloseEditTitleFormCommand}" />
-                                        <Button Classes="misa-action"
-                                                Content="Save"
-                                                Command="{Binding UpdateTitleTaskCommand}" />
-                                    </StackPanel>
-                                </Grid>
+                            <!-- Cancel -->
+                            <Button Classes="misa-action"
+                                    Command="{Binding CloseEditTitleFormCommand}">
+                                <TextBlock Text="Cancel"/>
+                            </Button>
 
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
+                            <!-- Save -->
+                            <Button Classes="misa-action"
+                                    Command="{Binding UpdateTitleTaskCommand}">
+                                <TextBlock Text="Save"/>
+                            </Button>
+
+                        </StackPanel>
+                    </Grid>
+
                     
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Created" Opacity="0.7"/>

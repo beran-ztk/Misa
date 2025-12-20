@@ -31,7 +31,7 @@ public class Item : ChangeEvent
     public string Title { get; private set; }
     
     // Modelle
-    public Entity Entity { get; private set; }
+    public Entity Entity { get; set; }
     public State State { get; private set; }
     public Priority Priority { get; private set; }
     public Category Category { get; private set; }
@@ -43,10 +43,13 @@ public class Item : ChangeEvent
            or (int)Dictionaries.Items.ItemStates.Open
            or (int)Dictionaries.Items.ItemStates.Paused;
 
-    public void ChangeState(int newValue, string? reason = null)
+    public void ChangeState(int? optionalNewValue, ref bool changed,  string? reason = null)
     {
-        if (StateId == newValue)
+        if (StateId == optionalNewValue || optionalNewValue is null)
             return;
+
+        var newValue = Convert.ToInt32(optionalNewValue);
+        
         AddDomainEvent(new PropertyChangedEvent(
             EntityId: EntityId,
             ActionType: (int)ActionTypes.State,
@@ -55,13 +58,18 @@ public class Item : ChangeEvent
             Reason: reason
         ));
         StateId = newValue;
+        
+        changed = true;
     }
-    public void StartSession() => ChangeState((int)Dictionaries.Items.ItemStates.Active);
-    public void PauseSession() => ChangeState((int)Dictionaries.Items.ItemStates.Paused);
-    public void ChangePriority(int newValue, string? reason = null)
+    public void StartSession(ref bool hasBeenChanged) => ChangeState((int)Dictionaries.Items.ItemStates.Active, ref hasBeenChanged);
+    public void PauseSession(ref bool hasBeenChanged) => ChangeState((int)Dictionaries.Items.ItemStates.Paused, ref hasBeenChanged);
+    public void ChangePriority(int? optionalNewValue, ref bool changed, string? reason = null)
     {
-        if (PriorityId == newValue)
+        if (PriorityId == optionalNewValue || optionalNewValue is null)
             return;
+
+        var newValue = Convert.ToInt32(optionalNewValue);
+        
         AddDomainEvent(new PropertyChangedEvent(
             EntityId: EntityId,
             ActionType: (int)ActionTypes.Priority,
@@ -70,11 +78,16 @@ public class Item : ChangeEvent
             Reason: reason
         ));
         PriorityId = newValue;
+        
+        changed = true;
     }
-    public void ChangeCategory(int newValue, string? reason = null)
+    public void ChangeCategory(int? optionalNewValue, ref bool changed,  string? reason = null)
     {
-        if (CategoryId == newValue)
+        if (PriorityId == optionalNewValue || optionalNewValue is null)
             return;
+
+        var newValue = Convert.ToInt32(optionalNewValue);
+        
         AddDomainEvent(new PropertyChangedEvent(
             EntityId: EntityId,
             ActionType: (int)ActionTypes.Category,
@@ -83,23 +96,27 @@ public class Item : ChangeEvent
             Reason: reason
         ));
         CategoryId = newValue;
+        
+        changed = true;
     }
-    public void Rename(string newTitle, string? reason = null)
+    public void Rename(string? optionalNewTitle, ref bool changed,  string? reason = null)
     {
-        if (Title == newTitle || string.IsNullOrWhiteSpace(newTitle))
+        if (Title == optionalNewTitle || string.IsNullOrWhiteSpace(optionalNewTitle))
         {
             return;
         }
 
-        newTitle = newTitle.Trim();
+        var newValue = Convert.ToString(optionalNewTitle).Trim();
         
         AddDomainEvent(new PropertyChangedEvent(
             EntityId: EntityId,
             ActionType: (int)ActionTypes.Title,
             OldValue: Title,
-            NewValue: newTitle,
+            NewValue: newValue,
             Reason: reason
         ));
-        Title = newTitle;
+        Title = newValue;
+        
+        changed = true;
     }
 }

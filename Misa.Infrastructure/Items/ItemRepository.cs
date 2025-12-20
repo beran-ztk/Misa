@@ -9,7 +9,7 @@ namespace Misa.Infrastructure.Items;
 public class ItemRepository(MisaDbContext db) : IItemRepository
 {
     public async Task<Item> GetTrackedItemAsync(Guid id)
-        => await db.Items.FirstAsync(i => i.EntityId == id);
+        => await db.Items.Include(e => e.Entity).FirstAsync(i => i.EntityId == id);
 
     public async Task<Session> GetTrackedSessionAsync(Guid id)
     {

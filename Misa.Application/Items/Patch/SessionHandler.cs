@@ -6,29 +6,38 @@ namespace Misa.Application.Items.Patch;
 
 public class SessionHandler(IItemRepository repository)
 {
-    public async Task<bool> StartSessionAsync(SessionDto dto)
+    public async Task StartSessionAsync(SessionDto dto)
     {
+        bool hasBeenChanged = false;
         var item = await repository.GetTrackedItemAsync(dto.EntityId);
-        item.StartSession();
+        item.StartSession(ref hasBeenChanged);
 
         var session = Session.Start
         (
             dto.EntityId, dto.PlannedDuration, dto.Objective, 
             dto.StopAutomatically, dto.AutoStopReason, DateTimeOffset.UtcNow
         );
-        await repository.AddAsync(session);
         
+        if (!hasBeenChanged)
+            return;
+        
+        item.Entity.Update();
+        await repository.AddAsync(session);
         await repository.SaveChangesAsync();
-        return true;
     }
-    public async Task<bool> PauseSessionAsync(SessionDto dto)
+    public async Task PauseSessionAsync(SessionDto dto)
     {
+        bool hasBeenChanged = false;
         var item = await repository.GetTrackedItemAsync(dto.EntityId);
-        item.PauseSession();
+        item.PauseSession(ref hasBeenChanged);
 
         var session = await repository.GetTrackedSessionAsync(dto.EntityId);
         session.Pause(dto.EfficiencyId, dto.ConcentrationId, dto.Summary, DateTimeOffset.UtcNow);
+
+        if (!hasBeenChanged)
+            return;
+        
+        item.Entity.Update();
         await repository.SaveChangesAsync();
-        return true;
     }
 }
