@@ -57,25 +57,12 @@
                     
                 </StackPanel>
 
-                
-                <!-- State -->
-                <TextBlock Grid.Row="1" Grid.Column="0"
-                           Classes="misa-label"
-                           Text="State" />
-
-                <ComboBox Grid.Row="1" Grid.Column="1"
-                          Classes="misa-input"
-                          ItemsSource="{Binding States}"
-                          SelectedValue="{Binding StateId}"
-                          SelectedValueBinding="{Binding Id}"
-                          DisplayMemberBinding="{Binding Name}" />
-
                 <!-- Priority -->
-                <TextBlock Grid.Row="2" Grid.Column="0"
+                <TextBlock Grid.Row="1" Grid.Column="0"
                            Classes="misa-label"
                            Text="Priority" />
 
-                <ComboBox Grid.Row="2" Grid.Column="1"
+                <ComboBox Grid.Row="1" Grid.Column="1"
                           Classes="misa-input"
                           ItemsSource="{Binding Priorities}"
                           SelectedValue="{Binding PriorityId}"
@@ -83,11 +70,11 @@
                           DisplayMemberBinding="{Binding Name}" />
 
                 <!-- Category -->
-                <TextBlock Grid.Row="3" Grid.Column="0"
+                <TextBlock Grid.Row="2" Grid.Column="0"
                            Classes="misa-label"
                            Text="Category" />
 
-                <ComboBox Grid.Row="3" Grid.Column="1"
+                <ComboBox Grid.Row="2" Grid.Column="1"
                           Classes="misa-input"
                           ItemsSource="{Binding Categories}"
                           SelectedValue="{Binding CategoryId}"

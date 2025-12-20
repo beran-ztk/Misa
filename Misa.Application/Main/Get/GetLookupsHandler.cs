@@ -9,7 +9,6 @@ public class GetLookupsHandler(IMainRepository repository)
     public async Task<LookupsDto> GetAllAsync(CancellationToken ct)
     => new LookupsDto
         {
-            States = (await repository.GetStatesForCreation(ct)).ToDto(),
             Priorities = (await repository.GetPriorities(ct)).ToDto(),
             TaskCategories = (await repository.GetTaskCategories(ct)).ToDto(),
             EfficiencyTypes = (await repository.GetEfficiencyTypes(ct)).ToDto(),

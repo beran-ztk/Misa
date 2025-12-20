@@ -23,9 +23,12 @@ public class Entity
     public Guid? OwnerId { get; set; }
     public int WorkflowId { get; set; }
     public bool IsDeleted { get; set; }
+    public bool IsArchived { get; set; }
     
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
+    public DateTimeOffset? DeletedAt { get; set; }
+    public DateTimeOffset? ArchivedAt { get; set; }
     public DateTimeOffset InteractedAt { get; set; }
 
     public Workflow Workflow { get;  set; }

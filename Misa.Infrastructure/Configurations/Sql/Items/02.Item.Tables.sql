@@ -5,10 +5,12 @@ CREATE TABLE entities
     workflow_id         INT NOT NULL REFERENCES entity_workflow_types(id) ON DELETE RESTRICT,
     
     is_deleted          BOOL NOT NULL DEFAULT FALSE,
+    is_archived         BOOL NOT NULL DEFAULT FALSE,
     
     created_at_utc      TIMESTAMPTZ NOT NULL,
     updated_at_utc      TIMESTAMPTZ,
     deleted_at_utc      TIMESTAMPTZ,
+    archived_at_utc     TIMESTAMPTZ,
     interacted_at_utc   TIMESTAMPTZ NOT NULL
 );
 

@@ -37,10 +37,10 @@ public class Item : ChangeEvent
     public Category Category { get; private set; }
 
     public bool HasActiveSession 
-        => State.Id == (int)Dictionaries.Items.ItemStates.Active;
+        => StateId == (int)Dictionaries.Items.ItemStates.Active;
     public bool CanStartSession
-        => State.Id is (int)Dictionaries.Items.ItemStates.Draft
-           or (int)Dictionaries.Items.ItemStates.Open
+        => StateId is (int)Dictionaries.Items.ItemStates.Draft
+           or (int)Dictionaries.Items.ItemStates.InProgress
            or (int)Dictionaries.Items.ItemStates.Paused;
 
     public void ChangeState(int? optionalNewValue, ref bool changed,  string? reason = null)

@@ -19,15 +19,6 @@ public class MainRepository(MisaDbContext db) : IMainRepository
         await db.Descriptions.AddAsync(description);
         await db.SaveChangesAsync();
     }
-    public async Task<List<State>> GetStatesForCreation(CancellationToken ct)
-        => await db.States
-            .Where(s 
-                => s.Id == (int)Misa.Domain.Dictionaries.Items.ItemStates.Draft
-                || s.Id == (int)Misa.Domain.Dictionaries.Items.ItemStates.Open
-                || s.Id == (int)Misa.Domain.Dictionaries.Items.ItemStates.Done
-                || s.Id == (int)Misa.Domain.Dictionaries.Items.ItemStates.Archived)
-            .ToListAsync(ct);
-
     public async Task<List<Priority>> GetPriorities(CancellationToken ct)
         => await db.Priorities.ToListAsync(ct);
 

@@ -66,6 +66,20 @@
         <Setter Property="Background" Value="{StaticResource BrushPrimaryBackground}"/>
     </Style>
 
+    <Style Selector="Border.misa-detail-information-item">
+        <Setter Property="Margin" Value="0,0,8,8"/>
+        <Setter Property="Padding" Value="12"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrushBorder}"/>
+        <Setter Property="Background" Value="{StaticResource BrushPrimaryBackground}"/>
+    </Style>
+    <Style Selector="Button.misa-detail-information-item">
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Opacity" Value="0.6"/>
+    </Style>
 </UserControl.Styles>
 
     
@@ -357,12 +371,7 @@
                 <UniformGrid Columns="2" Rows="2" HorizontalAlignment="Stretch">
                     
                     <!-- Workflow -->
-                    <Border Margin="0,0,8,8"
-                            Padding="12"
-                            CornerRadius="10"
-                            BorderThickness="1"
-                            BorderBrush="{StaticResource BrushBorder}"
-                            Background="{StaticResource BrushPrimaryBackground}">
+                    <Border Classes="misa-detail-information-item">
                         <StackPanel Spacing="6">
                             <TextBlock Text="Workflow" Opacity="0.7" FontSize="12"/>
                             <TextBlock Text="{Binding Parent.DetailedEntity.Workflow.Name}" FontWeight="SemiBold"/>
@@ -373,28 +382,70 @@
                     </Border>
 
                     <!-- State -->
-                    <Border Margin="8,0,0,8"
-                            Padding="12"
-                            CornerRadius="10"
-                            BorderThickness="1"
-                            BorderBrush="{StaticResource BrushBorder}"
-                            Background="{StaticResource BrushPrimaryBackground}">
-                        <StackPanel Spacing="6">
-                            <TextBlock Text="State" Opacity="0.7" FontSize="12"/>
-                            <TextBlock Text="{Binding Parent.DetailedEntity.Item.State.Name}" FontWeight="SemiBold"/>
-                            <TextBlock Text="{Binding Parent.DetailedEntity.Item.State.Synopsis}"
-                                       TextWrapping="Wrap"
-                                       Opacity="0.85"/>
-                        </StackPanel>
+                    <Border Classes="misa-detail-information-item">
+                        <Grid>
+                            <!-- Content -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="State" Opacity="0.7" FontSize="12"/>
+                                <TextBlock Text="{Binding Parent.DetailedEntity.Item.State.Name}"
+                                           FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding Parent.DetailedEntity.Item.State.Synopsis}"
+                                           TextWrapping="Wrap"
+                                           Opacity="0.85"/>
+                            </StackPanel>
+
+                            <!-- Edit button (top-right overlay) -->
+                            <!-- <Button Classes="misa-detail-information-item" -->
+                            <!--         HorizontalAlignment="Right" -->
+                            <!--         VerticalAlignment="Top" -->
+                            <!--         Command="{Binding EditStateCommand}" -->
+                            <!--         IsVisible="{Binding CanEditState}" -->
+                            <!--         Margin="2"> -->
+                            <!-- -->
+                            <!--     <Image Width="14" -->
+                            <!--            Height="14" -->
+                            <!--            Source="{SvgImage /Assets/Images/Details/pencil.svg}"/> -->
+                            <!-- </Button> -->
+                            <!-- -->
+                            <!-- ~1~ Edit overlay (shown only when editing) @1@ -->
+                            <!-- <Border IsVisible="{Binding IsEditStateOpen}" -->
+                            <!--         Background="{StaticResource BrushPrimaryBackground}" -->
+                            <!--         BorderBrush="{StaticResource BrushBorder}" -->
+                            <!--         BorderThickness="1" -->
+                            <!--         CornerRadius="10" -->
+                            <!--         Padding="12"> -->
+                            <!-- -->
+                            <!--     <StackPanel Spacing="10"> -->
+                            <!-- -->
+                            <!--         <TextBlock Text="Edit State" -->
+                            <!--                    FontWeight="SemiBold"/> -->
+                            <!-- -->
+                            <!--         <ComboBox Classes="misa-input" -->
+                            <!--                   ItemsSource="{Binding StateTypes}" -->
+                            <!--                   SelectedValue="{Binding StateId}" -->
+                            <!--                   SelectedValueBinding="{Binding Id}" -->
+                            <!--                   DisplayMemberBinding="{Binding Name}" /> -->
+                            <!-- -->
+                            <!--         <StackPanel Orientation="Horizontal" -->
+                            <!--                     HorizontalAlignment="Right" -->
+                            <!--                     Spacing="8"> -->
+                            <!-- -->
+                            <!--             <Button Classes="misa-action" -->
+                            <!--                     Content="Cancel" -->
+                            <!--                     Command="{Binding CloseEditStateCommand}"/> -->
+                            <!-- -->
+                            <!--             <Button Classes="misa-action" -->
+                            <!--                     Content="Save" -->
+                            <!--                     Command="{Binding SaveStateCommand}"/> -->
+                            <!--         </StackPanel> -->
+                            <!-- -->
+                            <!--     </StackPanel> -->
+                            <!-- </Border> -->
+                        </Grid>
                     </Border>
 
                     <!-- Priority -->
-                    <Border Margin="0,8,8,0"
-                            Padding="12"
-                            CornerRadius="10"
-                            BorderThickness="1"
-                            BorderBrush="{StaticResource BrushBorder}"
-                            Background="{StaticResource BrushPrimaryBackground}">
+                    <Border Classes="misa-detail-information-item">
                         <StackPanel Spacing="6">
                             <TextBlock Text="Priority" Opacity="0.7" FontSize="12"/>
                             <TextBlock Text="{Binding Parent.DetailedEntity.Item.Priority.Name}" FontWeight="SemiBold"/>
@@ -405,12 +456,7 @@
                     </Border>
 
                     <!-- Category -->
-                    <Border Margin="8,8,0,0"
-                            Padding="12"
-                            CornerRadius="10"
-                            BorderThickness="1"
-                            BorderBrush="{StaticResource BrushBorder}"
-                            Background="{StaticResource BrushPrimaryBackground}">
+                    <Border Classes="misa-detail-information-item">
                         <StackPanel Spacing="6">
                             <TextBlock Text="Category" Opacity="0.7" FontSize="12"/>
                             <TextBlock Text="{Binding Parent.DetailedEntity.Item.Category.Name}" FontWeight="SemiBold"/>

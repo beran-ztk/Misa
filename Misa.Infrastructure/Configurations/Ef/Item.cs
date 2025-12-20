@@ -17,7 +17,8 @@ public class Item : IEntityTypeConfiguration<Misa.Domain.Items.Item>
         
         builder.Property(x => x.StateId)
             .IsRequired()
-            .HasColumnName("state_id");
+            .HasColumnName("state_id")
+            .HasDefaultValue((int)Misa.Domain.Dictionaries.Items.ItemStates.Draft);
         
         builder.Property(x => x.PriorityId)
             .IsRequired()

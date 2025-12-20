@@ -3,6 +3,7 @@ using Misa.Application.Items.Mappings;
 using Misa.Application.Items.Repositories;
 using Misa.Contract.Entities;
 using Misa.Contract.Items;
+using Misa.Domain.Dictionaries.Items;
 
 namespace Misa.Application.Items.Add;
 
@@ -17,7 +18,8 @@ public class CreateItemHandler(IItemRepository repository)
             OwnerId = itemDto.OwnerId,
             WorkflowId = (int)Misa.Domain.Dictionaries.Entities.EntityWorkflows.Task
         };
-            
+
+        itemDto.StateId = (int)ItemStates.Draft;
         var entity = entityDto.ToDomain();
         var item = itemDto.ToDomain(entity);
         

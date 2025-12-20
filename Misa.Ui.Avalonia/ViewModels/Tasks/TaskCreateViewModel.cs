@@ -21,7 +21,6 @@ public partial class TaskCreateViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> CreateTaskCommand { get; }
     
     private string _title = string.Empty;
-    private int _stateId = 1;
     private int _priorityId = 1;
     private int _categoryId = 1;
     private string? _errorMessageTitle = null;
@@ -46,11 +45,6 @@ public partial class TaskCreateViewModel : ViewModelBase
         get => _title;
         set => SetProperty(ref _title, value);
     }
-    public int StateId
-    {
-        get => _stateId;
-        set => SetProperty(ref _stateId, value);
-    }
     public int PriorityId
     {
         get => _priorityId;
@@ -71,8 +65,6 @@ public partial class TaskCreateViewModel : ViewModelBase
         get => _titleBorderBrush;
         set => SetProperty(ref _titleBorderBrush, value);
     }
-    public IReadOnlyList<StateDto> States => 
-        MainViewModel.NavigationService.LookupsStore.States;
     public IReadOnlyList<PriorityDto> Priorities =>
         MainViewModel.NavigationService.LookupsStore.Priorities;
     public IReadOnlyList<CategoryDto> Categories =>
@@ -105,7 +97,6 @@ public partial class TaskCreateViewModel : ViewModelBase
             var dto = new CreateItemDto
             {
                 OwnerId    = null,
-                StateId    = StateId,
                 PriorityId = PriorityId,
                 CategoryId = CategoryId,
                 Title      = trimmedTitle
@@ -125,7 +116,7 @@ public partial class TaskCreateViewModel : ViewModelBase
                 if (createdItem != null)
                     MainViewModel.Items.Add(createdItem);
                 MainViewModel.IsCreateTaskFormOpen = false;
-                MainViewModel.SelectedEntity = createdItem?.Entity.Id;
+                MainViewModel.SelectedTask = createdItem;
             }
         }
         catch (Exception e)

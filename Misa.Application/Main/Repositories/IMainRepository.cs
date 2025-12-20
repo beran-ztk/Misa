@@ -8,7 +8,6 @@ namespace Misa.Application.Main.Repositories;
 
 public interface IMainRepository
 {
-    public Task<List<State>> GetStatesForCreation(CancellationToken ct);
     public Task AddDescriptionAsync(Description description);
     public Task<List<Priority>> GetPriorities(CancellationToken ct);
     public Task<List<Category>> GetTaskCategories(CancellationToken ct);

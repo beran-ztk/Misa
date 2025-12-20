@@ -24,15 +24,27 @@ public class Entity : IEntityTypeConfiguration<Domain.Entities.Entity>
         builder.Property(e => e.WorkflowId)
             .HasColumnName("workflow_id")
             .IsRequired();
+        
         builder.Property(e => e.IsDeleted)
             .HasColumnName("is_deleted")
             .HasDefaultValue(false)
             .IsRequired();
+        builder.Property(e => e.IsArchived)
+            .HasColumnName("is_archived")
+            .HasDefaultValue(false)
+            .IsRequired();
+        
         builder.Property(e => e.CreatedAt)
             .HasColumnName("created_at_utc")
             .IsRequired();
         builder.Property(e => e.UpdatedAt)
             .HasColumnName("updated_at_utc")
+            .IsRequired(false);
+        builder.Property(e => e.DeletedAt)
+            .HasColumnName("deleted_at_utc")
+            .IsRequired(false);
+        builder.Property(e => e.ArchivedAt)
+            .HasColumnName("archived_at_utc")
             .IsRequired(false);
         builder.Property(e => e.InteractedAt)
             .HasColumnName("interacted_at_utc")
