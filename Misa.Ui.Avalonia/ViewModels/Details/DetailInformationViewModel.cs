@@ -100,6 +100,7 @@ public partial class DetailInformationViewModel : ViewModelBase
             Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
 
         CloseEditState();
+        Parent.Refresh(true);
     }
     
     private async Task SetUserSettableStates()
@@ -172,7 +173,7 @@ public partial class DetailInformationViewModel : ViewModelBase
         if (!response.IsSuccessStatusCode)
             Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
 
-        Parent.Refresh();
+        Parent.Refresh(true);
         IsEditTitleFormOpen = false;
     }
 

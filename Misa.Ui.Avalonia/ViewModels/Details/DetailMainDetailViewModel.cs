@@ -56,9 +56,12 @@ public class DetailMainDetailViewModel : ViewModelBase
 
     public bool HasDetailedEntity => DetailedEntity is not null;
 
-    public void Refresh()
+    public void Refresh(bool dataHasBeenChanged = false)
     {
         _ = OnSelectedEntityChanged();
+        
+        if (dataHasBeenChanged)
+            EntityDetail.ReloadList();
     }
     private async Task OnSelectedEntityChanged()
     {

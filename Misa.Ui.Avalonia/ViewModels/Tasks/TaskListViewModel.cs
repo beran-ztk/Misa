@@ -20,7 +20,7 @@ public class TaskListViewModel : ViewModelBase
     public TaskViewModel MainViewModel { get; }
     
     
-    private async Task LoadAsync()
+    public async Task LoadAsync()
     {
         try
         {

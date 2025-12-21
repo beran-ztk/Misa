@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Misa.Contract.Entities;
@@ -41,6 +42,10 @@ public partial class TaskViewModel : ViewModelBase, IEntityDetail
     }
 
     [ObservableProperty] public Guid? _selectedEntity;
+    public void ReloadList()
+    {
+        _ = ListModel.LoadAsync();
+    }
 
     public ViewModelBase? CurrentInfoModel
     {
