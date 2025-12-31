@@ -1,6 +1,6 @@
 ﻿using Misa.Application.Entities.Repositories;
 
-namespace Misa.Application.Entities.Patch;
+namespace Misa.Application.Entities.Commands;
 
 public class PatchEntityHandler(IEntityRepository repository)
 {

@@ -5,7 +5,7 @@ using Misa.Contract.Entities;
 using Misa.Contract.Items;
 using Misa.Domain.Dictionaries.Items;
 
-namespace Misa.Application.Items.Add;
+namespace Misa.Application.Items.Commands;
 
 public class CreateItemHandler(IItemRepository repository)
 {

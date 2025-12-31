@@ -4,7 +4,7 @@ using Misa.Domain.Audit;
 using Misa.Infrastructure.Data;
 using Item = Misa.Domain.Items.Item;
 
-namespace Misa.Infrastructure.Items;
+namespace Misa.Infrastructure.Persistence.Repositories;
 
 public class ItemRepository(MisaDbContext db) : IItemRepository
 {

@@ -1,5 +1,6 @@
 ﻿using Misa.Contract.Audit;
 using Misa.Contract.Entities.Lookups;
+using Misa.Contract.Extensions;
 using Misa.Contract.Items;
 using Misa.Contract.Main;
 
@@ -22,8 +23,12 @@ public class EntityDto
     public List<DescriptionDto> Descriptions { get; set; } = new();
     public List<SessionDto> Sessions { get; set; } = new();
     public List<ActionDto> Actions { get; set; } = new();
+    public List<RelationDto> ParentRelations { get; set; } = new();
+    public List<RelationDto> ChildRelations { get; set; } = new();
+    public bool HasDeadline { get; set; }
     public bool HasRunningSession { get; set; }
     public bool HasPausedSession { get; set; }
     public bool HasActiveSession { get; set; }
     public bool CanStartSession { get; set; }
+    
 }

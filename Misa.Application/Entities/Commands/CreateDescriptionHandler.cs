@@ -1,11 +1,8 @@
-﻿using Misa.Application.Entities.Mappings;
-using Misa.Application.Main.Mappings;
-using Misa.Application.Main.Repositories;
-using Misa.Contract.Entities;
+﻿using Misa.Application.Main.Repositories;
 using Misa.Contract.Main;
 using Misa.Domain.Main;
 
-namespace Misa.Application.Main.Add;
+namespace Misa.Application.Entities.Commands;
 
 public class CreateDescriptionHandler(IMainRepository repository)
 {

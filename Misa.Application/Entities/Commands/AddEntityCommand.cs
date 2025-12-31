@@ -1,5 +1,6 @@
 ﻿using Misa.Application.Entities.Mappings;
-namespace Misa.Application.Entities.Add;
+
+namespace Misa.Application.Entities.Commands;
 
 public static class AddEntityCommand
 {

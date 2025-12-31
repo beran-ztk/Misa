@@ -1,7 +1,9 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using Misa.Contract.Audit;
 using Misa.Domain.Audit;
+using Misa.Domain.Dictionaries;
 using Misa.Domain.Dictionaries.Items;
+using Misa.Domain.Extensions;
 using Misa.Domain.Items;
 using Misa.Domain.Main;
 using Action = Misa.Domain.Audit.Action;
@@ -39,7 +41,11 @@ public class Entity
     public ICollection<Description> Descriptions { get; set; } = new List<Description>();
     public ICollection<Session> Sessions { get; set; } = new List<Session>();
     public ICollection<Domain.Audit.Action> Actions { get; set; } = new List<Action>();
+    public ICollection<Relations> ParentRelations { get; set; } = new List<Relations>();
+    public ICollection<Relations> ChildRelations { get; set; } = new List<Relations>();
 
+    public bool HasDeadline
+        => ChildRelations.Any(r => r.RelationId == (int)RelationTypeDictionary.Deadline);
     public bool HasActiveSession 
         => Item?.StateId == (int)Dictionaries.Items.ItemStates.Active;
     public bool CanStartSession

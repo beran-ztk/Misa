@@ -3,7 +3,7 @@ using Misa.Application.Items.Repositories;
 using Misa.Contract.Audit;
 using Misa.Domain.Audit;
 
-namespace Misa.Application.Items.Patch;
+namespace Misa.Application.Items.Commands;
 
 public class SessionHandler(IItemRepository repository, IEntityRepository entityRepository)
 {

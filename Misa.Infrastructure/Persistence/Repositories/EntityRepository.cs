@@ -1,9 +1,7 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Microsoft.EntityFrameworkCore;
-using Misa.Infrastructure.Configurations.Ef;
+﻿using Microsoft.EntityFrameworkCore;
 using Entity = Misa.Domain.Entities.Entity;
 
-namespace Misa.Infrastructure.Entities;
+namespace Misa.Infrastructure.Persistence.Repositories;
 
 public class EntityRepository(Misa.Infrastructure.Data.MisaDbContext db) : Misa.Application.Entities.Repositories.IEntityRepository
 {

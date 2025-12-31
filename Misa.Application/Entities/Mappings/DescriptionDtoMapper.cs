@@ -1,9 +1,7 @@
-﻿using Misa.Contract.Entities;
-using Misa.Contract.Main;
-using Misa.Domain.Entities;
+﻿using Misa.Contract.Main;
 using Misa.Domain.Main;
 
-namespace Misa.Application.Main.Mappings;
+namespace Misa.Application.Entities.Mappings;
 
 public static class DescriptionDtoMapper
 {
