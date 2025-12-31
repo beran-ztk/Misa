@@ -1,17 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Misa.Application.Main.Repositories;
-using Misa.Contract.Audit.Lookups;
-using Misa.Contract.Items.Lookups;
 using Misa.Domain.Audit;
 using Misa.Domain.Dictionaries.Items;
 using Misa.Domain.Main;
-using Misa.Infrastructure.Configurations.Ef;
 using Misa.Infrastructure.Data;
 using Category = Misa.Domain.Items.Category;
 using Priority = Misa.Domain.Items.Priority;
 using State = Misa.Domain.Items.State;
 
-namespace Misa.Infrastructure.Main;
+namespace Misa.Infrastructure.Persistence.Repositories;
 
 public class MainRepository(MisaDbContext db) : IMainRepository
 {

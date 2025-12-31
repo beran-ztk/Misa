@@ -1,7 +1,7 @@
 ﻿using Misa.Application.Items.Repositories;
 using Misa.Contract.Items;
 
-namespace Misa.Application.Items.Patch;
+namespace Misa.Application.Items.Commands;
 
 public class UpdateItemHandler(IItemRepository repository)
 {

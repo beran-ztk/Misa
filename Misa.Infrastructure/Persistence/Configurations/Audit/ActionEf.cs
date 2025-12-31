@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Misa.Infrastructure.Configurations.Ef.Audit;
+namespace Misa.Infrastructure.Persistence.Configurations.Audit;
 
 public class ActionEf : IEntityTypeConfiguration<Misa.Domain.Audit.Action>
 {

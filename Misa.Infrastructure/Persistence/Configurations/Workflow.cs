@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Misa.Infrastructure.Configurations.Ef;
+namespace Misa.Infrastructure.Persistence.Configurations;
 
 public class Workflow : IEntityTypeConfiguration<Misa.Domain.Entities.Workflow>
 {

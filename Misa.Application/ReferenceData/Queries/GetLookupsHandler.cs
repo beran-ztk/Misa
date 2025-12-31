@@ -1,11 +1,10 @@
 ﻿using Misa.Application.Items.Mappings;
 using Misa.Application.Main.Repositories;
-using Misa.Contract.Entities;
 using Misa.Contract.Items.Lookups;
 using Misa.Contract.Main;
 using Misa.Domain.Dictionaries.Items;
 
-namespace Misa.Application.Main.Get;
+namespace Misa.Application.ReferenceData.Queries;
 
 public class GetLookupsHandler(IMainRepository repository)
 {

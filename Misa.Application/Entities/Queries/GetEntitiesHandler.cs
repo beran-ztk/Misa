@@ -2,7 +2,7 @@
 using Misa.Application.Entities.Repositories;
 using Misa.Contract.Entities;
 
-namespace Misa.Application.Entities.Get;
+namespace Misa.Application.Entities.Queries;
 
 public class GetEntitiesHandler(IEntityRepository repository)
 {
@@ -17,9 +17,5 @@ public class GetEntitiesHandler(IEntityRepository repository)
         return dto;
     }
 
-    public async Task<EntityDto?> GetDetailedEntityAsync(Guid id, CancellationToken ct = default)
-    {
-        var entity = await repository.GetDetailedEntityAsync(id, ct);
-        return entity?.ToDetailedDto();
-    }
+    
 }

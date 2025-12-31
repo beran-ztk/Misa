@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Misa.Infrastructure.Configurations.Ef.Scheduling;
+namespace Misa.Infrastructure.Persistence.Configurations.Scheduling;
 
 public class ScheduleEntityConfiguration : IEntityTypeConfiguration<Domain.Scheduling.Schedule>
 {
