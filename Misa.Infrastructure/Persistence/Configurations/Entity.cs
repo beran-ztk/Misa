@@ -1,9 +1,7 @@
-﻿using Misa.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Misa.Infrastructure.Configurations.Ef;
+namespace Misa.Infrastructure.Persistence.Configurations;
 
 public class Entity : IEntityTypeConfiguration<Domain.Entities.Entity>
 {
@@ -75,6 +73,16 @@ public class Entity : IEntityTypeConfiguration<Domain.Entities.Entity>
         builder.HasMany(e => e.Actions)
             .WithOne()
             .HasForeignKey(a => a.EntityId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(e => e.ParentRelations)
+            .WithOne()
+            .HasForeignKey(r => r.ParentId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(e => e.ChildRelations)
+            .WithOne()
+            .HasForeignKey(r => r.ChildId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

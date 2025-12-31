@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Misa.Domain.Audit;
 
-namespace Misa.Infrastructure.Configurations.Ef.Audit;
+namespace Misa.Infrastructure.Persistence.Configurations.Audit;
 
 public class SessionStatesEf : IEntityTypeConfiguration<SessionStates>
 {

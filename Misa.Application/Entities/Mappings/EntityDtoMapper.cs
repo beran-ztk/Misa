@@ -1,9 +1,7 @@
-﻿using Misa.Application.Items.Mappings;
+﻿using Misa.Application.Entities.Queries.GetSingleDetailedEntity;
+using Misa.Application.Items.Mappings;
 using Misa.Contract.Entities;
 using Misa.Contract.Entities.Lookups;
-using Misa.Domain.Entities;
-using Misa.Application.Main.Mappings;
-using Misa.Domain.Audit;
 
 namespace Misa.Application.Entities.Mappings;
 
@@ -42,6 +40,9 @@ public static class EntityDtoMapper
              Descriptions = entity.Descriptions.ToDto(),
              Sessions = entity.Sessions.ToDto(),
              Actions = entity.Actions.ToDto(),
+             ParentRelations = entity.ParentRelations.ToDto(),
+             ChildRelations = entity.ChildRelations.ToDto(),
+             HasDeadline = entity.HasDeadline,
              HasRunningSession = entity.HasRunningSession(),
              HasPausedSession = entity.HasPausedSession(),
              HasActiveSession = entity.HasActiveSession,

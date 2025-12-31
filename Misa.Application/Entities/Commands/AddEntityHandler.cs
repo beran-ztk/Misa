@@ -1,7 +1,7 @@
 ﻿using Misa.Application.Entities.Repositories;
 using Misa.Domain.Entities;
 
-namespace Misa.Application.Entities.Add;
+namespace Misa.Application.Entities.Commands;
 
 public class AddEntityHandler(IEntityRepository repository)
 {

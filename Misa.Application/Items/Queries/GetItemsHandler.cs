@@ -2,7 +2,7 @@
 using Misa.Application.Items.Repositories;
 using Misa.Contract.Items;
 
-namespace Misa.Application.Items.Get;
+namespace Misa.Application.Items.Queries;
 
 public class GetItemsHandler(IItemRepository repository)
 {

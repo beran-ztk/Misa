@@ -1,26 +1,21 @@
 using Misa.Infrastructure.Data;
-using Misa.Infrastructure.Items;
 using Misa.Application.Items.Repositories;
 using Misa.Contract.Items;
 using Microsoft.EntityFrameworkCore;
 using Misa.Api.Endpoints.Scheduling;
 using Misa.Application.Common.Abstractions.Persistence;
-using Misa.Application.Entities.Add;
-using Misa.Application.Entities.Get;
-using Misa.Application.Entities.Patch;
+using Misa.Application.Entities.Commands;
+using Misa.Application.Entities.Queries;
+using Misa.Application.Entities.Queries.GetSingleDetailedEntity;
 using Misa.Application.Entities.Repositories;
-using Misa.Application.Items.Add;
-using Misa.Application.Items.Get;
-using Misa.Application.Items.Patch;
-using Misa.Application.Main.Add;
-using Misa.Application.Main.Get;
+using Misa.Application.Items.Commands;
+using Misa.Application.Items.Queries;
 using Misa.Application.Main.Repositories;
+using Misa.Application.ReferenceData.Queries;
 using Misa.Application.Scheduling.Commands.SetEntityDeadline;
 using Misa.Contract.Audit;
 using Misa.Contract.Entities;
 using Misa.Contract.Main;
-using Misa.Infrastructure.Entities;
-using Misa.Infrastructure.Main;
 using Misa.Infrastructure.Persistence.Repositories;
 
 const string connectionString =
@@ -44,6 +39,7 @@ builder.Services.AddScoped<CreateDescriptionHandler>();
 builder.Services.AddScoped<AddEntityHandler>();
 builder.Services.AddScoped<PatchEntityHandler>();
 builder.Services.AddScoped<UpdateItemHandler>();
+builder.Services.AddScoped<GetSingleDetailedEntityHandler>();
 builder.Services.AddScoped<IEntityRepository, EntityRepository>();
 
 // Scheduler
@@ -53,8 +49,9 @@ builder.Services.AddScoped<SetEntityDeadlineHandler>();
 var app = builder.Build();
 
 app.MapGet("/api/entities/{id:guid}", 
-    async (Guid id, GetEntitiesHandler entityHandler, CancellationToken ct) 
-    => await entityHandler.GetDetailedEntityAsync(id, ct));
+    async (Guid id, GetSingleDetailedEntityHandler handler) 
+    => await handler.Handle(id));
+
 app.MapPatch("/Entity/Delete", async (Guid entityId, PatchEntityHandler handler, CancellationToken ct = default) 
     => await handler.DeleteEntityAsync(entityId, ct));
 app.MapPatch("/Entity/Archive", async (Guid entityId, PatchEntityHandler handler, CancellationToken ct = default) 
