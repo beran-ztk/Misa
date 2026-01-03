@@ -10,4 +10,8 @@
       <ProjectReference Include="..\Misa.Domain\Misa.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="WolverineFx" Version="5.9.2" />
+    </ItemGroup>
+
 </Project>
