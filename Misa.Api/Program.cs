@@ -27,7 +27,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseWolverine(opts =>
 {
     opts.Discovery.IncludeAssembly(typeof(RemoveItemDeadlineHandler).Assembly);
+    opts.Discovery.IncludeAssembly(typeof(UpsertItemDeadlineHandler).Assembly);
 });
+
 builder.Services.AddControllers();
 builder.Services.AddTransient<ExceptionMappingMiddleware>();
 builder.Services.AddDbContext<MisaDbContext>(options => options.UseNpgsql(connectionString));
@@ -49,8 +51,6 @@ builder.Services.AddScoped<UpdateItemHandler>();
 builder.Services.AddScoped<GetSingleDetailedEntityHandler>();
 builder.Services.AddScoped<IEntityRepository, EntityRepository>();
 
-builder.Services.AddScoped<UpsertItemDeadlineHandler>();
-builder.Services.AddScoped<RemoveItemDeadlineHandler>();
 
 
 
