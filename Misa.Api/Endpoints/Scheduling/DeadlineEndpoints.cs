@@ -16,11 +16,10 @@ public static class DeadlineEndpoints
     private static async Task<IResult> UpsertDeadline(
         [FromRoute] Guid itemId,
         [FromBody] ScheduleDeadlineDto dto,
-        UpsertItemDeadlineHandler handler)
+        IMessageBus bus,
+        CancellationToken ct)
     {
-        var dueAtUtc = dto.DeadlineAt.ToUniversalTime();
-
-        await handler.Handle(new UpsertItemDeadlineCommand(itemId, dueAtUtc));
+        await bus.InvokeAsync(new UpsertItemDeadlineCommand(itemId, dto.DeadlineAt), ct);
         return Results.NoContent();
     }
 
