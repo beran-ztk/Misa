@@ -6,22 +6,26 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Misa.Contract.Audit;
 using Misa.Contract.Audit.Lookups;
+using Misa.Contract.Events;
 using Misa.Contract.Items;
 using Misa.Contract.Items.Lookups;
 using Misa.Contract.Main;
 using Misa.Contract.Scheduling;
 using Misa.Ui.Avalonia.Interfaces;
+using Misa.Ui.Avalonia.Stores;
 using Misa.Ui.Avalonia.ViewModels.Shells;
 using ReactiveUI;
 
 namespace Misa.Ui.Avalonia.ViewModels.Details;
 
-public partial class DetailInformationViewModel : ViewModelBase
+public partial class DetailInformationViewModel : ViewModelBase, IDisposable
 {
     public IEntityDetail EntityDetail { get; }
     public DetailMainDetailViewModel Parent { get; }
@@ -29,12 +33,17 @@ public partial class DetailInformationViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> AddDescriptionCommand { get; }
     public ReactiveCommand<Unit, Unit> StartSessionCommand { get; }
     public ReactiveCommand<Unit, Unit> PauseSessionCommand { get; }
+    private readonly NavigationStore _nav;
     
 
     public DetailInformationViewModel(DetailMainDetailViewModel parent)
     {
         Parent = parent;
         EntityDetail = parent.EntityDetail;
+        
+        _nav = parent.NavigationService.NavigationStore;
+        Console.WriteLine($"[VM] subscribe nav={_nav.GetHashCode()}");
+        _nav.RealtimeEventReceived += OnRealtimeEvent;
         
         AddDescriptionCommand = ReactiveCommand.CreateFromTask(AddDescriptionAsync);
         AddDescriptionCommand.Subscribe();
@@ -50,6 +59,37 @@ public partial class DetailInformationViewModel : ViewModelBase
             {
                 ResetDescription();
             });
+    }
+    private void OnRealtimeEvent(EventDto evt)
+    {
+        Console.WriteLine($"[VM] event {evt.EventType}");
+
+        if (!string.Equals(evt.EventType, "DeadlineRemoved", StringComparison.Ordinal))
+            return;
+
+        Guid itemId;
+        try
+        {
+            using var doc = JsonDocument.Parse(evt.Payload);
+            itemId = doc.RootElement.GetProperty("itemId").GetGuid();
+        }
+        catch { return; }
+
+        var currentItemId = Parent.DetailedEntity?.Item?.EntityId;
+        if (currentItemId is null || currentItemId.Value != itemId)
+            return;
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            // Minimal Reaktion:
+            Parent.Refresh();
+            CloseDeadlineForm(); // optional
+        });
+    }
+
+    public void Dispose()
+    {
+        _nav.RealtimeEventReceived -= OnRealtimeEvent;
     }
     // Edit State
     [ObservableProperty] private bool _isEditStateOpen;
@@ -496,7 +536,7 @@ public partial class DetailInformationViewModel : ViewModelBase
             if (!response.IsSuccessStatusCode)
                 Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
 
-            Parent.Refresh();
+            // Parent.Refresh();
             CloseDeadlineForm();
         }
         catch (Exception e)

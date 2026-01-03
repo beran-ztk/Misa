@@ -5,6 +5,7 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Avalonia.Markup.Xaml;
 using Misa.Ui.Avalonia.Services.Navigation;
 using Misa.Ui.Avalonia.Stores;
@@ -27,10 +28,24 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            
-            var httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:4500") };
+
+            const string uri = "http://localhost:4500";
+            var httpClient = new HttpClient { BaseAddress = new Uri(uri) };
 
             var navigationStore = new NavigationStore(httpClient);
+            navigationStore.WireRealtimeHandlers();
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await navigationStore.Realtime.StartAsync(baseUrl: uri);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"[SignalR] Start failed: {e}");
+                }
+            });
+            
             var lookupsStore = new LookupsStore(httpClient);
             INavigationService navigationService = new NavigationService(navigationStore, lookupsStore);
             

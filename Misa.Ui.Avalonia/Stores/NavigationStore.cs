@@ -5,7 +5,7 @@ using Misa.Ui.Avalonia.ViewModels.Shells;
 
 namespace Misa.Ui.Avalonia.Stores;
 
-public class NavigationStore : ObservableObject
+public partial class NavigationStore : ObservableObject
 {
     public NavigationStore(HttpClient httpClient)
     {

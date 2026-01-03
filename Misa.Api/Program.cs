@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.SignalR;
 using Misa.Infrastructure.Data;
 using Misa.Contract.Items;
 using Microsoft.EntityFrameworkCore;
 using Misa.Api.Common.Exceptions;
+using Misa.Api.Common.Realtime;
 using Misa.Api.Endpoints.Scheduling;
+using Misa.Application.Common.Abstractions.Events;
 using Misa.Application.Common.Abstractions.Persistence;
 using Misa.Application.Entities.Commands;
 using Misa.Application.Entities.Queries;
@@ -24,15 +27,20 @@ const string connectionString =
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
+builder.Services.AddSignalR();
+builder.Services.AddTransient<ExceptionMappingMiddleware>();
+builder.Services.AddDbContext<MisaDbContext>(options => options.UseNpgsql(connectionString));
+
 builder.Host.UseWolverine(opts =>
 {
     opts.Discovery.IncludeAssembly(typeof(RemoveItemDeadlineHandler).Assembly);
     opts.Discovery.IncludeAssembly(typeof(UpsertItemDeadlineHandler).Assembly);
 });
 
-builder.Services.AddControllers();
-builder.Services.AddTransient<ExceptionMappingMiddleware>();
-builder.Services.AddDbContext<MisaDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddScoped<EventsHub>();
+builder.Services.AddScoped<IEventPublisher, SignalREventPublisher>();
+
 
 
 builder.Services.AddScoped<CreateItemHandler>();
@@ -42,6 +50,7 @@ builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IMainRepository, MainRepository>();
 
 // Entity
+
 builder.Services.AddScoped<GetEntitiesHandler>();
 builder.Services.AddScoped<SessionHandler>();
 builder.Services.AddScoped<CreateDescriptionHandler>();
@@ -56,6 +65,7 @@ builder.Services.AddScoped<IEntityRepository, EntityRepository>();
 
 var app = builder.Build();
 app.MapControllers();
+app.MapHub<EventsHub>("/hubs/events");
 app.UseMiddleware<ExceptionMappingMiddleware>();
 
 app.MapGet("/api/entities/{id:guid}", 
