@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="9.0.8" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
         <PrivateAssets>all</PrivateAssets>
@@ -18,10 +19,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Misa.Application\Misa.Application.csproj" />
       <ProjectReference Include="..\Misa.Domain\Misa.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Persistence\Configurations\Extensions\" />
     </ItemGroup>
 
 </Project>

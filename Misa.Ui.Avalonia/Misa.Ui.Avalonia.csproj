@@ -31,6 +31,7 @@
         <PackageReference Include="Avalonia.Themes.Simple" Version="11.3.6" />
         <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.3.0.6" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.8" />
         <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="11.3.6" />
     </ItemGroup>
 
