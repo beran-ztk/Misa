@@ -26,33 +26,76 @@ CREATE TABLE scheduled_deadlines
     CONSTRAINT uq_scheduled_deadlines_item UNIQUE (item_id)
 );
 
-CREATE TABLE schedule_recurrence_rules
+-- Enums
+CREATE TYPE schedule_rule_state AS ENUM ('running', 'paused', 'done');
+CREATE TYPE schedule_misfire_policy AS ENUM ('skip', 'catchup', 'run_once');
+
+CREATE TABLE scheduled_recurrence_rules
 (
-    id                       UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    schedule_id              UUID NOT NULL REFERENCES schedule(entity_id) ON DELETE CASCADE,
+    id                      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    schedule_id             UUID NOT NULL REFERENCES schedule(entity_id) ON DELETE CASCADE,
 
-    frequency_type_id        INT NOT NULL REFERENCES schedule_frequency_types(id) ON DELETE RESTRICT,
-    frequency_interval       INT NULL,
+    freq_type_id            INT  NOT NULL REFERENCES schedule_frequency_types(id) ON DELETE RESTRICT,
+    freq_interval           INT  NOT NULL DEFAULT 1,
 
-    occurrence_count_limit   INT NULL,      -- RRULE COUNT: max. insgesamt
+    occurrence_count_limit  INT  NULL,
 
-    by_day                   INT[] NULL,    -- 1=Mon..7=Sun
-    by_month_day             INT[] NULL,    -- 1..31
-    by_month                 INT[] NULL,    -- 1..12
+    by_day                  INT[] NULL, -- 1=Mon..7=Sun
+    by_month_day            INT[] NULL, -- 1..31
+    by_month                INT[] NULL, -- 1..12
 
-    catch_up                 BOOLEAN NOT NULL DEFAULT TRUE,
-    max_catch_up_occurrences INT NOT NULL DEFAULT 1,
+    misfire_policy          schedule_misfire_policy NOT NULL DEFAULT 'catchup',
 
-    time_to_live             INTERVAL NULL, -- TTL pro Occurrence (Expiry)
+    lookahead_count         INT NOT NULL DEFAULT 1 CHECK (lookahead_count >= 0),
 
-    is_enabled               BOOLEAN NOT NULL DEFAULT TRUE,
+    occurrence_ttl          INTERVAL NULL CHECK (occurrence_ttl IS NULL OR occurrence_ttl > INTERVAL '0'),
 
-    until_at_utc             TIMESTAMPTZ NULL,
-    last_generated_at_utc    TIMESTAMPTZ NULL
+    state                  schedule_rule_state NOT NULL DEFAULT 'running',
+
+    payload                JSONB NULL,
+
+    timezone               TEXT NOT NULL CHECK (timezone != ''),
+
+    start_time             TIME NULL,
+    end_time               TIME NULL,
+
+    active_from_utc           TIMESTAMPTZ NOT NULL,
+    active_until_utc           TIMESTAMPTZ NULL,
+
+    last_run_at_utc        TIMESTAMPTZ NULL,
+    next_due_at_utc        TIMESTAMPTZ NULL,
+
+    -- invariants
+    CHECK (
+        (start_time IS NULL AND end_time IS NULL)
+            OR (start_time IS NOT NULL AND end_time IS NOT NULL AND start_time < end_time)
+        ),
+    CHECK (active_until_utc IS NULL OR active_until_utc > active_from_utc),
+    CHECK (frequency_interval >= 1),
+    CHECK (occurrence_count_limit IS NULL OR occurrence_count_limit >= 1),
+    CHECK (next_due_at_utc IS NULL OR last_run_at_utc IS NULL OR next_due_at_utc >= last_run_at_utc),
+    CHECK (by_day IS NULL OR (1 <= ALL(by_day) AND ALL(by_day) <= 7)),
+    CHECK (by_month_day IS NULL OR (1 <= ALL(by_month_day) AND ALL(by_month_day) <= 31)),
+    CHECK (by_month IS NULL OR (1 <= ALL(by_month) AND ALL(by_month) <= 12))
 );
 
+-- sinnvolle Indizes für den Runner
+CREATE INDEX ix_srr_schedule_id ON scheduled_recurrence_rules(schedule_id);
+CREATE INDEX ix_srr_due_running ON scheduled_recurrence_rules(next_due_at_utc)
+    WHERE state = 'running';
 
 
+ExecutionLog / RunHistory
+id
+rule_id
+scheduled_for
+started_at, finished_at
+status (ok/fail)
+dedupe_key = (rule_id, scheduled_for) (unique)
+
+Optional but common:
+Outbox table for notifications/events (reliable delivery).
+Concurrency + safety = Lock table
 
 -- create table calendar_occurrences
 -- (
