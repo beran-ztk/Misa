@@ -24,10 +24,8 @@ public partial class NavigationStore : ObservableObject
 
         Realtime.EventReceived += evt =>
         {
-            // 1) rohes Event an alle Interessenten
             RealtimeEventReceived?.Invoke(evt);
 
-            // 2) optional: globaler Minimal-Refresher (nur wenn du es willst)
             HandleGlobalRefresh(evt);
         };
     }
