@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using Misa.Application.Common.Exceptions;
 using Misa.Application.Items.Repositories;
 using Misa.Domain.Audit;
@@ -11,7 +12,11 @@ namespace Misa.Infrastructure.Persistence.Repositories;
 public class ItemRepository(MisaDbContext db) : IItemRepository
 {
     public async Task<Item> GetTrackedItemAsync(Guid id)
-        => await db.Items.Include(e => e.Entity).FirstAsync(i => i.EntityId == id);
+    {
+        return await db.Items
+            .Include(e => e.Entity)
+            .FirstAsync(i => i.EntityId == id);
+    }
     public async Task SaveChangesAsync(CancellationToken  ct = default)
         => await db.SaveChangesAsync(ct);
 
@@ -55,7 +60,6 @@ public class ItemRepository(MisaDbContext db) : IItemRepository
             .Include(i => i.Category)
             .FirstOrDefaultAsync( i => i.EntityId == id, ct );
     }
-
     public async Task<List<Item>> GetAllTasksAsync(CancellationToken ct)
     {
         return await db.Items
@@ -77,18 +81,11 @@ public class ItemRepository(MisaDbContext db) : IItemRepository
             .Include(i => i.Category)
             .SingleOrDefaultAsync(i => i.EntityId == entityId, ct);
     }
-
-
     public async Task UpsertDeadlineAsync(Guid itemId, DateTimeOffset dueAtUtc, CancellationToken ct = default)
     {
-        if (itemId == Guid.Empty)
-            throw new ArgumentException("ItemId must not be empty.", nameof(itemId));
-
+        var item = GetTrackedItemAsync(itemId);
         var utc = dueAtUtc.ToUniversalTime();
 
-        var itemExists = await db.Items.AnyAsync(i => i.EntityId == itemId, ct);
-        if (!itemExists)
-            throw new InvalidOperationException($"Item '{itemId}' not found.");
 
         var existing = await db.Set<ScheduledDeadline>()
             .SingleOrDefaultAsync(d => d.ItemId == itemId, ct);
@@ -101,11 +98,9 @@ public class ItemRepository(MisaDbContext db) : IItemRepository
 
         existing.Reschedule(utc);
     }
-
     public async Task RemoveDeadlineAsync(Guid itemId, CancellationToken ct = default)
     {
-        if (itemId == Guid.Empty)
-            throw new ArgumentException("ItemId must not be empty.", nameof(itemId));
+        var item = GetTrackedItemAsync(itemId);
 
         var existing = await db.Set<ScheduledDeadline>()
             .SingleOrDefaultAsync(d => d.ItemId == itemId, ct);
