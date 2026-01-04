@@ -1,5 +1,5 @@
 ﻿using Misa.Ui.Avalonia.Stores;
-using TaskViewModel = Misa.Ui.Avalonia.Features.Tasks.TasksHub.TaskViewModel;
+using PageViewModel = Misa.Ui.Avalonia.Features.Tasks.Page.PageViewModel;
 
 namespace Misa.Ui.Avalonia.Services.Navigation;
 
@@ -14,6 +14,6 @@ public class NavigationService : INavigationService
     }
     public void ShowTasks()
     {
-        NavigationStore.CurrentViewModel = new TaskViewModel(this);
+        NavigationStore.CurrentViewModel = new PageViewModel(this);
     }
 }

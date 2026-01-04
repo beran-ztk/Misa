@@ -1,0 +1,65 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Misa.Ui.Avalonia.App.Shell.NavigationView"
+             xmlns:shell="clr-namespace:Misa.Ui.Avalonia.App.Shell"
+             x:DataType="shell:NavigationViewModel">
+    
+    <UserControl.Styles>
+        
+        <Style Selector="Button.MainNavigation">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        
+        <Style Selector="Button.MainNavigation:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{StaticResource BrushPanelBackground}" />
+        </Style>
+
+        <Style Selector="Button.MainNavigation:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="{StaticResource ColorActive}" />
+        </Style>
+        
+        <Style Selector="TextBlock.MainNavigation">
+            <Setter Property="FontSize" Value="{StaticResource FontSizeMedium}"/>
+            <Setter Property="Foreground" Value="{StaticResource BrushTextSecondary}"/>
+        </Style>
+        
+    </UserControl.Styles>
+    
+    
+    <Border Background="{StaticResource BrushPrimaryBackground}"
+            BorderBrush="{StaticResource BrushSecondaryBackground}"
+            BorderThickness="0,0,1,0">
+        
+        <Grid RowDefinitions="*,Auto">
+        
+            <StackPanel Grid.Row="0" 
+                        Spacing="{StaticResource SpacingSmall}">
+                
+                <TextBlock Text="Navigation" 
+                           FontSize="10"
+                           Margin="2,2,0,0"
+                           Foreground="{StaticResource BrushTextFaded}"/>
+                
+                <Button Classes="MainNavigation"
+                        Command="{Binding ShowTasksCommand}">
+                    <StackPanel Orientation="Horizontal" 
+                                Spacing="{StaticResource SpacingSmall}">
+                        <Image Width="16" Height="16"
+                               Source="{SvgImage /Assets/Images/MainNavigation/list-dashes.svg}"/>
+                        <TextBlock Text="Tasks" 
+                                   Classes="MainNavigation"/>
+                    </StackPanel>
+                </Button>
+                
+            </StackPanel>
+        </Grid>
+    </Border>
+    
+</UserControl>

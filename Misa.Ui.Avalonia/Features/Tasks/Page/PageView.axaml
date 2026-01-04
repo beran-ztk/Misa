@@ -1,0 +1,32 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Misa.Ui.Avalonia.Features.Tasks.Page.PageView"
+             xmlns:list="clr-namespace:Misa.Ui.Avalonia.Features.Tasks.List"
+             xmlns:navigation="clr-namespace:Misa.Ui.Avalonia.Features.Tasks.Navigation"
+             xmlns:page="clr-namespace:Misa.Ui.Avalonia.Features.Tasks.Page"
+             x:DataType="page:PageViewModel">
+    <Border>
+        <Grid ColumnDefinitions="*,1,*">
+            
+            <Border Grid.Column="0"
+                    BorderThickness="0,0,1,0"
+                    BorderBrush="{StaticResource BrushBorder}">
+                <Grid RowDefinitions="50,*">
+                
+                    <navigation:NavigationView Grid.Row="0"
+                                              DataContext="{Binding Navigation}" />
+                    <list:ListView Grid.Row="1"
+                                        DataContext="{Binding Model}" />
+                </Grid>
+            </Border>
+            <GridSplitter Grid.Column="1"
+                          Background="{StaticResource BrushBorder}"/>
+            <ContentControl Grid.Column="2"
+                            Background="{StaticResource BrushPrimaryBackground}"
+                            Content="{Binding CurrentInfoModel}" />
+        </Grid>
+    </Border>
+</UserControl>

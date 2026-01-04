@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Misa.Ui.Avalonia.ViewModels.Shells;
+using Misa.Ui.Avalonia.App.Shell;
+using Misa.Ui.Avalonia.Presentation.Mapping;
 
 namespace Misa.Ui.Avalonia.Stores;
 

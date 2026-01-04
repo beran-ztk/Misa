@@ -5,7 +5,6 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Misa.Contract.Events;
 using Misa.Ui.Avalonia.Services.Realtime;
-using Misa.Ui.Avalonia.ViewModels.Shells;
 
 namespace Misa.Ui.Avalonia.Stores;
 
