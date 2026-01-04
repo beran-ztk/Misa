@@ -33,9 +33,6 @@
 
                 <StackPanel Grid.Row="0" Grid.Column="1"
                             Spacing="{StaticResource SpacingSmall}">
-                    <!-- <TextBox Classes="misa-input" -->
-                    <!--          Watermark="Task title..." -->
-                    <!--          Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" /> -->
 
                     <TextBox Classes="misa-input"
                              Watermark="Task title..."
