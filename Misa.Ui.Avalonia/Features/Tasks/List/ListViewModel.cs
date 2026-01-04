@@ -1,9 +1,7 @@
-﻿using System;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Misa.Contract.Items;
-using Misa.Ui.Avalonia.Features.Tasks.Shared;
 using Misa.Ui.Avalonia.Features.Tasks.Shared;
 using Misa.Ui.Avalonia.Presentation.Mapping;
 using PageViewModel = Misa.Ui.Avalonia.Features.Tasks.Page.PageViewModel;
