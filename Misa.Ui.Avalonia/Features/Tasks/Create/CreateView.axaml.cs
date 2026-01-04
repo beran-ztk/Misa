@@ -11,15 +11,9 @@ public partial class CreateView : UserControl
     public void TitleTextChangedEvent(object sender, TextChangedEventArgs e)
     {
         if (DataContext is not CreateViewModel viewModel) return;
-        
-        if (!string.IsNullOrEmpty(viewModel.Title))
-        {
-            viewModel.ErrorMessageTitle = null;
-            viewModel.TitleBorderBrush = null;
-        }
-        else
-        {
-            viewModel.TitleError();
-        }
+
+        if (string.IsNullOrEmpty(viewModel.Title)) return;
+        viewModel.ErrorMessageTitle = null;
+        viewModel.TitleBorderBrush = null;
     }
 }

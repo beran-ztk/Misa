@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Misa.Contract.Entities;
 using Misa.Contract.Items;
 using Misa.Ui.Avalonia.Features.Details;
+using Misa.Ui.Avalonia.Features.Tasks.Shared;
+using Misa.Ui.Avalonia.Features.Tasks.Create;
 using Misa.Ui.Avalonia.Features.Tasks.List;
 using Misa.Ui.Avalonia.Interfaces;
 using Misa.Ui.Avalonia.Presentation.Mapping;
@@ -12,49 +13,84 @@ using NavigationViewModel = Misa.Ui.Avalonia.Features.Tasks.Navigation.Navigatio
 
 namespace Misa.Ui.Avalonia.Features.Tasks.Page;
 
-public enum TaskDetailMode
+public partial class PageViewModel : ViewModelBase, IEntityDetail, IDisposable
 {
-    None,
-    Create,
-    View,
-    Edit
-}
-public partial class PageViewModel : ViewModelBase, IEntityDetail
-{
-    private ReadEntityDto? _readEntity;
-    
     private ReadItemDto? _selectedTask;
-    
     private ViewModelBase? _currentInfoModel;
+
     public INavigationService NavigationService;
-    public DetailMainDetailViewModel DetailViewModel { get; } 
+    public DetailMainDetailViewModel DetailViewModel { get; }
+
     public ListViewModel Model { get; }
     public NavigationViewModel Navigation { get; }
-    public ObservableCollection<ReadItemDto> Items { get; set; } = [];
-    
-    [ObservableProperty] private bool _isCreateTaskFormOpen;
+
+    public ObservableCollection<ReadItemDto> Items { get; } = [];
+
+    [ObservableProperty] public Guid? _selectedEntity;
+
+    [ObservableProperty] private string? _pageError;
+
+    public IEventBus Bus { get; }
+
+    private readonly IDisposable _subOpenCreate;
+    private readonly IDisposable _subCloseRight;
+    private readonly IDisposable _subReload;
+    private readonly IDisposable _subCreated;
+    private readonly IDisposable _subCreateFailed;
+
     public PageViewModel(INavigationService navigationService)
     {
         NavigationService = navigationService;
-        
-        Model = new ListViewModel(this);
-        Navigation = new NavigationViewModel(this);
+
+        Bus = new EventBus();
+
+        Model = new ListViewModel(this, Bus);
+        Navigation = new NavigationViewModel(this, Bus);
         DetailViewModel = new DetailMainDetailViewModel(this, NavigationService);
+
+        _subOpenCreate = Bus.Subscribe<OpenCreateRequested>(_ =>
+        {
+            PageError = null;
+            CurrentInfoModel = new CreateViewModel(this, Bus);
+        });
+
+        _subCloseRight = Bus.Subscribe<CloseRightPaneRequested>(_ =>
+        {
+            PageError = null;
+            CurrentInfoModel = null;
+        });
+
+        _subReload = Bus.Subscribe<ReloadTasksRequested>(evt =>
+        {
+            PageError = null;
+            _ = Model.LoadAsync();
+        });
+
+        _subCreated = Bus.Subscribe<TaskCreated>(e =>
+        {
+            PageError = null;
+
+            Items.Add(e.Created);
+
+            SelectedTask = e.Created;
+        });
+
+        _subCreateFailed = Bus.Subscribe<TaskCreateFailed>(e =>
+        {
+            PageError = e.Message;
+        });
     }
 
-    [ObservableProperty] public Guid? _selectedEntity;
-    public void ReloadList()
-    {
-        _ = Model.LoadAsync();
-    }
+    public void ReloadList() => Bus.Publish(new ReloadTasksRequested());
 
     public ViewModelBase? CurrentInfoModel
     {
         get => _currentInfoModel;
         set => SetProperty(ref _currentInfoModel, value);
-        
     }
+
     public void ShowDetails() => CurrentInfoModel = DetailViewModel;
+
     public ReadItemDto? SelectedTask
     {
         get => _selectedTask;
@@ -64,5 +100,13 @@ public partial class PageViewModel : ViewModelBase, IEntityDetail
             SelectedEntity = value?.Entity.Id;
             ShowDetails();
         }
+    }
+    public void Dispose()
+    {
+        _subOpenCreate.Dispose();
+        _subCloseRight.Dispose();
+        _subReload.Dispose();
+        _subCreated.Dispose();
+        _subCreateFailed.Dispose();
     }
 }

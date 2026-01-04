@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reactive;
-using Misa.Ui.Avalonia.Features.Tasks.Create;
+using Misa.Ui.Avalonia.Features.Tasks.Shared;
 using Misa.Ui.Avalonia.Features.Tasks.Page;
 using Misa.Ui.Avalonia.Presentation.Mapping;
 using ReactiveUI;
@@ -11,17 +11,16 @@ public class NavigationViewModel : ViewModelBase
 {
     public PageViewModel MainViewModel { get; }
     public ReactiveCommand<Unit, Unit> AddTaskCommand { get; }
-    public NavigationViewModel(PageViewModel vm)
+
+    private readonly IEventBus _bus;
+
+    public NavigationViewModel(PageViewModel vm, IEventBus bus)
     {
         MainViewModel = vm;
-        AddTaskCommand = ReactiveCommand.Create(AddTaskCommandAsync);
-        AddTaskCommand
-            .ThrownExceptions
-            .Subscribe(Console.WriteLine);
-    }
-    private void AddTaskCommandAsync()
-    {
-        MainViewModel.IsCreateTaskFormOpen = true;
-        MainViewModel.CurrentInfoModel = new CreateViewModel(MainViewModel);
+        _bus = bus;
+
+        AddTaskCommand = ReactiveCommand.Create(() => _bus.Publish(new OpenCreateRequested()));
+
+        AddTaskCommand.ThrownExceptions.Subscribe(_ => _bus.Publish(new TaskCreateFailed("Unexpected error while opening Create view.")));
     }
 }
