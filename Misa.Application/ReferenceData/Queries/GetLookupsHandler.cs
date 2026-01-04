@@ -18,8 +18,6 @@ public class GetLookupsHandler(IMainRepository repository)
     }
     public async Task<LookupsDto> GetAllAsync(CancellationToken ct)
     {
-        
-        
         return new LookupsDto
         {
             Priorities = (await repository.GetPriorities(ct)).ToDto(),
