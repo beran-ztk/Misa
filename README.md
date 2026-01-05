@@ -11,6 +11,12 @@ Its long-term goal is to manage a Zettelkasten-like knowledge system where topic
 ## Tech Stack
 • .NET  
 • ASP.NET Web API  
-• Avalonia UI (MVVM)  
-• PostgreSQL  
+• Avalonia UI (MVVM)
+
+• PostgreSQL
+• Entity Framework Core
+
 • REST
+• Wolverine
+• RabbitMQ
+• SignalR
