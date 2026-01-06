@@ -36,4 +36,8 @@ public sealed class ScheduledDeadline : DomainEventEntity
             DeadlineAtUtc = (DateTimeOffset)deadlineAtUtc;   
         }
     }
+    public void RemoveDeadlineAndAuditChanges()
+    {
+        RescheduleDeadlineAndAuditChanges(null);
+    }
 }

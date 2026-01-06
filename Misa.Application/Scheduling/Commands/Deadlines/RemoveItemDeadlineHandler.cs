@@ -27,7 +27,7 @@ public sealed class RemoveItemDeadlineHandler(IItemRepository repository, IMessa
             return Result.NotFound(DeadlineErrorCodes.DeadlineNotFound, "Deadline not found.");
         }
 
-        deadlineEntry.RescheduleDeadlineAndAuditChanges(null);
+        deadlineEntry.RemoveDeadlineAndAuditChanges();
         await repository.RemoveScheduledDeadlineAsync(deadlineEntry, ct);
         
         await repository.SaveChangesAsync(ct);
