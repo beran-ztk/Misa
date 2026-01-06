@@ -17,10 +17,10 @@ using Misa.Contract.Items;
 using Misa.Contract.Items.Lookups;
 using Misa.Contract.Main;
 using Misa.Contract.Scheduling;
-using Misa.Ui.Avalonia.Interfaces;
+using Misa.Ui.Avalonia.Infrastructure.Services.Interfaces;
 using Misa.Ui.Avalonia.Presentation.Mapping;
-using Misa.Ui.Avalonia.Stores;
 using ReactiveUI;
+using NavigationStore = Misa.Ui.Avalonia.Infrastructure.Stores.NavigationStore;
 
 namespace Misa.Ui.Avalonia.Features.Details;
 

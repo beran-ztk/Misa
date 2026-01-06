@@ -6,9 +6,9 @@ using Misa.Ui.Avalonia.Features.Details;
 using Misa.Ui.Avalonia.Features.Tasks.Shared;
 using Misa.Ui.Avalonia.Features.Tasks.Create;
 using Misa.Ui.Avalonia.Features.Tasks.List;
-using Misa.Ui.Avalonia.Interfaces;
+using Misa.Ui.Avalonia.Infrastructure.Services.Interfaces;
+using Misa.Ui.Avalonia.Infrastructure.Services.Navigation;
 using Misa.Ui.Avalonia.Presentation.Mapping;
-using Misa.Ui.Avalonia.Services.Navigation;
 using NavigationViewModel = Misa.Ui.Avalonia.Features.Tasks.Navigation.NavigationViewModel;
 
 namespace Misa.Ui.Avalonia.Features.Tasks.Page;

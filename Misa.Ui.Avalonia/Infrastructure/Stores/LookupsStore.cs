@@ -6,7 +6,7 @@ using Misa.Contract.Audit.Lookups;
 using Misa.Contract.Items.Lookups;
 using Misa.Contract.Main;
 
-namespace Misa.Ui.Avalonia.Stores;
+namespace Misa.Ui.Avalonia.Infrastructure.Stores;
 
 public class LookupsStore
 {

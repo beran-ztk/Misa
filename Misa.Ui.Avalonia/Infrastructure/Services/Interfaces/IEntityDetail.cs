@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Misa.Ui.Avalonia.Interfaces;
+namespace Misa.Ui.Avalonia.Infrastructure.Services.Interfaces;
 
 public interface IEntityDetail
 {

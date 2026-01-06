@@ -1,7 +1,8 @@
-﻿using Misa.Ui.Avalonia.Stores;
+﻿using Misa.Ui.Avalonia.Infrastructure.Stores;
+using NavigationStore = Misa.Ui.Avalonia.Infrastructure.Stores.NavigationStore;
 using PageViewModel = Misa.Ui.Avalonia.Features.Tasks.Page.PageViewModel;
 
-namespace Misa.Ui.Avalonia.Services.Navigation;
+namespace Misa.Ui.Avalonia.Infrastructure.Services.Navigation;
 
 public class NavigationService : INavigationService
 {

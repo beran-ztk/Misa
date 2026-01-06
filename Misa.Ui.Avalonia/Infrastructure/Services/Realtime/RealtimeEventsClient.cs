@@ -3,9 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Misa.Contract.Events;
-using Misa.Ui.Avalonia.Stores;
 
-namespace Misa.Ui.Avalonia.Services.Realtime;
+namespace Misa.Ui.Avalonia.Infrastructure.Services.Realtime;
 
 public sealed class RealtimeEventsClient : IAsyncDisposable
 {

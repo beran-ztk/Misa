@@ -1,7 +1,8 @@
 ﻿using System.Net.Http;
+using Misa.Ui.Avalonia.Infrastructure.Services.Navigation;
+using Misa.Ui.Avalonia.Infrastructure.Stores;
 using Misa.Ui.Avalonia.Presentation.Mapping;
-using Misa.Ui.Avalonia.Services.Navigation;
-using Misa.Ui.Avalonia.Stores;
+using NavigationStore = Misa.Ui.Avalonia.Infrastructure.Stores.NavigationStore;
 
 namespace Misa.Ui.Avalonia.App.Shell;
 

@@ -3,9 +3,9 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Misa.Contract.Entities;
 using Misa.Ui.Avalonia.App.Shell;
-using Misa.Ui.Avalonia.Interfaces;
+using Misa.Ui.Avalonia.Infrastructure.Services.Interfaces;
+using Misa.Ui.Avalonia.Infrastructure.Services.Navigation;
 using Misa.Ui.Avalonia.Presentation.Mapping;
-using Misa.Ui.Avalonia.Services.Navigation;
 using ReactiveUI;
 
 namespace Misa.Ui.Avalonia.Features.Details;

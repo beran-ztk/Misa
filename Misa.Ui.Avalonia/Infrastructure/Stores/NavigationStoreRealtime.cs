@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Net.Http;
 using System.Text.Json;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Misa.Contract.Events;
-using Misa.Ui.Avalonia.Services.Realtime;
+using Misa.Ui.Avalonia.Infrastructure.Services.Realtime;
 
-namespace Misa.Ui.Avalonia.Stores;
+namespace Misa.Ui.Avalonia.Infrastructure.Stores;
 
 public partial class NavigationStore : ObservableObject
 {

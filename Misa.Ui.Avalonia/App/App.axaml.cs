@@ -7,8 +7,9 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Misa.Ui.Avalonia.App.Shell;
-using Misa.Ui.Avalonia.Services.Navigation;
-using Misa.Ui.Avalonia.Stores;
+using Misa.Ui.Avalonia.Infrastructure.Services.Navigation;
+using Misa.Ui.Avalonia.Infrastructure.Stores;
+using NavigationStore = Misa.Ui.Avalonia.Infrastructure.Stores.NavigationStore;
 
 namespace Misa.Ui.Avalonia.App;
 
