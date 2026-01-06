@@ -11,12 +11,6 @@ namespace Misa.Infrastructure.Persistence.Repositories;
 
 public class ItemRepository(MisaDbContext db) : IItemRepository
 {
-    public async Task<Item?> TryGetItemAsync(Guid id)
-    {
-        return await db.Items
-            .Include(e => e.Entity)
-            .SingleOrDefaultAsync(i => i.EntityId == id);
-    }
     public async Task SaveChangesAsync(CancellationToken  ct = default)
         => await db.SaveChangesAsync(ct);
 
@@ -82,6 +76,13 @@ public class ItemRepository(MisaDbContext db) : IItemRepository
             .SingleOrDefaultAsync(i => i.EntityId == entityId, ct);
     }
     
+    
+    public async Task<Item?> TryGetItemAsync(Guid id, CancellationToken ct)
+    {
+        return await db.Items
+            .Include(e => e.Entity)
+            .SingleOrDefaultAsync(i => i.EntityId == id, ct);
+    }
     public async Task<ScheduledDeadline?> TryGetScheduledDeadlineForItemAsync(Guid itemId, CancellationToken ct)
     {
         return await db.Deadlines

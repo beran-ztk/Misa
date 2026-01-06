@@ -10,7 +10,7 @@ public interface IItemRepository
     Task<Item?> GetTaskAsync(Guid id, CancellationToken ct = default);
     Task<List<Item>> GetAllTasksAsync(CancellationToken ct = default);
     Task SaveChangesAsync(CancellationToken ct = default);
-    Task<Item?> TryGetItemAsync(Guid id);
+    Task<Item?> TryGetItemAsync(Guid id, CancellationToken ct);
 
     // Sessions
     Task<Session> AddSessionAsync(Session session);

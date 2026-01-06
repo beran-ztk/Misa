@@ -13,7 +13,7 @@ public class ItemDeadlineRemoveEventHandler(IEventPublisher events)
         var eventDto = new EventDto
         {
             EventType = "DeadlineRemoved",
-            Payload = System.Text.Json.JsonSerializer.Serialize(new { e.ItemId }),
+            Payload = System.Text.Json.JsonSerializer.Serialize(new { itemId = e.ItemId }),
             TimestampUtc = DateTimeOffset.UtcNow
         };
         await events.PublishAsync(eventDto, ct);

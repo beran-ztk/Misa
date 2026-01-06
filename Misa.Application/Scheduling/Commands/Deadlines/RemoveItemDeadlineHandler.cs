@@ -15,7 +15,7 @@ public sealed class RemoveItemDeadlineHandler(IItemRepository repository, IMessa
             return Result.Invalid(DeadlineErrorCodes.ItemIdEmpty, "ItemId must not be empty.");
         }
 
-        var item = await repository.TryGetItemAsync(command.ItemId);
+        var item = await repository.TryGetItemAsync(command.ItemId, ct);
         if (item is null)
         {
             return Result.NotFound(DeadlineErrorCodes.ItemNotFound, "Item not found.");
