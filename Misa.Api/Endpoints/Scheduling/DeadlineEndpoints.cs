@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Misa.Application.Common.Abstractions.Events;
 using Misa.Application.Scheduling.Commands.Deadlines;
-using Misa.Contract.Events;
 using Misa.Contract.Scheduling;
 using Wolverine;
 
@@ -27,18 +25,10 @@ public static class DeadlineEndpoints
     private static async Task<IResult> RemoveDeadline(
         [FromRoute] Guid itemId,
         IMessageBus bus,
-        IEventPublisher events,
         CancellationToken ct)
     {
         await bus.InvokeAsync(new RemoveItemDeadlineCommand(itemId), ct);
 
-        await events.PublishAsync(new EventDto
-        {
-            EventType = "DeadlineRemoved",
-            Payload = System.Text.Json.JsonSerializer.Serialize(new { itemId }),
-            TimestampUtc = DateTimeOffset.UtcNow
-        }, ct);
-        
         return Results.NoContent();
     }
 }
