@@ -18,13 +18,13 @@ public sealed class RemoveItemDeadlineHandler(IItemRepository repository, IMessa
         var item = await repository.TryGetItemAsync(command.ItemId);
         if (item is null)
         {
-            return Result.Invalid(DeadlineErrorCodes.ItemNotFound, "Item not found.");
+            return Result.NotFound(DeadlineErrorCodes.ItemNotFound, "Item not found.");
         }
 
         var deadlineEntry = await repository.TryGetScheduledDeadlineForItemAsync(command.ItemId, ct);
         if (deadlineEntry is null)
         {
-            return Result.Invalid(DeadlineErrorCodes.DeadlineNotFound, "Deadline not found.");
+            return Result.NotFound(DeadlineErrorCodes.DeadlineNotFound, "Deadline not found.");
         }
 
         deadlineEntry.RescheduleDeadlineAndAuditChanges(null);
