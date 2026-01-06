@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Misa.Api.Common;
+using Misa.Application.Common.Results;
 using Misa.Application.Scheduling.Commands.Deadlines;
 using Misa.Contract.Scheduling;
 using Wolverine;
@@ -27,9 +29,9 @@ public static class DeadlineEndpoints
         IMessageBus bus,
         CancellationToken ct)
     {
-        await bus.InvokeAsync(new RemoveItemDeadlineCommand(itemId), ct);
+        var result = await bus.InvokeAsync<Result>(new RemoveItemDeadlineCommand(itemId), ct);
 
-        return Results.NoContent();
+        return result.ToIResult();
     }
 }
 
