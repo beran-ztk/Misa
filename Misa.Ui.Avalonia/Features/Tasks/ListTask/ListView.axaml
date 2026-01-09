@@ -3,9 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Misa.Ui.Avalonia.Features.Tasks.List.ListView"
-             xmlns:list="clr-namespace:Misa.Ui.Avalonia.Features.Tasks.List"
-             x:DataType="list:ListViewModel">
+             x:Class="Misa.Ui.Avalonia.Features.Tasks.ListTask.ListView"
+             xmlns:listTask="clr-namespace:Misa.Ui.Avalonia.Features.Tasks.ListTask"
+             x:DataType="listTask:ListViewModel">
     
     <Border Padding="8"
             Background="{StaticResource ColorPrimaryBackground}">
@@ -23,7 +23,7 @@
                                 Spacing="12">
                         <TextBlock Text="Tasks:"
                                    Foreground="{StaticResource BrushTextSecondary}" />
-                        <TextBlock Text="{Binding MainViewModel.Items.Count}"
+                        <TextBlock Text="{Binding Parent.Tasks.Count}"
                                    Foreground="{StaticResource BrushTextPrimary}" />
                     </StackPanel>
             
@@ -42,8 +42,8 @@
                     Padding="16">
                 
                 <DataGrid Classes="misa-grid"
-                          ItemsSource="{Binding MainViewModel.Items}"
-                          SelectedItem="{Binding MainViewModel.SelectedItem, Mode=TwoWay}"
+                          ItemsSource="{Binding Parent.Tasks}"
+                          SelectedItem="{Binding Parent.SelectedTask, Mode=TwoWay}"
                           AutoGenerateColumns="False"
                           SelectionMode="Extended"
                           IsReadOnly="True">
@@ -54,25 +54,16 @@
                                             Width="*" />
 
                         <DataGridTextColumn Header="State"
-                                            Binding="{Binding State.Name}"
+                                            Binding="{Binding StateName}"
                                             Width="150" />
 
                         <DataGridTextColumn Header="Priority"
-                                            Binding="{Binding Priority.Name}"
+                                            Binding="{Binding PriorityName}"
                                             Width="150" />
                         
                         <DataGridTextColumn Header="Category"
-                                            Binding="{Binding Category.Name}"
+                                            Binding="{Binding CategoryName}"
                                             Width="150" />
-                        
-                        <DataGridTextColumn Header="Interacted"
-                                            Binding="{Binding Entity.InteractedAt, StringFormat='yyyy-MM-dd HH:mm'}"
-                                            Width="*" />
-                        
-                        <DataGridTextColumn Header="Created"
-                                            Binding="{Binding Entity.CreatedAt, StringFormat='yyyy-MM-dd HH:mm'}"
-                                            Width="*" />
-
                     </DataGrid.Columns>
 
                 </DataGrid>

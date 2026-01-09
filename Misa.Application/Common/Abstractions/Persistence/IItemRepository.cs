@@ -12,6 +12,8 @@ public interface IItemRepository
     Task SaveChangesAsync(CancellationToken ct = default);
     Task<Item?> TryGetItemAsync(Guid id, CancellationToken ct);
 
+    // Tasks
+    Task<List<Item>> TryGetTasksAsync(CancellationToken ct);
     // Sessions
     Task<Session> AddSessionAsync(Session session);
     Task AddAsync(SessionSegment segment);

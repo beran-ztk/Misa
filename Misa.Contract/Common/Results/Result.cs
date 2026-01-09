@@ -1,4 +1,4 @@
-﻿namespace Misa.Application.Common.Results;
+﻿namespace Misa.Contract.Common.Results;
 
 public enum ResultStatus
 {

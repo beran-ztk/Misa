@@ -41,7 +41,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
         Parent = parent;
         EntityDetailHost = parent.EntityDetailHost;
         
-        _nav = parent.NavigationService.NavigationStore;
+        _nav = Parent.EntityDetailHost.NavigationService.NavigationStore;
         
         Console.WriteLine($"[VM] subscribe nav={_nav.GetHashCode()}");
         _nav.RealtimeEventReceived += OnRealtimeEvent;
@@ -137,7 +137,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
             EntityId = (Guid)currentEntityId,
             StateId = selectedId
         };
-        var response = await Parent.NavigationService.NavigationStore
+        var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
             .MisaHttpClient.PatchAsJsonAsync(requestUri: "tasks", itemDto);
         
         if (!response.IsSuccessStatusCode)
@@ -155,7 +155,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
             if (currentStateId == null)
                 return;
             
-            var states = await Parent.NavigationService.NavigationStore
+            var states = await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.GetFromJsonAsync<List<StateDto>>(requestUri: $"Lookups/UserSettableStates?stateId={currentStateId}");
 
             if (states == null)
@@ -209,7 +209,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
                 : Title
         };
 
-        var response = await Parent.NavigationService.NavigationStore
+        var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
             .MisaHttpClient.PatchAsJsonAsync(requestUri: "tasks", dto);
 
         if (!response.IsSuccessStatusCode)
@@ -266,9 +266,9 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private int? efficiencyId; 
     [ObservableProperty] private int? concentrationId; 
     public IReadOnlyList<SessionEfficiencyTypeDto> EfficiencyTypes =>
-        Parent.NavigationService.LookupsStore.EfficiencyTypes;
+        Parent.EntityDetailHost.NavigationService.LookupsStore.EfficiencyTypes;
     public IReadOnlyList<SessionConcentrationTypeDto> ConcentrationTypes =>
-        Parent.NavigationService.LookupsStore.ConcentrationTypes;
+        Parent.EntityDetailHost.NavigationService.LookupsStore.ConcentrationTypes;
     
     public string Description
     {
@@ -283,7 +283,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
     {
         try
         {
-            var response = await Parent.NavigationService.NavigationStore
+            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PostAsync(
                     requestUri: $"Sessions/Continue/{Parent.DetailedEntity.Id}",
                     content: null
@@ -314,7 +314,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
                 Concentration = ConcentrationId,
                 Summary = Summary
             };
-            var response = await Parent.NavigationService.NavigationStore
+            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PostAsJsonAsync( requestUri: $"Sessions/Stop", stopSession );
             
             if (!response.IsSuccessStatusCode)
@@ -342,7 +342,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
                 StopAutomatically = StopAutomatically ?? false,
                 AutoStopReason = AutoStopReason
             };
-            var response = await Parent.NavigationService.NavigationStore
+            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PostAsJsonAsync(requestUri: "Sessions/Start", dto);
 
             if (!response.IsSuccessStatusCode)
@@ -363,7 +363,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
         {
             var dto = new PauseSessionDto(Parent.DetailedEntity.Id, PauseReason);
             
-            var response = await Parent.NavigationService.NavigationStore
+            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PostAsJsonAsync(requestUri: "Sessions/Pause", dto);
 
             if (!response.IsSuccessStatusCode)
@@ -394,7 +394,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
                 Content = trimmedDescription
             };
             
-            var response = await Parent.NavigationService.NavigationStore
+            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PostAsJsonAsync(requestUri: "api/descriptions", dto);
             
             if (!response.IsSuccessStatusCode)
@@ -420,7 +420,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
         try
         {
             var id = Parent.DetailedEntity!.Id;
-            await Parent.NavigationService.NavigationStore
+            await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PatchAsync(requestUri: $"Entity/Delete?entityId={id}", content: null);
             
             await Parent.Reload();
@@ -436,7 +436,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
         try
         {
             var id = Parent.DetailedEntity!.Id;
-            await Parent.NavigationService.NavigationStore
+            await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PatchAsync(requestUri: $"Entity/Archive?entityId={id}", content: null);
             
             await Parent.Reload();
@@ -483,7 +483,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
 
             var dto = new ScheduleDeadlineDto(DeadlineAt: deadlineAt);
 
-            var response = await Parent.NavigationService.NavigationStore
+            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PutAsJsonAsync(
                     requestUri: $"items/{Parent.DetailedEntity.Item.EntityId}/deadline",
                     dto
@@ -535,7 +535,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
 
             using var request = new HttpRequestMessage(HttpMethod.Delete, $"items/{itemId}/deadline");
 
-            var response = await Parent.NavigationService.NavigationStore
+            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.SendAsync(request, _removeDeadlineCts.Token);
 
             if (!response.IsSuccessStatusCode)

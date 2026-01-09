@@ -16,7 +16,6 @@ namespace Misa.Ui.Avalonia.Features.Details.Page;
 public partial class DetailPageViewModel : ViewModelBase, IDisposable
 {
     public IEntityDetailHost EntityDetailHost { get; }
-    public INavigationService NavigationService { get; }
 
     [ObservableProperty] private EntityDto _detailedEntity = new();
     [ObservableProperty] private int _selectedTabIndex;
@@ -29,8 +28,7 @@ public partial class DetailPageViewModel : ViewModelBase, IDisposable
     public DetailPageViewModel(IEntityDetailHost entityDetailHost)
     {
         EntityDetailHost = entityDetailHost;
-        NavigationService = entityDetailHost.NavigationService;
-
+        
         InformationViewModel = new Information.InformationViewModel(this);
         
         this.WhenAnyValue(x => x.EntityDetailHost.ActiveEntityId)
@@ -43,15 +41,17 @@ public partial class DetailPageViewModel : ViewModelBase, IDisposable
     {
         await LoadEntityAsync(EntityDetailHost.ActiveEntityId);
     }
-    public async Task LoadEntityAsync(Guid entityId)
+    private async Task LoadEntityAsync(Guid entityId)
     {
-        _loadCts?.Cancel();
+        Console.WriteLine("Entity change detected!");
+        
+        await _loadCts?.CancelAsync();
         _loadCts?.Dispose();
         _loadCts = new CancellationTokenSource();
 
         try
         {
-            var response = await NavigationService.NavigationStore.MisaHttpClient
+            var response = await EntityDetailHost.NavigationService.NavigationStore.MisaHttpClient
                 .GetFromJsonAsync<EntityDto>($"api/entities/{entityId}", _loadCts.Token);
 
             if (response != null)

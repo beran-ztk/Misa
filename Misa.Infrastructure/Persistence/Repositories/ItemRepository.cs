@@ -65,6 +65,18 @@ public class ItemRepository(MisaDbContext db) : IItemRepository
             .Where(i => i.Entity.WorkflowId == (int)Misa.Domain.Dictionaries.Entities.EntityWorkflows.Task)
             .ToListAsync(ct);
     }
+
+    public async Task<List<Item>> TryGetTasksAsync(CancellationToken ct)
+    {
+        return await db.Items
+            .Include(e => e.Entity)
+            .Include(i => i.State)
+            .Include(i => i.Priority)
+            .Include(i => i.Category)
+            .Where(i => i.Entity.WorkflowId == (int)Domain.Dictionaries.Entities.EntityWorkflows.Task)
+            .ToListAsync(ct);
+    }
+
     public async Task<Item?> LoadAsync(Guid entityId, CancellationToken ct = default)
     {
         return await db.Items

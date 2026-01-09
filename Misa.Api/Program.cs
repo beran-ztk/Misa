@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Misa.Api.Common.Exceptions;
 using Misa.Api.Common.Realtime;
 using Misa.Api.Endpoints.Scheduling;
+using Misa.Api.Endpoints.Tasks;
 using Misa.Application.Common.Abstractions.Events;
 using Misa.Application.Common.Abstractions.Persistence;
 using Misa.Application.Entities.Commands;
@@ -13,6 +14,7 @@ using Misa.Application.Entities.Queries.GetSingleDetailedEntity;
 using Misa.Application.Entities.Repositories;
 using Misa.Application.Items.Commands;
 using Misa.Application.Items.Queries;
+using Misa.Application.Items.Tasks.Queries;
 using Misa.Application.Main.Repositories;
 using Misa.Application.ReferenceData.Queries;
 using Misa.Application.Scheduling.Commands.Deadlines;
@@ -36,6 +38,7 @@ builder.Host.UseWolverine(opts =>
 {
     opts.Discovery.IncludeAssembly(typeof(RemoveItemDeadlineHandler).Assembly);
     opts.Discovery.IncludeAssembly(typeof(UpsertItemDeadlineHandler).Assembly);
+    opts.Discovery.IncludeAssembly(typeof(GetTasksHandler).Assembly);
 });
 
 builder.Services.AddScoped<EventsHub>();
@@ -113,22 +116,22 @@ app.MapPost("/api/descriptions", async ( DescriptionDto dto, CreateDescriptionHa
     => await descriptionHandler.CreateAsync(dto));
 
 // Session
-app.MapPost("/Sessions/Start", async (SessionDto dto, SessionHandler handler) 
-    => await handler.StartSessionAsync(dto));
-app.MapPost("/Sessions/Pause", async (PauseSessionDto dto, SessionHandler handler) 
-    => await handler.PauseSessionAsync(dto));
-app.MapPost(
-    "/Sessions/Continue/{entityId:guid}",
-    async (Guid entityId, SessionHandler handler)
-        => await handler.ContinueSessionAsync(entityId)
-);
-app.MapPost(
-    "/Sessions/Stop",
-    async (StopSessionDto dto, SessionHandler handler)
-        => await handler.StopSessionAsync(dto)
-);
+// app.MapPost("/Sessions/Start", async (SessionDto dto, SessionHandler handler) 
+//     => await handler.StartSessionAsync(dto));
+// app.MapPost("/Sessions/Pause", async (PauseSessionDto dto, SessionHandler handler) 
+//     => await handler.PauseSessionAsync(dto));
+// app.MapPost(
+//     "/Sessions/Continue/{entityId:guid}",
+//     async (Guid entityId, SessionHandler handler)
+//         => await handler.ContinueSessionAsync(entityId)
+// );
+// app.MapPost(
+//     "/Sessions/Stop",
+//     async (StopSessionDto dto, SessionHandler handler)
+//         => await handler.StopSessionAsync(dto)
+// );
 
-// Scheduling Endpoints
+TaskEndpoints.Map(app);
 DeadlineEndpoints.Map(app);
 
 app.Run();

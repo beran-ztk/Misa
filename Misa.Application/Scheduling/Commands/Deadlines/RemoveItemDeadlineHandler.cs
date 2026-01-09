@@ -1,7 +1,7 @@
 ﻿using Misa.Application.Common.Abstractions.Persistence;
-using Misa.Application.Common.Results;
 using Misa.Application.Scheduling.Events.Commands;
 using Misa.Application.Scheduling.Results;
+using Misa.Contract.Common.Results;
 using Wolverine;
 
 namespace Misa.Application.Scheduling.Commands.Deadlines;
