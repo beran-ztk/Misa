@@ -1,14 +1,16 @@
-﻿namespace Misa.Domain.Entities.Extensions;
+﻿
+namespace Misa.Domain.Entities.Extensions;
 
 public class Description
 {
     private Description() { }
-
-    public Description( Guid guid, int typeId, string content, DateTimeOffset? createdAtUtc)
+    public static Description Create(Guid id, string content)
     {
-        EntityId = guid;
-        Content = content;
-        CreatedAtUtc = createdAtUtc ?? DateTimeOffset.UtcNow;
+        return new Description
+        {
+            EntityId = id,
+            Content = content
+        };
     }
     public Guid Id { get; set; }
     public Guid EntityId { get; set; }

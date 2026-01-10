@@ -35,7 +35,10 @@ public partial class DetailPageViewModel : ViewModelBase, IDisposable
         this.WhenAnyValue(x => x.EntityDetailHost.ActiveEntityId)
             .Where(id => id != Guid.Empty)
             .DistinctUntilChanged()
-            .Subscribe(id => _ = LoadEntityAsync(id));
+            .Subscribe(id =>
+            {
+                _ = LoadEntityAsync(id);
+            });
     }
 
     public async Task Reload()
@@ -72,6 +75,7 @@ public partial class DetailPageViewModel : ViewModelBase, IDisposable
             }
             
             ItemOverview = result.Value;
+            InformationViewModel.Description.Load();
         }
         catch (OperationCanceledException)
         {

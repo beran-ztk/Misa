@@ -21,7 +21,7 @@
                        FontWeight="SemiBold"
                        Margin="10"/>
     
-            <ItemsControl ItemsSource="{Binding Parent.Parent.ItemOverview.Descriptions}">
+            <ItemsControl ItemsSource="{Binding Descriptions}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="10,6"
@@ -64,19 +64,19 @@
                              Classes="misa-input"
                              Watermark="Description..."
                              Foreground="{StaticResource BrushTextPrimary}"
-                             Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+                             Text="{Binding Description, Mode=TwoWay}" />
     
-                    <!-- <Button Grid.Column="1" -->
-                    <!--         Width="38" -->
-                    <!--         Height="38" -->
-                    <!--         Background="{StaticResource BrushPrimaryBackground}" -->
-                    <!--         BorderBrush="{StaticResource BrushBorder}" -->
-                    <!--         BorderThickness="1" -->
-                    <!--         Command="{Binding AddDescriptionCommand}"> -->
-                    <!--     <Image Width="16" -->
-                    <!--            Height="16" -->
-                    <!--            Source="{SvgImage /Assets/Images/MainNavigation/plus-circle.svg}" /> -->
-                    <!-- </Button> -->
+                    <Button Grid.Column="1"
+                            Width="38"
+                            Height="38"
+                            Background="{StaticResource BrushPrimaryBackground}"
+                            BorderBrush="{StaticResource BrushBorder}"
+                            BorderThickness="1"
+                            Command="{Binding AddDescriptionCommand}">
+                        <Image Width="16"
+                               Height="16"
+                               Source="{SvgImage /Assets/Images/MainNavigation/plus-circle.svg}" />
+                    </Button>
                 </Grid>
             </Border>
         </StackPanel>

@@ -12,11 +12,6 @@ namespace Misa.Infrastructure.Persistence.Repositories;
 
 public class MainRepository(MisaDbContext db) : IMainRepository
 {
-    public async Task AddDescriptionAsync(Description description)
-    {
-        await db.Descriptions.AddAsync(description);
-        await db.SaveChangesAsync();
-    }
     public async Task<List<Priority>> GetPriorities(CancellationToken ct)
         => await db.Priorities.ToListAsync(ct);
     public async Task<List<Category>> GetTaskCategories(CancellationToken ct)

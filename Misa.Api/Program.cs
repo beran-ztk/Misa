@@ -3,11 +3,13 @@ using Misa.Contract.Items;
 using Microsoft.EntityFrameworkCore;
 using Misa.Api.Common.Exceptions;
 using Misa.Api.Common.Realtime;
+using Misa.Api.Endpoints.Entities;
 using Misa.Api.Endpoints.Items;
 using Misa.Api.Endpoints.Scheduling;
 using Misa.Application.Common.Abstractions.Events;
 using Misa.Application.Common.Abstractions.Persistence;
 using Misa.Application.Entities.Commands;
+using Misa.Application.Entities.Commands.Description;
 using Misa.Application.Entities.Queries;
 using Misa.Application.Entities.Queries.GetSingleDetailedEntity;
 using Misa.Application.Items.Commands;
@@ -35,6 +37,7 @@ builder.Host.UseWolverine(opts =>
     opts.Discovery.IncludeAssembly(typeof(UpsertItemDeadlineHandler).Assembly);
     opts.Discovery.IncludeAssembly(typeof(GetTasksHandler).Assembly);
     opts.Discovery.IncludeAssembly(typeof(GetItemDetailsHandler).Assembly);
+    opts.Discovery.IncludeAssembly(typeof(AddDescriptionHandler).Assembly);
 });
 
 builder.Services.AddScoped<EventsHub>();
@@ -100,9 +103,6 @@ app.MapPatch("/tasks", async (UpdateItemDto dto, UpdateItemHandler handler) =>
     return Results.Ok();
 });
 
-// Description
-
-
 // Session
 // app.MapPost("/Sessions/Start", async (SessionDto dto, SessionHandler handler) 
 //     => await handler.StartSessionAsync(dto));
@@ -122,5 +122,6 @@ app.MapPatch("/tasks", async (UpdateItemDto dto, UpdateItemHandler handler) =>
 TaskEndpoints.Map(app);
 ItemDetailEndpoints.Map(app);
 DeadlineEndpoints.Map(app);
+DescriptionEndpoints.Map(app);
 
 app.Run();

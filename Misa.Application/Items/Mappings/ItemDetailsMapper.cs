@@ -56,7 +56,7 @@ public static class ItemDetailsMapper
             domain.Content,
             domain.CreatedAtUtc
         );
-    public static IReadOnlyList<DescriptionDto> ToDto(this ICollection<Description> domains)
+    public static ICollection<DescriptionDto> ToDto(this ICollection<Description> domains)
         => domains
             .Select(d => d.ToDto())
             .ToList();
