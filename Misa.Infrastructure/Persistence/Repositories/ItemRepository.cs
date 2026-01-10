@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Misa.Application.Common.Abstractions.Persistence;
 using Misa.Application.Common.Exceptions;
 using Misa.Domain.Audit;
+using Misa.Domain.Entities;
 using Misa.Domain.Scheduling;
 using Misa.Infrastructure.Data;
 using Item = Misa.Domain.Items.Item;
@@ -44,27 +45,32 @@ public class ItemRepository(MisaDbContext db) : IItemRepository
                ?? throw new InvalidOperationException(
                    "Session wurde gespeichert, aber konnte nicht wieder geladen werden");
     }
-    public async Task<Item?> GetTaskAsync(Guid id, CancellationToken ct)
+    public async Task<List<Item>> TryGetTasksAsync(CancellationToken ct)
     {
         return await db.Items
-            .Include(i => i.Entity)
-            .ThenInclude(e => e.Workflow)
+            .Include(e => e.Entity)
             .Include(i => i.State)
             .Include(i => i.Priority)
             .Include(i => i.Category)
-            .FirstOrDefaultAsync( i => i.EntityId == id, ct );
-    }
-    public async Task<List<Item>> GetAllTasksAsync(CancellationToken ct)
-    {
-        return await db.Items
-            .Include(i => i.Entity)
-            .ThenInclude(e => e.Workflow)
-            .Include(i => i.State)
-            .Include(i => i.Priority)
-            .Include(i => i.Category)
-            .Where(i => i.Entity.WorkflowId == (int)Misa.Domain.Dictionaries.Entities.EntityWorkflows.Task)
+            .Where(i => i.Entity.WorkflowId == (int)Domain.Dictionaries.Entities.EntityWorkflows.Task)
             .ToListAsync(ct);
     }
+
+    public async Task<Item?> TryGetItemDetailsAsync(Guid id, CancellationToken ct)
+    {
+        return await db.Items
+            .Include(i => i.State)
+            .Include(i => i.Priority)
+            .Include(i => i.Category)
+            
+            .Include(e => e.Entity)
+                .ThenInclude(e => e.Workflow)
+            .Include(e => e.Entity)
+                .ThenInclude(e => e.Descriptions)
+            
+            .FirstOrDefaultAsync(e => e.EntityId == id, ct);
+    }
+
     public async Task<Item?> LoadAsync(Guid entityId, CancellationToken ct = default)
     {
         return await db.Items

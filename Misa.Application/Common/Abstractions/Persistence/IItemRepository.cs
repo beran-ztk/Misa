@@ -1,4 +1,5 @@
 ﻿using Misa.Domain.Audit;
+using Misa.Domain.Entities;
 using Misa.Domain.Items;
 using Misa.Domain.Scheduling;
 
@@ -7,11 +8,12 @@ namespace Misa.Application.Common.Abstractions.Persistence;
 public interface IItemRepository
 {
     Task<Item> AddAsync(Item item, CancellationToken ct);
-    Task<Item?> GetTaskAsync(Guid id, CancellationToken ct = default);
-    Task<List<Item>> GetAllTasksAsync(CancellationToken ct = default);
     Task SaveChangesAsync(CancellationToken ct = default);
     Task<Item?> TryGetItemAsync(Guid id, CancellationToken ct);
 
+    Task<Item?> TryGetItemDetailsAsync(Guid id, CancellationToken ct);
+    // Tasks
+    Task<List<Item>> TryGetTasksAsync(CancellationToken ct);
     // Sessions
     Task<Session> AddSessionAsync(Session session);
     Task AddAsync(SessionSegment segment);

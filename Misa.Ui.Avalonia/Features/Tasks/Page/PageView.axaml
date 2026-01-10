@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Misa.Ui.Avalonia.Features.Tasks.Page.PageView"
-             xmlns:list="clr-namespace:Misa.Ui.Avalonia.Features.Tasks.List"
              xmlns:navigation="clr-namespace:Misa.Ui.Avalonia.Features.Tasks.Navigation"
              xmlns:page="clr-namespace:Misa.Ui.Avalonia.Features.Tasks.Page"
+             xmlns:listTask="clr-namespace:Misa.Ui.Avalonia.Features.Tasks.ListTask"
              x:DataType="page:PageViewModel">
     <Border>
         <Grid ColumnDefinitions="*,1,*">
@@ -18,7 +18,7 @@
                 
                     <navigation:NavigationView Grid.Row="0"
                                               DataContext="{Binding Navigation}" />
-                    <list:ListView Grid.Row="1"
+                    <listTask:ListView Grid.Row="1"
                                         DataContext="{Binding Model}" />
                 </Grid>
             </Border>

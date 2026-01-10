@@ -1,24 +1,23 @@
-using Microsoft.AspNetCore.SignalR;
 using Misa.Infrastructure.Data;
 using Misa.Contract.Items;
 using Microsoft.EntityFrameworkCore;
 using Misa.Api.Common.Exceptions;
 using Misa.Api.Common.Realtime;
+using Misa.Api.Endpoints.Entities;
+using Misa.Api.Endpoints.Items;
 using Misa.Api.Endpoints.Scheduling;
 using Misa.Application.Common.Abstractions.Events;
 using Misa.Application.Common.Abstractions.Persistence;
 using Misa.Application.Entities.Commands;
+using Misa.Application.Entities.Commands.Description;
 using Misa.Application.Entities.Queries;
 using Misa.Application.Entities.Queries.GetSingleDetailedEntity;
-using Misa.Application.Entities.Repositories;
 using Misa.Application.Items.Commands;
 using Misa.Application.Items.Queries;
-using Misa.Application.Main.Repositories;
 using Misa.Application.ReferenceData.Queries;
 using Misa.Application.Scheduling.Commands.Deadlines;
-using Misa.Contract.Audit;
 using Misa.Contract.Entities;
-using Misa.Contract.Main;
+using Misa.Contract.Items.Common;
 using Misa.Infrastructure.Persistence.Repositories;
 using Wolverine;
 
@@ -36,6 +35,9 @@ builder.Host.UseWolverine(opts =>
 {
     opts.Discovery.IncludeAssembly(typeof(RemoveItemDeadlineHandler).Assembly);
     opts.Discovery.IncludeAssembly(typeof(UpsertItemDeadlineHandler).Assembly);
+    opts.Discovery.IncludeAssembly(typeof(GetTasksHandler).Assembly);
+    opts.Discovery.IncludeAssembly(typeof(GetItemDetailsHandler).Assembly);
+    opts.Discovery.IncludeAssembly(typeof(AddDescriptionHandler).Assembly);
 });
 
 builder.Services.AddScoped<EventsHub>();
@@ -45,7 +47,6 @@ builder.Services.AddScoped<IEventPublisher, SignalREventPublisher>();
 
 builder.Services.AddScoped<CreateItemHandler>();
 builder.Services.AddScoped<GetLookupsHandler>();
-builder.Services.AddScoped<GetItemsHandler>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IMainRepository, MainRepository>();
 
@@ -53,7 +54,6 @@ builder.Services.AddScoped<IMainRepository, MainRepository>();
 
 builder.Services.AddScoped<GetEntitiesHandler>();
 builder.Services.AddScoped<SessionHandler>();
-builder.Services.AddScoped<CreateDescriptionHandler>();
 builder.Services.AddScoped<AddEntityHandler>();
 builder.Services.AddScoped<PatchEntityHandler>();
 builder.Services.AddScoped<UpdateItemHandler>();
@@ -95,11 +95,6 @@ app.MapPost("/api/entities/add", async (
     return Results.Ok();
 });
 
-app.MapGet("/api/tasks/{id:guid}",
-    async (Guid id, GetItemsHandler handler, CancellationToken ct)
-        => await handler.GetTaskAsync(id, ct));
-app.MapGet("/api/tasks", async ( GetItemsHandler handler, CancellationToken ct) 
-     => await handler.GetTasksAsync(ct));
 app.MapPost("/api/tasks", async ( CreateItemDto dto, CreateItemHandler itemHandler, CancellationToken ct) 
     => await itemHandler.AddTaskAsync(dto, ct));
 app.MapPatch("/tasks", async (UpdateItemDto dto, UpdateItemHandler handler) =>
@@ -108,27 +103,25 @@ app.MapPatch("/tasks", async (UpdateItemDto dto, UpdateItemHandler handler) =>
     return Results.Ok();
 });
 
-// Description
-app.MapPost("/api/descriptions", async ( DescriptionDto dto, CreateDescriptionHandler descriptionHandler, CancellationToken ct) 
-    => await descriptionHandler.CreateAsync(dto));
-
 // Session
-app.MapPost("/Sessions/Start", async (SessionDto dto, SessionHandler handler) 
-    => await handler.StartSessionAsync(dto));
-app.MapPost("/Sessions/Pause", async (PauseSessionDto dto, SessionHandler handler) 
-    => await handler.PauseSessionAsync(dto));
-app.MapPost(
-    "/Sessions/Continue/{entityId:guid}",
-    async (Guid entityId, SessionHandler handler)
-        => await handler.ContinueSessionAsync(entityId)
-);
-app.MapPost(
-    "/Sessions/Stop",
-    async (StopSessionDto dto, SessionHandler handler)
-        => await handler.StopSessionAsync(dto)
-);
+// app.MapPost("/Sessions/Start", async (SessionDto dto, SessionHandler handler) 
+//     => await handler.StartSessionAsync(dto));
+// app.MapPost("/Sessions/Pause", async (PauseSessionDto dto, SessionHandler handler) 
+//     => await handler.PauseSessionAsync(dto));
+// app.MapPost(
+//     "/Sessions/Continue/{entityId:guid}",
+//     async (Guid entityId, SessionHandler handler)
+//         => await handler.ContinueSessionAsync(entityId)
+// );
+// app.MapPost(
+//     "/Sessions/Stop",
+//     async (StopSessionDto dto, SessionHandler handler)
+//         => await handler.StopSessionAsync(dto)
+// );
 
-// Scheduling Endpoints
+TaskEndpoints.Map(app);
+ItemDetailEndpoints.Map(app);
 DeadlineEndpoints.Map(app);
+DescriptionEndpoints.Map(app);
 
 app.Run();

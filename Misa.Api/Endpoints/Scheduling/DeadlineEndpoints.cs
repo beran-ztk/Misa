@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Misa.Api.Common;
-using Misa.Application.Common.Results;
 using Misa.Application.Scheduling.Commands.Deadlines;
+using Misa.Contract.Common.Results;
 using Misa.Contract.Scheduling;
 using Wolverine;
 

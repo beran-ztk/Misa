@@ -4,9 +4,10 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Misa.Contract.Items;
+using Misa.Contract.Items.Common;
 using Misa.Ui.Avalonia.Features.Details.Page;
 using Misa.Ui.Avalonia.Features.Tasks.Create;
-using Misa.Ui.Avalonia.Features.Tasks.List;
+using Misa.Ui.Avalonia.Features.Tasks.ListTask;
 using Misa.Ui.Avalonia.Features.Tasks.Shared;
 using Misa.Ui.Avalonia.Infrastructure.Services.Interfaces;
 using Misa.Ui.Avalonia.Infrastructure.Services.Navigation;
@@ -22,11 +23,13 @@ public partial class PageViewModel : ViewModelBase, IEntityDetailHost, IDisposab
 
     public INavigationService NavigationService { get; }
 
-    [ObservableProperty] private ReadItemDto? _selectedItem;
+    [ObservableProperty] private ListTaskDto? _selectedTask;
 
-    partial void OnSelectedItemChanged(ReadItemDto? value)
+    partial void OnSelectedTaskChanged(ListTaskDto? value)
     {
+        Console.WriteLine("OnSelectedItemChanged called!");
         ActiveEntityId = value?.EntityId ?? Guid.Empty;
+        Console.WriteLine($"OnSelectedItemChanged set ActiveEntityId to {ActiveEntityId}!");
     }
 
     private ViewModelBase? _currentInfoModel;
@@ -34,7 +37,7 @@ public partial class PageViewModel : ViewModelBase, IEntityDetailHost, IDisposab
 
     public ListViewModel Model { get; }
     public NavigationViewModel Navigation { get; }
-    public ObservableCollection<ReadItemDto> Items { get; } = [];
+    public ObservableCollection<ListTaskDto> Tasks { get; } = [];
 
     [ObservableProperty] private string? _pageError;
 
@@ -52,7 +55,7 @@ public partial class PageViewModel : ViewModelBase, IEntityDetailHost, IDisposab
 
         Bus = new EventBus();
 
-        Model = new ListViewModel(this, Bus);
+        Model = new ListViewModel(this);
         Navigation = new NavigationViewModel(this, Bus);
         _detailViewModel = new DetailPageViewModel(this);
         
@@ -79,12 +82,12 @@ public partial class PageViewModel : ViewModelBase, IEntityDetailHost, IDisposab
             _ = Model.LoadAsync();
         });
 
-        _subCreated = Bus.Subscribe<TaskCreated>(e =>
-        {
-            PageError = null;
-            Items.Add(e.Created);
-            SelectedItem = e.Created; // triggert ActiveEntityId über OnSelectedItemChanged
-        });
+        // _subCreated = Bus.Subscribe<TaskCreated>(e =>
+        // {
+        //     PageError = null;
+        //     Tasks.Add(e.Created);
+        //     SelectedTask = e.Created; // triggert ActiveEntityId über OnSelectedItemChanged
+        // });
 
         _subCreateFailed = Bus.Subscribe<TaskCreateFailed>(e =>
         {

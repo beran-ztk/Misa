@@ -93,5 +93,9 @@
         <DependentUpon>DetailInformationView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Features\Details\Information\Extensions\Descriptions\DescriptionView.axaml.cs">
+        <DependentUpon>DescriptionView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

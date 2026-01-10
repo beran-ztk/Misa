@@ -5,7 +5,7 @@ namespace Misa.Application.Items.Commands;
 
 public class UpdateItemHandler(IItemRepository repository)
 {
-    public async Task UpdateAsync(UpdateItemDto dto)
+    public async System.Threading.Tasks.Task UpdateAsync(UpdateItemDto dto)
     {
         var item = await repository.TryGetItemAsync(dto.EntityId, CancellationToken.None);
         var hasBeenChanged = false;

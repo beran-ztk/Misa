@@ -1,4 +1,4 @@
-﻿using Misa.Application.Common.Results;
+﻿using Misa.Contract.Common.Results;
 
 namespace Misa.Api.Common;
 
