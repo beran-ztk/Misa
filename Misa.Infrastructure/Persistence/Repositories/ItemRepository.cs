@@ -62,12 +62,10 @@ public class ItemRepository(MisaDbContext db) : IItemRepository
             .Include(e => e.Entity)
                 .ThenInclude(e => e.Workflow)
 
-            // Item (alles LEFT JOIN)
-            .Include(e => e.Priority)
+            .Include(i => i.State)
             .Include(i => i.Priority)
-            .Include(e => e.Category)
+            .Include(i => i.Category)
             
-            // Descriptions
             .Include(e => e.Entity)
                 .ThenInclude(e => e.Descriptions)
                     .ThenInclude(d => d.Type)

@@ -6,7 +6,7 @@ using Wolverine;
 
 namespace Misa.Api.Endpoints.Items;
 
-public class ItemDetailEndpoints
+public static class ItemDetailEndpoints
 {
     public static void Map(WebApplication app)
     {
@@ -14,7 +14,7 @@ public class ItemDetailEndpoints
     }
 
     private static async Task<Result<ItemOverviewDto>> GetDetails(
-        [FromQuery] Guid itemId,
+        [FromRoute] Guid itemId,
         IMessageBus bus, 
         CancellationToken ct)
     {

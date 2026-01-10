@@ -17,7 +17,6 @@ using Misa.Application.Scheduling.Commands.Deadlines;
 using Misa.Contract.Descriptions;
 using Misa.Contract.Entities;
 using Misa.Contract.Items.Common;
-using Misa.Contract.Main;
 using Misa.Infrastructure.Persistence.Repositories;
 using Wolverine;
 

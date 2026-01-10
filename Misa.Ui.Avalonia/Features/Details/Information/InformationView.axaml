@@ -356,48 +356,48 @@
         <!--     </StackPanel> -->
         <!-- </Border> -->
 
-        <Border Padding="10"
-                CornerRadius="10"
-                BorderThickness="1"
-                BorderBrush="{StaticResource BrushBorder}"
-                Background="{StaticResource BrushPrimaryBackground}"
-                IsVisible="{Binding IsDeadlineFormOpen}">
-            <StackPanel Spacing="10">
-
-                <TextBlock Text="Set Deadline"
-                           FontWeight="SemiBold"/>
-
-                <Grid ColumnDefinitions="*"
-                      RowDefinitions="Auto,Auto"
-                      RowSpacing="8"
-                      ColumnSpacing="10">
-
-                    <TextBlock Grid.Row="0" VerticalAlignment="Top" Text="When do you want to set the deadline for?" />
-                    <StackPanel Grid.Row="1" Spacing="8">
-                        <DatePicker 
-                            SelectedDate="{Binding DeadlineDate, Mode=TwoWay}"/>
-                        <TimePicker 
-                            SelectedTime="{Binding DeadlineTime, Mode=TwoWay}"/>
-
-                        <StackPanel Orientation="Horizontal"
-                                    Spacing="8"
-                                    HorizontalAlignment="Right">
-                            <Button Classes="misa-action"
-                                    Content="Remove"
-                                    Command="{Binding RemoveDeadlineCommand}" />
-                            <Button Classes="misa-action"
-                                    Content="Cancel"
-                                    Command="{Binding CloseDeadlineFormCommand}" />
-                            <Button Classes="misa-action"
-                                    Content="Save"
-                                    Command="{Binding UpsertDeadlineCommand}" />
-                        </StackPanel>
-                    </StackPanel>
-
-                </Grid>
-
-            </StackPanel>
-        </Border>
+        <!-- <Border Padding="10" -->
+        <!--         CornerRadius="10" -->
+        <!--         BorderThickness="1" -->
+        <!--         BorderBrush="{StaticResource BrushBorder}" -->
+        <!--         Background="{StaticResource BrushPrimaryBackground}" -->
+        <!--         IsVisible="{Binding IsDeadlineFormOpen}"> -->
+        <!--     <StackPanel Spacing="10"> -->
+        <!-- -->
+        <!--         <TextBlock Text="Set Deadline" -->
+        <!--                    FontWeight="SemiBold"/> -->
+        <!-- -->
+        <!--         <Grid ColumnDefinitions="*" -->
+        <!--               RowDefinitions="Auto,Auto" -->
+        <!--               RowSpacing="8" -->
+        <!--               ColumnSpacing="10"> -->
+        <!-- -->
+        <!--             <TextBlock Grid.Row="0" VerticalAlignment="Top" Text="When do you want to set the deadline for?" /> -->
+        <!--             <StackPanel Grid.Row="1" Spacing="8"> -->
+        <!--                 <DatePicker  -->
+        <!--                     SelectedDate="{Binding DeadlineDate, Mode=TwoWay}"/> -->
+        <!--                 <TimePicker  -->
+        <!--                     SelectedTime="{Binding DeadlineTime, Mode=TwoWay}"/> -->
+        <!-- -->
+        <!--                 <StackPanel Orientation="Horizontal" -->
+        <!--                             Spacing="8" -->
+        <!--                             HorizontalAlignment="Right"> -->
+        <!--                     <Button Classes="misa-action" -->
+        <!--                             Content="Remove" -->
+        <!--                             Command="{Binding RemoveDeadlineCommand}" /> -->
+        <!--                     <Button Classes="misa-action" -->
+        <!--                             Content="Cancel" -->
+        <!--                             Command="{Binding CloseDeadlineFormCommand}" /> -->
+        <!--                     <Button Classes="misa-action" -->
+        <!--                             Content="Save" -->
+        <!--                             Command="{Binding UpsertDeadlineCommand}" /> -->
+        <!--                 </StackPanel> -->
+        <!--             </StackPanel> -->
+        <!-- -->
+        <!--         </Grid> -->
+        <!-- -->
+        <!--     </StackPanel> -->
+        <!-- </Border> -->
         
         <!-- Edit -->
         <!-- <Border Padding="10" -->
@@ -461,7 +461,7 @@
                 <!-- Top meta -->
                 <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="ID" Opacity="0.7"/>
-                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Parent.EntityDetailHost.Id}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Parent.ItemOverview.Item.Id}"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Title" Opacity="0.7"/>
 
@@ -473,7 +473,7 @@
 
                         <!-- Display mode -->
                         <TextBlock Grid.Row="0" Grid.Column="0"
-                                   Text="{Binding Parent.DetailedEntity.Item.Title}"
+                                   Text="{Binding Parent.ItemOverview.Item.Title}"
                                    TextWrapping="Wrap"
                                    IsVisible="{Binding !IsEditTitleFormOpen}"/>
 
@@ -515,18 +515,14 @@
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Created" Opacity="0.7"/>
                     <TextBlock Grid.Row="2" Grid.Column="1"
-                               Text="{Binding Parent.DetailedEntity.CreatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}"/>
+                               Text="{Binding Parent.ItemOverview.Entity.CreatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}"/>
 
                     <TextBlock Grid.Row="3" Grid.Column="0" Text="Updated" Opacity="0.7"/>
                     <TextBlock Grid.Row="3" Grid.Column="1"
-                               Text="{Binding Parent.DetailedEntity.UpdatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}"/>
+                               Text="{Binding Parent.ItemOverview.Entity.UpdatedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}"/>
                     <TextBlock Grid.Row="4" Grid.Column="0" Text="Interacted" Opacity="0.7"/>
                     <TextBlock Grid.Row="4" Grid.Column="1"
-                               Text="{Binding Parent.DetailedEntity.InteractedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}"/>
-                    
-                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Session Count" Opacity="0.7"/>
-                    <TextBlock Grid.Row="5" Grid.Column="1"
-                               Text="{Binding Parent.DetailedEntity.Sessions.Count}"/>
+                               Text="{Binding Parent.ItemOverview.Entity.InteractedAt, StringFormat={}{0:yyyy-MM-dd HH:mm}}"/>
                 </Grid>
 
 
@@ -537,8 +533,8 @@
                     <Border Classes="misa-detail-information-item">
                         <StackPanel Spacing="6">
                             <TextBlock Text="Workflow" Opacity="0.7" FontSize="12"/>
-                            <TextBlock Text="{Binding Parent.DetailedEntity.Workflow.Name}" FontWeight="SemiBold"/>
-                            <TextBlock Text="{Binding Parent.DetailedEntity.Workflow.Synopsis}"
+                            <TextBlock Text="{Binding Parent.ItemOverview.Entity.Workflow.Name}" FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding Parent.ItemOverview.Entity.Workflow.Synopsis}"
                                        TextWrapping="Wrap"
                                        Opacity="0.85"/>
                         </StackPanel>
@@ -550,9 +546,9 @@
                             <!-- Content -->
                             <StackPanel Spacing="6">
                                 <TextBlock Text="State" Opacity="0.7" FontSize="12"/>
-                                <TextBlock Text="{Binding Parent.DetailedEntity.Item.State.Name}"
+                                <TextBlock Text="{Binding Parent.ItemOverview.Item.State.Name}"
                                            FontWeight="SemiBold"/>
-                                <TextBlock Text="{Binding Parent.DetailedEntity.Item.State.Synopsis}"
+                                <TextBlock Text="{Binding Parent.ItemOverview.Item.State.Synopsis}"
                                            TextWrapping="Wrap"
                                            Opacity="0.85"/>
                             </StackPanel>
@@ -578,7 +574,7 @@
                             
                                 <StackPanel Spacing="10">
                             
-                                    <TextBlock Text="{Binding Parent.DetailedEntity.Item.State.Name, StringFormat='Edit State → {0}'}"
+                                    <TextBlock Text="{Binding Parent.ItemOverview.Item.State.Name, StringFormat='Edit State → {0}'}"
                                                FontWeight="SemiBold"/>
                             
                                     <ComboBox Classes="misa-input"
@@ -609,8 +605,8 @@
                     <Border Classes="misa-detail-information-item">
                         <StackPanel Spacing="6">
                             <TextBlock Text="Priority" Opacity="0.7" FontSize="12"/>
-                            <TextBlock Text="{Binding Parent.DetailedEntity.Item.Priority.Name}" FontWeight="SemiBold"/>
-                            <TextBlock Text="{Binding Parent.DetailedEntity.Item.Priority.Synopsis}"
+                            <TextBlock Text="{Binding Parent.ItemOverview.Item.Priority.Name}" FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding Parent.ItemOverview.Item.Priority.Synopsis}"
                                        TextWrapping="Wrap"
                                        Opacity="0.85"/>
                         </StackPanel>
@@ -620,8 +616,8 @@
                     <Border Classes="misa-detail-information-item">
                         <StackPanel Spacing="6">
                             <TextBlock Text="Category" Opacity="0.7" FontSize="12"/>
-                            <TextBlock Text="{Binding Parent.DetailedEntity.Item.Category.Name}" FontWeight="SemiBold"/>
-                            <TextBlock Text="{Binding Parent.DetailedEntity.Item.Category.Synopsis}"
+                            <TextBlock Text="{Binding Parent.ItemOverview.Item.Category.Name}" FontWeight="SemiBold"/>
+                            <TextBlock Text="{Binding Parent.ItemOverview.Item.Category.Synopsis}"
                                        TextWrapping="Wrap"
                                        Opacity="0.85"/>
                         </StackPanel>

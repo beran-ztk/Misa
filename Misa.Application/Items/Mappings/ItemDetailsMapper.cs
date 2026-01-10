@@ -2,6 +2,7 @@
 using Misa.Contract.Entities;
 using Misa.Contract.Items.Common;
 using Misa.Contract.Items.Details;
+using Misa.Contract.Items.Lookups;
 using Misa.Domain.Entities;
 using Misa.Domain.Items;
 

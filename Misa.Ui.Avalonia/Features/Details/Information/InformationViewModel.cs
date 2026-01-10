@@ -1,95 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Json;
-using System.Reactive;
-using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Misa.Contract.Audit;
 using Misa.Contract.Audit.Lookups;
 using Misa.Contract.Descriptions;
-using Misa.Contract.Events;
 using Misa.Contract.Items;
 using Misa.Contract.Items.Lookups;
-using Misa.Contract.Scheduling;
 using Misa.Ui.Avalonia.Features.Details.Page;
-using Misa.Ui.Avalonia.Infrastructure.Services.Interfaces;
 using Misa.Ui.Avalonia.Presentation.Mapping;
-using ReactiveUI;
-using NavigationStore = Misa.Ui.Avalonia.Infrastructure.Stores.NavigationStore;
 
 namespace Misa.Ui.Avalonia.Features.Details.Information;
 
-public partial class InformationViewModel : ViewModelBase, IDisposable
+public partial class InformationViewModel(DetailPageViewModel parent) : ViewModelBase
 {
-    public IEntityDetailHost EntityDetailHost { get; }
-    public DetailPageViewModel Parent { get; }
+    public DetailPageViewModel Parent { get; } = parent;
     private string _description = string.Empty;
-    public ReactiveCommand<Unit, Unit> AddDescriptionCommand { get; }
-    public ReactiveCommand<Unit, Unit> StartSessionCommand { get; }
-    public ReactiveCommand<Unit, Unit> PauseSessionCommand { get; }
-    private readonly NavigationStore _nav;
-    private bool _disposed;
 
-    public InformationViewModel(DetailPageViewModel parent)
-    {
-        Parent = parent;
-        EntityDetailHost = parent.EntityDetailHost;
-        
-        _nav = Parent.EntityDetailHost.NavigationService.NavigationStore;
-        
-        Console.WriteLine($"[VM] subscribe nav={_nav.GetHashCode()}");
-        _nav.RealtimeEventReceived += OnRealtimeEvent;
-        
-        AddDescriptionCommand = ReactiveCommand.CreateFromTask(AddDescriptionAsync);
-        AddDescriptionCommand.Subscribe();
-        
-        StartSessionCommand = ReactiveCommand.CreateFromTask(StartSessionAsync);
-        StartSessionCommand.Subscribe();
-        
-        PauseSessionCommand = ReactiveCommand.CreateFromTask(EndSessionAsync);
-        PauseSessionCommand.Subscribe();
-    }
-    private void OnRealtimeEvent(EventDto evt)
-    {
-        Console.WriteLine($"[VM] event {evt.EventType}");
-
-        if (!string.Equals(evt.EventType, "DeadlineRemoved", StringComparison.Ordinal))
-            return;
-
-        Guid itemId;
-        try
-        {
-            using var doc = JsonDocument.Parse(evt.Payload);
-            itemId = doc.RootElement.GetProperty("itemId").GetGuid();
-            Console.WriteLine($"[Information] item={itemId}, store={GetHashCode()}");
-        }
-        catch { return; }
-
-        var currentItemId = Parent.DetailedEntity?.Item?.EntityId;
-        if (currentItemId is null || currentItemId.Value != itemId)
-            return;
-
-        Dispatcher.UIThread.Post(() =>
-        {
-            Console.WriteLine($"[InformationView] refresh Ui, store={GetHashCode()}");
-            _ = Parent.Reload();
-            CloseDeadlineForm();
-        });
-    }
-
-    public void Dispose()
-    {
-        if (_disposed) return;
-        _disposed = true;
-
-        _nav.RealtimeEventReceived -= OnRealtimeEvent;
-    }
     // Edit State
     [ObservableProperty] private bool _isEditStateOpen;
     [ObservableProperty] private int _stateId;
@@ -102,7 +32,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
         if (SettableStates.Count < 1)
             return;
 
-        StateId = Enumerable.First<StateDto>(SettableStates).Id;
+        StateId = SettableStates.First().Id;
         IsEditStateOpen = true;
     }
 
@@ -117,24 +47,20 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private async Task SaveEditState()
     {
-        var currentId = Parent.DetailedEntity?.Item?.State.Id;
+        var currentId = Parent.ItemOverview.Item.State.Id;
         var selectedId = StateId;
 
-        if (currentId == null)
-            return;
         if (currentId == selectedId)
         {
             CloseEditState();
             return;
         }
 
-        var currentEntityId = Parent.DetailedEntity?.Id;
-        if (currentEntityId == null)
-            return;
+        var currentEntityId = Parent.ItemOverview.Item.Id;
 
         UpdateItemDto itemDto = new()
         {
-            EntityId = (Guid)currentEntityId,
+            EntityId = currentEntityId,
             StateId = selectedId
         };
         var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
@@ -151,12 +77,8 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
     {
         try
         {
-            var currentStateId = Parent.DetailedEntity?.Item?.State.Id;
-            if (currentStateId == null)
-                return;
-            
             var states = await Parent.EntityDetailHost.NavigationService.NavigationStore
-                .MisaHttpClient.GetFromJsonAsync<List<StateDto>>(requestUri: $"Lookups/UserSettableStates?stateId={currentStateId}");
+                .MisaHttpClient.GetFromJsonAsync<List<StateDto>>(requestUri: $"Lookups/UserSettableStates?stateId={Parent.ItemOverview.Item.Id}");
 
             if (states == null)
                 return;
@@ -190,9 +112,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
     [RelayCommand]
     private void ShowEditTitleForm()
     {
-        if (Parent.DetailedEntity?.Item is null) return;
-
-        Title = Parent.DetailedEntity.Item.Title;
+        Title = Parent.ItemOverview.Item.Title;
         IsEditTitleFormOpen = true;
     }
     [RelayCommand]
@@ -203,8 +123,8 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
     {
         var dto = new UpdateItemDto
         {
-            EntityId = Parent.DetailedEntity.Id,
-            Title = Title == Parent.DetailedEntity?.Item?.Title
+            EntityId = Parent.ItemOverview.Item.Id,
+            Title = Title == Parent.ItemOverview.Item.Title
                 ? null 
                 : Title
         };
@@ -285,7 +205,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
         {
             var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PostAsync(
-                    requestUri: $"Sessions/Continue/{Parent.DetailedEntity.Id}",
+                    requestUri: $"Sessions/Continue/{Parent.ItemOverview.Item.Id}",
                     content: null
                 );
 
@@ -309,7 +229,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
         {
             var stopSession = new StopSessionDto
             {
-                EntityId = Parent.DetailedEntity.Id,
+                EntityId = Parent.ItemOverview.Item.Id,
                 Efficiency = EfficiencyId,
                 Concentration = ConcentrationId,
                 Summary = Summary
@@ -334,9 +254,9 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
         {
             SessionDto dto = new()
             {
-                EntityId = Parent.DetailedEntity.Id,
+                EntityId = Parent.ItemOverview.Item.Id,
                 PlannedDuration = PlannedMinutes.HasValue 
-                    ? TimeSpan.FromMinutes(Convert.ToInt32((object?)PlannedMinutes)) 
+                    ? TimeSpan.FromMinutes(Convert.ToInt32(PlannedMinutes)) 
                     : null,
                 Objective = Objective,
                 StopAutomatically = StopAutomatically ?? false,
@@ -361,7 +281,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
     {
         try
         {
-            var dto = new PauseSessionDto(Parent.DetailedEntity.Id, PauseReason);
+            var dto = new PauseSessionDto(Parent.ItemOverview.Item.Id, PauseReason);
             
             var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PostAsJsonAsync(requestUri: "Sessions/Pause", dto);
@@ -390,7 +310,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
             
             var dto = new DescriptionResolvedDto()
             {
-                EntityId = (Guid)EntityDetailHost.ActiveEntityId, 
+                EntityId = Parent.ItemOverview.Item.Id, 
                 Content = trimmedDescription
             };
             
@@ -419,7 +339,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
     {
         try
         {
-            var id = Parent.DetailedEntity!.Id;
+            var id = Parent.ItemOverview.Item.Id;
             await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PatchAsync(requestUri: $"Entity/Delete?entityId={id}", content: null);
             
@@ -435,7 +355,7 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
     {
         try
         {
-            var id = Parent.DetailedEntity!.Id;
+            var id = Parent.ItemOverview.Item.Id;
             await Parent.EntityDetailHost.NavigationService.NavigationStore
                 .MisaHttpClient.PatchAsync(requestUri: $"Entity/Archive?entityId={id}", content: null);
             
@@ -451,112 +371,112 @@ public partial class InformationViewModel : ViewModelBase, IDisposable
     [ObservableProperty] private DateTimeOffset? _deadlineDate;
     [ObservableProperty] private TimeSpan? _deadlineTime;
 
-    [RelayCommand]
-    private void ShowDeadlineForm()
-    {
-        IsDeadlineFormOpen = true;
-
-        var existingUtc = Parent.DetailedEntity?.Item?.ScheduledDeadline?.DeadlineAt;
-        var local = existingUtc?.ToLocalTime() ?? DateTimeOffset.Now;
-
-        DeadlineDate = local.Date;
-        DeadlineTime = local.TimeOfDay;
-    }
-
-    [RelayCommand]
-    private void CloseDeadlineForm()
-    {
-        IsDeadlineFormOpen = false;
-    }
-
-    [RelayCommand]
-    private async Task UpsertDeadline()
-    {
-        try
-        {
-            if (Parent.DetailedEntity?.Item is null || DeadlineDate is null || DeadlineTime is null)
-                return;
-
-            var localDateTime = DeadlineDate.Value.Date + DeadlineTime.Value;
-            var localOffset = TimeZoneInfo.Local.GetUtcOffset((DateTime)localDateTime);
-            var deadlineAt = new DateTimeOffset(localDateTime, localOffset);
-
-            var dto = new ScheduleDeadlineDto(DeadlineAt: deadlineAt);
-
-            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
-                .MisaHttpClient.PutAsJsonAsync(
-                    requestUri: $"items/{Parent.DetailedEntity.Item.EntityId}/deadline",
-                    dto
-                );
-
-            if (!response.IsSuccessStatusCode)
-                Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
-
-            await Parent.Reload();
-            CloseDeadlineForm();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-    }
-
-    // Remove Deadline
-    private CancellationTokenSource? _removeDeadlineCts;
-    
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(RemoveDeadlineCommand))]
-    [NotifyCanExecuteChangedFor(nameof(CancelRemoveDeadlineCommand))]
-    private bool _isRemovingDeadline;
-    private bool CanCancelRemoveDeadline() => IsRemovingDeadline;
-
-    [RelayCommand(CanExecute = nameof(CanCancelRemoveDeadline))]
-    private void CancelRemoveDeadline()
-    {
-        _removeDeadlineCts?.Cancel();
-    }
-    
-    [RelayCommand]
-    private async Task RemoveDeadline()
-    {
-        if (Parent.DetailedEntity?.Item is null)
-        {
-            return;
-        }
-        
-        _removeDeadlineCts?.Dispose();
-        _removeDeadlineCts = new CancellationTokenSource();
-
-        IsRemovingDeadline = true;
-        
-        try
-        {
-            var itemId = Parent.DetailedEntity.Item.EntityId;
-
-            using var request = new HttpRequestMessage(HttpMethod.Delete, $"items/{itemId}/deadline");
-
-            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
-                .MisaHttpClient.SendAsync(request, _removeDeadlineCts.Token);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            Console.WriteLine("RemoveDeadline canceled by user.");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-        finally
-        {
-            _removeDeadlineCts?.Dispose();
-            _removeDeadlineCts = null;
-            
-            IsRemovingDeadline = false;
-        }
-    }
+    // [RelayCommand]
+    // private void ShowDeadlineForm()
+    // {
+    //     IsDeadlineFormOpen = true;
+    //
+    //     var existingUtc = parent.DetailedEntity?.Item?.ScheduledDeadline?.DeadlineAt;
+    //     var local = existingUtc?.ToLocalTime() ?? DateTimeOffset.Now;
+    //
+    //     DeadlineDate = local.Date;
+    //     DeadlineTime = local.TimeOfDay;
+    // }
+    //
+    // [RelayCommand]
+    // private void CloseDeadlineForm()
+    // {
+    //     IsDeadlineFormOpen = false;
+    // }
+    //
+    // [RelayCommand]
+    // private async Task UpsertDeadline()
+    // {
+    //     try
+    //     {
+    //         if (parent.DetailedEntity?.Item is null || DeadlineDate is null || DeadlineTime is null)
+    //             return;
+    //
+    //         var localDateTime = DeadlineDate.Value.Date + DeadlineTime.Value;
+    //         var localOffset = TimeZoneInfo.Local.GetUtcOffset((DateTime)localDateTime);
+    //         var deadlineAt = new DateTimeOffset(localDateTime, localOffset);
+    //
+    //         var dto = new ScheduleDeadlineDto(DeadlineAt: deadlineAt);
+    //
+    //         var response = await parent.EntityDetailHost.NavigationService.NavigationStore
+    //             .MisaHttpClient.PutAsJsonAsync(
+    //                 requestUri: $"items/{parent.DetailedEntity.Item.EntityId}/deadline",
+    //                 dto
+    //             );
+    //
+    //         if (!response.IsSuccessStatusCode)
+    //             Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
+    //
+    //         await parent.Reload();
+    //         CloseDeadlineForm();
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Console.WriteLine(e);
+    //     }
+    // }
+    //
+    // // Remove Deadline
+    // private CancellationTokenSource? _removeDeadlineCts;
+    //
+    // [ObservableProperty]
+    // [NotifyCanExecuteChangedFor(nameof(RemoveDeadlineCommand))]
+    // [NotifyCanExecuteChangedFor(nameof(CancelRemoveDeadlineCommand))]
+    // private bool _isRemovingDeadline;
+    // private bool CanCancelRemoveDeadline() => IsRemovingDeadline;
+    //
+    // [RelayCommand(CanExecute = nameof(CanCancelRemoveDeadline))]
+    // private void CancelRemoveDeadline()
+    // {
+    //     _removeDeadlineCts?.Cancel();
+    // }
+    //
+    // [RelayCommand]
+    // private async Task RemoveDeadline()
+    // {
+    //     if (parent.DetailedEntity?.Item is null)
+    //     {
+    //         return;
+    //     }
+    //     
+    //     _removeDeadlineCts?.Dispose();
+    //     _removeDeadlineCts = new CancellationTokenSource();
+    //
+    //     IsRemovingDeadline = true;
+    //     
+    //     try
+    //     {
+    //         var itemId = parent.DetailedEntity.Item.EntityId;
+    //
+    //         using var request = new HttpRequestMessage(HttpMethod.Delete, $"items/{itemId}/deadline");
+    //
+    //         var response = await parent.EntityDetailHost.NavigationService.NavigationStore
+    //             .MisaHttpClient.SendAsync(request, _removeDeadlineCts.Token);
+    //
+    //         if (!response.IsSuccessStatusCode)
+    //         {
+    //             Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
+    //         }
+    //     }
+    //     catch (OperationCanceledException)
+    //     {
+    //         Console.WriteLine("RemoveDeadline canceled by user.");
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Console.WriteLine(e);
+    //     }
+    //     finally
+    //     {
+    //         _removeDeadlineCts?.Dispose();
+    //         _removeDeadlineCts = null;
+    //         
+    //         IsRemovingDeadline = false;
+    //     }
+    // }
 }
