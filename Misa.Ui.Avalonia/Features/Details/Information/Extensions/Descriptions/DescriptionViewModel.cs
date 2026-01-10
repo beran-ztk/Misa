@@ -12,7 +12,7 @@ using Misa.Contract.Entities.Features;
 using Misa.Ui.Avalonia.Presentation.Mapping;
 using ReactiveUI;
 
-namespace Misa.Ui.Avalonia.Features.Details.Information.Extensions;
+namespace Misa.Ui.Avalonia.Features.Details.Information.Extensions.Descriptions;
 
 public partial class DescriptionViewModel : ViewModelBase
 {

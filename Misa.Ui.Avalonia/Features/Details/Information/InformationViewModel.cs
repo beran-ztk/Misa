@@ -5,13 +5,11 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Misa.Contract.Audit;
-using Misa.Contract.Audit.Lookups;
 using Misa.Contract.Items;
 using Misa.Contract.Items.Lookups;
-using Misa.Ui.Avalonia.Features.Details.Information.Extensions;
 using Misa.Ui.Avalonia.Features.Details.Page;
 using Misa.Ui.Avalonia.Presentation.Mapping;
+using DescriptionViewModel = Misa.Ui.Avalonia.Features.Details.Information.Extensions.Descriptions.DescriptionViewModel;
 
 namespace Misa.Ui.Avalonia.Features.Details.Information;
 
@@ -95,25 +93,9 @@ public partial class InformationViewModel : ViewModelBase
             Console.WriteLine(e);
         }
     }
-    // Session
-    [ObservableProperty] private bool isStartFormOpen;
-    [ObservableProperty] private bool isPauseFormOpen;
-    [ObservableProperty] private bool _isStopFormOpen;
     
-    [ObservableProperty] private int? plannedMinutes;
-    [ObservableProperty] private string? objective;
-    [ObservableProperty] private bool? stopAutomatically;
-    [ObservableProperty] private string? autoStopReason;
-    
-    [ObservableProperty] private string? _pauseReason;
-    
-    [ObservableProperty] private int? efficiency;
-    [ObservableProperty] private int? concentration;
-    [ObservableProperty] private string? summary;
-    
-
-    [ObservableProperty] private bool isEditTitleFormOpen;
-    [ObservableProperty] private string title = string.Empty;
+    [ObservableProperty] private bool _isEditTitleFormOpen;
+    [ObservableProperty] private string _title = string.Empty;
     [RelayCommand]
     private void ShowEditTitleForm()
     {
@@ -144,158 +126,14 @@ public partial class InformationViewModel : ViewModelBase
         IsEditTitleFormOpen = false;
     }
 
-    [RelayCommand]
-    private void ShowSessionStartForm()
-    {
-        IsStartFormOpen = true;
-        PlannedMinutes = null;
-        Objective = null;
-        StopAutomatically = false;
-        AutoStopReason = null;
-    }
-
-    [RelayCommand]
-    private void CloseSessionStartForm()
-    {
-        IsStartFormOpen = false;
-    }
-
-    [RelayCommand]
-    private void ShowSessionPauseForm()
-    {
-        IsPauseFormOpen = !IsPauseFormOpen;
-    } 
-
-    [RelayCommand]
-    private void CloseSessionPauseForm()
-    {
-        IsPauseFormOpen = false;
-    } 
     
-    [RelayCommand]
-    private void ShowSessionStopForm()
-    {
-        Summary = null;
-        Concentration = null;
-        EfficiencyId = null;
-        ConcentrationId = null;
-        IsStopFormOpen = true;
-    }
 
-    [RelayCommand]
-    private void CloseSessionStopForm()
-    {
-        IsStopFormOpen = false;
-    }
-    
-    [ObservableProperty] private int? efficiencyId; 
-    [ObservableProperty] private int? concentrationId; 
-    public IReadOnlyList<SessionEfficiencyTypeDto> EfficiencyTypes =>
-        Parent.EntityDetailHost.NavigationService.LookupsStore.EfficiencyTypes;
-    public IReadOnlyList<SessionConcentrationTypeDto> ConcentrationTypes =>
-        Parent.EntityDetailHost.NavigationService.LookupsStore.ConcentrationTypes;
     
  
 
-    [RelayCommand]
-    private async Task SessionContinue()
-    {
-        try
-        {
-            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
-                .MisaHttpClient.PostAsync(
-                    requestUri: $"Sessions/Continue/{Parent.ItemOverview.Item.Id}",
-                    content: null
-                );
 
-
-            if (!response.IsSuccessStatusCode)
-                Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
-
-            await Parent.Reload();
-            CloseSessionStartForm();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-    }
     
-    [RelayCommand]
-    private async Task StopSession()
-    {
-        try
-        {
-            var stopSession = new StopSessionDto
-            {
-                EntityId = Parent.ItemOverview.Item.Id,
-                Efficiency = EfficiencyId,
-                Concentration = ConcentrationId,
-                Summary = Summary
-            };
-            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
-                .MisaHttpClient.PostAsJsonAsync( requestUri: $"Sessions/Stop", stopSession );
-            
-            if (!response.IsSuccessStatusCode)
-                Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
 
-            await Parent.Reload();
-            CloseSessionStopForm();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-    }
-    private async Task StartSessionAsync()
-    {
-        try
-        {
-            SessionDto dto = new()
-            {
-                EntityId = Parent.ItemOverview.Item.Id,
-                PlannedDuration = PlannedMinutes.HasValue 
-                    ? TimeSpan.FromMinutes(Convert.ToInt32(PlannedMinutes)) 
-                    : null,
-                Objective = Objective,
-                StopAutomatically = StopAutomatically ?? false,
-                AutoStopReason = AutoStopReason
-            };
-            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
-                .MisaHttpClient.PostAsJsonAsync(requestUri: "Sessions/Start", dto);
-
-            if (!response.IsSuccessStatusCode)
-                Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
-
-            await Parent.Reload();
-            CloseSessionStartForm();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-    }
-    
-    private async Task EndSessionAsync()
-    {
-        try
-        {
-            var dto = new PauseSessionDto(Parent.ItemOverview.Item.Id, PauseReason);
-            
-            var response = await Parent.EntityDetailHost.NavigationService.NavigationStore
-                .MisaHttpClient.PostAsJsonAsync(requestUri: "Sessions/Pause", dto);
-
-            if (!response.IsSuccessStatusCode)
-                Console.WriteLine($"Server returned {response.StatusCode}: {response.ReasonPhrase}");
-
-            await Parent.Reload();
-            CloseSessionPauseForm();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-    }
     
 
     [RelayCommand]

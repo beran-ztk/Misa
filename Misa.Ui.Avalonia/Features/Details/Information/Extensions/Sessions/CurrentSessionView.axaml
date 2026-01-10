@@ -1,0 +1,38 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Misa.Ui.Avalonia.Features.Details.Information.Extensions.Sessions.CurrentSessionView"
+             xmlns:information="clr-namespace:Misa.Ui.Avalonia.Features.Details.Information.Extensions.Sessions"
+             x:DataType="information:CurrentSessionViewModel">
+    
+    <StackPanel>
+        <Button Classes="misa-action"
+                Command="{Binding ShowSessionStartFormCommand}"
+                IsVisible="{Binding Parent.DetailedEntity.CanStartSession}">
+            <Image Width="16" Height="16"
+                   Source="{SvgImage /Assets/Images/Details/play.svg}"/>
+        </Button>
+        <Button Classes="misa-action"
+                Command="{Binding ShowSessionPauseFormCommand}"
+                IsVisible="{Binding Parent.DetailedEntity.HasRunningSession}">
+            <Image Width="16" Height="16"
+                   Source="{SvgImage /Assets/Images/Details/pause.svg}"/>
+        </Button>
+        
+        <Button Classes="misa-action"
+                Command="{Binding SessionContinueCommand}"
+                IsVisible="{Binding Parent.DetailedEntity.HasPausedSession}">
+            <Image Width="16" Height="16"
+                   Source="{SvgImage /Assets/Images/Details/play-pause.svg}"/>
+        </Button>
+        
+        <Button Classes="misa-action"
+                Command="{Binding ShowSessionStopFormCommand}"
+                IsVisible="{Binding Parent.DetailedEntity.HasActiveSession}">
+            <Image Width="16" Height="16"
+                   Source="{SvgImage /Assets/Images/Details/stop.svg}"/>
+        </Button>
+    </StackPanel>
+</UserControl>
