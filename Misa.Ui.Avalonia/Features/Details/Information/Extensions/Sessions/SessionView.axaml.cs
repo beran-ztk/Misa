@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Misa.Ui.Avalonia.Features.Details.Information.Extensions.Sessions;
 
-public partial class CurrentSessionView : UserControl
+public partial class SessionView : UserControl
 {
-    public CurrentSessionView()
+    public SessionView()
     {
         InitializeComponent();
     }

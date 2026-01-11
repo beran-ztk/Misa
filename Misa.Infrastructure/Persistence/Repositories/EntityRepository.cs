@@ -46,16 +46,6 @@ public class EntityRepository(Misa.Infrastructure.Data.MisaDbContext db) : IEnti
             // Descriptions
             .Include(e => e.Descriptions)
             
-            // Sessions
-            .Include(e => e.Sessions)
-                .ThenInclude(s => s.State)
-            .Include(e => e.Sessions)
-                .ThenInclude(s => s.Efficiency)
-            .Include(e => e.Sessions)
-                .ThenInclude(s => s.Concentration)
-            .Include(e => e.Sessions)
-                .ThenInclude(s => s.Segments)
-            
             // Actions
             .Include(e => e.Actions)
                 .ThenInclude(a => a.Type)

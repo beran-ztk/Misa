@@ -56,5 +56,10 @@ public class Item : IEntityTypeConfiguration<Misa.Domain.Items.Item>
             .HasForeignKey<Misa.Domain.Scheduling.ScheduledDeadline>(d => d.ItemId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Session 1:0..1
+        builder.HasMany(e => e.Sessions)
+            .WithOne()
+            .HasForeignKey(s => s.EntityId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

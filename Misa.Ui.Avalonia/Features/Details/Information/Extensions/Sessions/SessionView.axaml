@@ -1,0 +1,125 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Misa.Ui.Avalonia.Features.Details.Information.Extensions.Sessions.SessionView"
+             xmlns:information="clr-namespace:Misa.Ui.Avalonia.Features.Details.Information.Extensions.Sessions"
+             x:DataType="information:SessionViewModel">
+
+    <StackPanel Spacing="12">
+
+        <Border Padding="12"
+                Margin="10"
+                CornerRadius="10"
+                BorderThickness="1"
+                BorderBrush="{StaticResource BrushBorder}"
+                Background="{StaticResource BrushPrimaryBackgroundLighter}">
+
+            <StackPanel Spacing="12">
+
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button Classes="misa-action"
+                            Command="{Binding ShowStartSessionFormCommand}">
+                        <Image Width="16" Height="16"
+                               Source="{SvgImage /Assets/Images/Details/play.svg}"/>
+                    </Button>
+
+                <!--     <Button Classes="misa-action" -->
+                <!--             Command="{Binding ShowSessionPauseFormCommand}" -->
+                <!--             IsEnabled="{Binding Overview.CanPauseSession}"> -->
+                <!--         <Image Width="16" Height="16" -->
+                <!--                Source="{SvgImage /Assets/Images/Details/pause.svg}"/> -->
+                <!--     </Button> -->
+                <!-- -->
+                <!--     <Button Classes="misa-action" -->
+                <!--             Command="{Binding SessionContinueCommand}" -->
+                <!--             IsEnabled="{Binding Overview.CanContinueSession}"> -->
+                <!--         <Image Width="16" Height="16" -->
+                <!--                Source="{SvgImage /Assets/Images/Details/play-pause.svg}"/> -->
+                <!--     </Button> -->
+                <!-- -->
+                <!--     <Button Classes="misa-action" -->
+                <!--             Command="{Binding ShowSessionStopFormCommand}" -->
+                <!--             IsEnabled="{Binding Overview.CanStopSession}"> -->
+                <!--         <Image Width="16" Height="16" -->
+                <!--                Source="{SvgImage /Assets/Images/Details/stop.svg}"/> -->
+                <!--     </Button> -->
+                </StackPanel>
+
+                <!-- Optional: kleine Summary -->
+                <!--
+                <TextBlock Text="{Binding Overview.ItemSessionCount}" />
+                -->
+            </StackPanel>
+        </Border>
+
+        <!-- Start-Session Form -->
+        <Border Padding="12"
+                Margin="10,0,10,10"
+                CornerRadius="10"
+                BorderThickness="1"
+                BorderBrush="{StaticResource BrushBorder}"
+                Background="{StaticResource BrushPrimaryBackgroundLighter}"
+                IsVisible="{Binding IsStartSessionFormOpen}">
+
+            <StackPanel Spacing="10">
+                <TextBlock Text="Start session"
+                           FontWeight="SemiBold"/>
+
+                <Grid ColumnDefinitions="140,*"
+                      RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                      RowSpacing="8"
+                      ColumnSpacing="10">
+
+                    <TextBlock Grid.Row="0" Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Text="Planned (min)" />
+                    <NumericUpDown Grid.Row="0" Grid.Column="1"
+                                   Classes="misa-input"
+                                   Minimum="1" Maximum="600"
+                                   Value="{Binding PlannedMinutes, Mode=TwoWay}" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Text="Objective" />
+                    <TextBox Grid.Row="1" Grid.Column="1"
+                             Classes="misa-input"
+                             Text="{Binding Objective, Mode=TwoWay}"
+                             Watermark="What are you doing?" />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Text="Auto stop" />
+                    <CheckBox Grid.Row="2" Grid.Column="1"
+                              IsChecked="{Binding StopAutomatically, Mode=TwoWay}"
+                              Content="Stop automatically after planned duration" />
+
+                    <TextBlock Grid.Row="3" Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Text="Reason" />
+                    <TextBox Grid.Row="3" Grid.Column="1"
+                             Classes="misa-input"
+                             IsEnabled="{Binding StopAutomatically}"
+                             Text="{Binding AutoStopReason, Mode=TwoWay}"
+                             Watermark="Optional reason" />
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text=" " />
+                    <StackPanel Grid.Row="4" Grid.Column="1"
+                                Orientation="Horizontal"
+                                Spacing="8"
+                                HorizontalAlignment="Right">
+                        <!-- <Button Classes="misa-action" -->
+                        <!--         Content="Cancel" -->
+                        <!--         Command="{Binding CancelStartSessionCommand}" /> -->
+                        <Button Classes="misa-action"
+                                Content="Save"
+                                Command="{Binding StartSessionCommand}" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+    </StackPanel>
+</UserControl>

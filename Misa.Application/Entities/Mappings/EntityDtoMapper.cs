@@ -36,12 +36,7 @@ public static class EntityDtoMapper
              UpdatedAt = entity.UpdatedAt,
              InteractedAt = entity.InteractedAt,
              Item = entity.Item?.ToReadItemDto(),
-             Sessions = entity.Sessions.ToDto(),
-             Actions = entity.Actions.ToDto(),
-             HasRunningSession = entity.HasRunningSession(),
-             HasPausedSession = entity.HasPausedSession(),
-             HasActiveSession = entity.HasActiveSession,
-             CanStartSession = entity.CanStartSession
+             Actions = entity.Actions.ToDto()
         };
     public static ReadEntityDto ToReadEntityDto(this Misa.Domain.Entities.Entity entity)
         => new()
