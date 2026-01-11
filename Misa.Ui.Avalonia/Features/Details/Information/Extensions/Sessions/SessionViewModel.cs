@@ -18,6 +18,8 @@ public partial class SessionViewModel : ViewModelBase
 {
     private InformationViewModel Parent { get; }
     [ObservableProperty] private CurrentSessionOverviewDto _currentSessionOverviewDto;
+    public bool HasActiveSession => CurrentSessionOverviewDto.ActiveSession != null;
+    public bool HasLatestClosedSession => CurrentSessionOverviewDto.LatestClosedSession != null;
     
     public SessionViewModel(InformationViewModel parent)
     {
@@ -47,6 +49,8 @@ public partial class SessionViewModel : ViewModelBase
             }
             
             CurrentSessionOverviewDto = result.Value;
+            OnPropertyChanged(nameof(HasActiveSession));
+            OnPropertyChanged(nameof(HasLatestClosedSession));
         }
         catch (Exception e)
         {

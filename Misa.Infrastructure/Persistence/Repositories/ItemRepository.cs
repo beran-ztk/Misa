@@ -36,7 +36,7 @@ public class ItemRepository(MisaDbContext db) : IItemRepository
                 s.ItemId == id
                 && (s.StateId == (int)Domain.Dictionaries.Audit.SessionState.Running
                 || s.StateId == (int)Domain.Dictionaries.Audit.SessionState.Paused)) 
-            .Include(s => s.Segments.Where(seg => seg.EndedAtUtc == null))
+            .Include(s => s.Segments)
             .Include(s => s.State)
             .Include(s => s.Efficiency)
             .Include(s => s.Concentration)
