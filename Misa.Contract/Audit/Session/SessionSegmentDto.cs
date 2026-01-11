@@ -1,4 +1,4 @@
-﻿namespace Misa.Contract.Audit;
+﻿namespace Misa.Contract.Audit.Session;
 
 public class SessionSegmentDto
 {

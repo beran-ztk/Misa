@@ -1,5 +1,6 @@
 ﻿using Misa.Contract.Audit;
 using Misa.Contract.Audit.Lookups;
+using Misa.Contract.Audit.Session;
 using Misa.Domain.Audit;
 
 namespace Misa.Application.Items.Mappings;
@@ -48,8 +49,8 @@ public static class AuditMapper
             CreatedAtUtc = x.CreatedAtUtc
         }).ToList();
 
-    public static List<SessionDto> ToDto(this ICollection<Session> s) 
-        => s.Select(x => new SessionDto()
+    public static List<SessionResolvedDto> ToDto(this ICollection<Session> s) 
+        => s.Select(x => new SessionResolvedDto()
     {
         Id = x.Id,
         EntityId = x.EntityId,

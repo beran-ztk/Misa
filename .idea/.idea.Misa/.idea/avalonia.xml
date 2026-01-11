@@ -14,7 +14,9 @@
         <entry key="Misa.Ui.Avalonia/Features/Details/History/HistoryView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
         <entry key="Misa.Ui.Avalonia/Features/Details/Information/Extensions/DescriptionView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
         <entry key="Misa.Ui.Avalonia/Features/Details/Information/Extensions/Descriptions/DescriptionView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
+        <entry key="Misa.Ui.Avalonia/Features/Details/Information/Extensions/Sessions/CurrentSessionView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
         <entry key="Misa.Ui.Avalonia/Features/Details/Information/Extensions/Sessions/PauseSessionView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
+        <entry key="Misa.Ui.Avalonia/Features/Details/Information/Extensions/Sessions/SessionContinueView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
         <entry key="Misa.Ui.Avalonia/Features/Details/Information/Extensions/Sessions/StartSessionView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
         <entry key="Misa.Ui.Avalonia/Features/Details/Information/Extensions/Sessions/StopSessionView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />
         <entry key="Misa.Ui.Avalonia/Features/Details/Information/InformationView.axaml" value="Misa.Ui.Avalonia/Misa.Ui.Avalonia.csproj" />

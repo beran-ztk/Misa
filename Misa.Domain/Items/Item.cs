@@ -1,5 +1,9 @@
-﻿using Misa.Domain.Common.DomainEvents;
+﻿using Misa.Contract.Audit;
+using Misa.Contract.Audit.Session;
+using Misa.Domain.Audit;
+using Misa.Domain.Common.DomainEvents;
 using Misa.Domain.Dictionaries.Audit;
+using Misa.Domain.Dictionaries.Items;
 using Misa.Domain.Entities;
 using Misa.Domain.Scheduling;
 
@@ -36,6 +40,41 @@ public class Item : DomainEventEntity
     public State State { get; private set; }
     public Priority Priority { get; private set; }
     public Category Category { get; private set; }
+    
+    public ICollection<Session> Sessions { get; set; } = new List<Session>();
+     public bool HasActiveSession 
+        => StateId == (int)Dictionaries.Items.ItemStates.Active;
+    public bool CanStartSession
+        => StateId 
+            is (int)Dictionaries.Items.ItemStates.Draft
+            or (int)Dictionaries.Items.ItemStates.Undefined
+            or (int)Dictionaries.Items.ItemStates.InProgress
+            or (int)Dictionaries.Items.ItemStates.Pending
+            or (int)Dictionaries.Items.ItemStates.WaitForResponse;
+
+    public Session? GetLatestActiveSession() 
+        => Sessions
+            .Where(s => 
+                s.StateId is (int)Dictionaries.Audit.SessionState.Running 
+            or (int)Dictionaries.Audit.SessionState.Paused )
+            .MaxBy(s => s.CreatedAtUtc);
+    public void EndSession(StopSessionDto dto)
+    {
+        var latestActiveSession = GetLatestActiveSession();
+        if (latestActiveSession == null)
+            return;
+
+        ChangeState((int)ItemStates.InProgress);
+        latestActiveSession.StateId = (int)Dictionaries.Audit.SessionState.Completed;
+        latestActiveSession.EfficiencyId = dto.Efficiency;
+        latestActiveSession.ConcentrationId = dto.Concentration;
+        latestActiveSession.Summary = dto.Summary;
+
+        var latestActiveSegment = latestActiveSession.GetLatestActiveSegment();
+        if (latestActiveSegment == null)
+            return;
+        latestActiveSegment.CloseSegment(null, DateTimeOffset.UtcNow);
+    }
     
     public ScheduledDeadline? ScheduledDeadline { get; private set; }
 

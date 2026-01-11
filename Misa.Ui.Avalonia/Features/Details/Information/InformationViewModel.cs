@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Misa.Contract.Items;
 using Misa.Contract.Items.Lookups;
+using Misa.Ui.Avalonia.Features.Details.Information.Extensions.Sessions;
 using Misa.Ui.Avalonia.Features.Details.Page;
 using Misa.Ui.Avalonia.Presentation.Mapping;
 using DescriptionViewModel = Misa.Ui.Avalonia.Features.Details.Information.Extensions.Descriptions.DescriptionViewModel;
@@ -17,11 +18,13 @@ public partial class InformationViewModel : ViewModelBase
 {
     public DetailPageViewModel Parent { get; }
     public DescriptionViewModel Description { get; }
+    public SessionViewModel Session { get; }
 
     public InformationViewModel(DetailPageViewModel parent)
     {
         Parent = parent;
         Description = new DescriptionViewModel(this);
+        Session = new SessionViewModel(this);
     }
     // Edit State
     [ObservableProperty] private bool _isEditStateOpen;

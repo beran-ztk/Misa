@@ -262,6 +262,8 @@
         <!--     </StackPanel> -->
         <!-- </Border> -->
         
+        <ContentControl Content="{Binding Session}"/>
+        
         <Border Padding="12"
                 Margin="10"
                 CornerRadius="10"

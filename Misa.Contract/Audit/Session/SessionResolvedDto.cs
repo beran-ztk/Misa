@@ -1,13 +1,9 @@
-﻿namespace Misa.Contract.Audit;
+﻿namespace Misa.Contract.Audit.Session;
 
-public class SessionDto
+public class SessionResolvedDto
 {
     public Guid Id { get; set; }
     public Guid EntityId { get; set; }
-    public int StateId { get; set; }
-    public int? EfficiencyId { get; set; } 
-    public int? ConcentrationId { get; set; }
-
     public Lookups.SessionStateDto State { get; set; } = new();
     public Lookups.SessionEfficiencyTypeDto? Efficiency { get; set; }
     public Lookups.SessionConcentrationTypeDto? Concentration { get; set; }
@@ -22,5 +18,5 @@ public class SessionDto
     public bool? WasAutomaticallyStopped { get; set; }
 
     public DateTimeOffset CreatedAtUtc { get; set; }
-    public List<SessionSegmentDto> Segments { get; set; } = new();
+    public required ICollection<SessionSegmentDto> Segments { get; set; }
 }
